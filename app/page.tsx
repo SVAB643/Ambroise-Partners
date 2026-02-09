@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 export default function AmbroisePartners() {
   const [isVisible, setIsVisible] = useState<Record<string, boolean>>({});
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -13,10 +12,6 @@ export default function AmbroisePartners() {
 
     const onScroll = () => setScrolled(window.scrollY > 12);
     window.addEventListener('scroll', onScroll, { passive: true });
-    const onResize = () => {
-      if (window.innerWidth > 960 && menuOpen) setMenuOpen(false);
-    };
-    window.addEventListener('resize', onResize);
 
     const observer = new IntersectionObserver(
       entries => {
@@ -33,9 +28,8 @@ export default function AmbroisePartners() {
     return () => {
       observer.disconnect();
       window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onResize);
     };
-  }, [menuOpen]);
+  }, []);
 
   const handleContactSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -105,52 +99,6 @@ export default function AmbroisePartners() {
         .nav-links a { font-weight: 600; color: inherit; letter-spacing: 0.03em; font-size: 0.95rem; transition: color 0.2s ease; }
         .nav-links a:hover { color: #0d6bff; }
         .cta { display: flex; gap: 0.75rem; }
-        .menu-toggle {
-          display: none;
-          width: 42px;
-          height: 42px;
-          border-radius: 12px;
-          border: 1px solid #0b1c3d;
-          background: rgba(255, 255, 255, 0.4);
-          align-items: center;
-          justify-content: center;
-          flex-direction: column;
-          gap: 6px;
-          padding: 9px;
-          transition: transform 0.18s ease, box-shadow 0.18s ease;
-        }
-        .menu-toggle:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(0,0,0,0.08); }
-        .menu-toggle span {
-          width: 100%;
-          height: 2px;
-          background: #0b1c3d;
-          border-radius: 999px;
-          transition: transform 0.2s ease, opacity 0.2s ease;
-        }
-        .menu-toggle.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-        .menu-toggle.open span:nth-child(2) { opacity: 0; }
-        .menu-toggle.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
-        .mobile-menu {
-          display: block;
-          position: absolute;
-          top: 64px;
-          right: 5vw;
-          left: 5vw;
-          background: rgba(255,255,255,0.96);
-          border: 1px solid rgba(14,17,23,0.08);
-          border-radius: 14px;
-          box-shadow: 0 16px 38px rgba(0,0,0,0.12);
-          padding: 1rem;
-          z-index: 120;
-        }
-        .mobile-menu a {
-          display: block;
-          padding: 0.75rem 0.5rem;
-          font-weight: 600;
-          letter-spacing: 0.02em;
-          color: #0a0f2c;
-        }
-        .mobile-menu a + a { border-top: 1px solid #e5e7eb; }
         .btn {
           border: 1px solid #0b1c3d;
           padding: 0.68rem 1.2rem;
@@ -214,12 +162,15 @@ export default function AmbroisePartners() {
           justify-content: center;
           background: linear-gradient(
             180deg,
-            #060c1f 0%,
-            #07132f 18%,
-            #0b2459 34%,
-            #0c3f9a 50%,
-            #5c9fff 68%,
-            #e5efff 86%,
+            #050b1e 0%,
+            #081434 18%,
+            #0b2459 32%,
+            #0c3f9a 46%,
+            #0b3bff 60%,
+            #4f9bff 70%,
+            #7cb9ff 78%,
+            #d6e8ff 90%,
+            #ffffff 97%,
             #ffffff 100%
           );
           color: #0b132f;
@@ -519,7 +470,6 @@ export default function AmbroisePartners() {
           .nav-links { display: none; }
           .nav-content { grid-template-columns: auto auto; justify-content: space-between; }
           .cta { justify-self: end; }
-          .menu-toggle { display: inline-flex; }
           .hero-card { padding: 3.2rem 2.4rem; }
           .grid-3 { grid-template-columns: 1fr; }
           .grid-3 .card::after { display: none; }
@@ -535,19 +485,19 @@ export default function AmbroisePartners() {
           .hero { padding: 6.2rem 6vw 4.2rem; }
           .hero-card {
             min-height: 72vh;
-            padding: 3.2rem 1.4rem 3rem;
+            padding: 3rem 1.2rem 2.8rem;
             border-radius: 18px;
             gap: 0.8rem;
-            background-size: 100% 200%;
+            background-size: 100% 240%;
             background-position: top center;
             background-repeat: no-repeat;
             align-items: flex-start;
             text-align: left;
           }
           .hero h1 {
-            font-size: clamp(1.18rem, 4.8vw, 1.45rem);
-            letter-spacing: 0.03em;
-            line-height: 1.18;
+            font-size: clamp(1.12rem, 4.2vw, 1.32rem);
+            letter-spacing: 0.02em;
+            line-height: 1.16;
           }
           .hero-tags { gap: 0.9rem; font-size: 0.78rem; flex-wrap: wrap; }
           .hero-tags span { padding-left: 0.8rem; }
@@ -602,27 +552,8 @@ export default function AmbroisePartners() {
           </div>
           <div className="cta">
             <a className="btn" href="#contact"><span>Contact us</span></a>
-            <button
-              aria-label="Toggle navigation"
-              className={`menu-toggle ${menuOpen ? 'open' : ''}`}
-              onClick={() => setMenuOpen(open => !open)}
-              type="button"
-            >
-              <span />
-              <span />
-              <span />
-            </button>
           </div>
         </div>
-        {menuOpen && (
-          <div className="mobile-menu">
-            <a href="#services" onClick={() => setMenuOpen(false)}>Services</a>
-            <a href="#why" onClick={() => setMenuOpen(false)}>Expertise</a>
-            <a href="#method" onClick={() => setMenuOpen(false)}>Method</a>
-            <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
-            <a href="#contact" onClick={() => setMenuOpen(false)}>Contact</a>
-          </div>
-        )}
       </nav>
 
       <header className="hero">
