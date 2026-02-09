@@ -455,6 +455,8 @@ export default function AmbroisePartners() {
 
         @media (max-width: 960px) {
           .nav-links { display: none; }
+          .nav-content { grid-template-columns: auto auto; justify-content: space-between; }
+          .cta { justify-self: end; }
           .hero-card { padding: 3.2rem 2.4rem; }
           .grid-3 { grid-template-columns: 1fr; }
           .grid-3 .card::after { display: none; }
@@ -462,14 +464,18 @@ export default function AmbroisePartners() {
 
         @media (max-width: 640px) {
           .nav { padding: 0.9rem 4vw; }
+          .nav-content { grid-template-columns: auto auto; gap: 0.8rem; padding: 0.6rem 4vw; }
+          .logo { font-size: 1rem; letter-spacing: 0.18em; }
+          .cta .btn, .cta .btn span { white-space: nowrap; }
+          .cta .btn { padding: 0.5rem 0.9rem; font-size: 0.85rem; }
           .hero { padding: 4rem 6vw 4rem; }
           .hero-card {
             min-height: auto;
-            padding: 4.2rem 1.6rem;
+            padding: 3.8rem 1.4rem;
             border-radius: 18px;
           }
-          .hero h1 { font-size: 1.4rem; letter-spacing: 0.14em; }
-          .hero-tags { gap: 0.9rem; font-size: 0.78rem; }
+          .hero h1 { font-size: 1.45rem; letter-spacing: 0.12em; }
+          .hero-tags { gap: 0.9rem; font-size: 0.78rem; flex-wrap: wrap; }
           .hero-tags span { padding-left: 0.8rem; }
           .hero-tags span:not(:first-child)::before { height: 12px; }
           .kpi-bar { padding: 1.6rem 5vw 0; }
