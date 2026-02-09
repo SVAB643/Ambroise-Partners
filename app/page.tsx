@@ -481,11 +481,11 @@ export default function AmbroisePartners() {
           .cta .btn { padding: 0.5rem 0.9rem; font-size: 0.85rem; }
           .hero { padding: 6.2rem 6vw 4.2rem; }
           .hero-card {
-            min-height: 90vh;
-            padding: 4.6rem 1.4rem 4.8rem;
+            min-height: 68vh;
+            padding: 4.2rem 1.4rem 3.8rem;
             border-radius: 18px;
             gap: 1rem;
-            background-size: 100% 220%;
+            background-size: 100% 140%;
             background-position: top center;
             background-repeat: no-repeat;
           }
