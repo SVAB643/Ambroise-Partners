@@ -468,7 +468,7 @@ export default function AmbroisePartners() {
           .logo { font-size: 1rem; letter-spacing: 0.18em; }
           .cta .btn, .cta .btn span { white-space: nowrap; }
           .cta .btn { padding: 0.5rem 0.9rem; font-size: 0.85rem; }
-          .hero { padding: 4rem 6vw 4rem; }
+          .hero { padding: 6.2rem 6vw 4.2rem; }
           .hero-card {
             min-height: auto;
             padding: 3.8rem 1.4rem;
