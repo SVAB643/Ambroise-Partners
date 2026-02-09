@@ -459,6 +459,33 @@ export default function AmbroisePartners() {
           .grid-3 { grid-template-columns: 1fr; }
           .grid-3 .card::after { display: none; }
         }
+
+        @media (max-width: 640px) {
+          .nav { padding: 0.9rem 4vw; }
+          .hero { padding: 4rem 6vw 4rem; }
+          .hero-card {
+            min-height: auto;
+            padding: 4.2rem 1.6rem;
+            border-radius: 18px;
+          }
+          .hero h1 { font-size: 1.4rem; letter-spacing: 0.14em; }
+          .hero-tags { gap: 0.9rem; font-size: 0.78rem; }
+          .hero-tags span { padding-left: 0.8rem; }
+          .hero-tags span:not(:first-child)::before { height: 12px; }
+          .kpi-bar { padding: 1.6rem 5vw 0; }
+          .kpi-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1.4rem; }
+          .title { font-size: 1.55rem; }
+          .lede { font-size: 1rem; }
+          .section-head { margin-bottom: 2.6rem; }
+          .grid-3 { grid-template-columns: 1fr; gap: 1.5rem; }
+          .card { padding: 1.6rem 1.4rem; }
+          .steps { gap: 1.2rem; }
+          .step { grid-template-columns: 56px 1fr; gap: 1.4rem; padding: 1.6rem 0; }
+          .step-no { font-size: 1.2rem; }
+          .split { grid-template-columns: 1fr; gap: 1.6rem; }
+          .contact-wrapper { padding: 0; }
+          .contact-card { width: 100%; }
+        }
       `}</style>
 
       <nav className="nav">
