@@ -481,12 +481,13 @@ export default function AmbroisePartners() {
           .cta .btn { padding: 0.5rem 0.9rem; font-size: 0.85rem; }
           .hero { padding: 6.2rem 6vw 4.2rem; }
           .hero-card {
-            min-height: auto;
+            min-height: 90vh;
             padding: 4.6rem 1.4rem 4.8rem;
             border-radius: 18px;
             gap: 1rem;
-            background-size: 100% 170%;
-            background-position: top;
+            background-size: 100% 220%;
+            background-position: top center;
+            background-repeat: no-repeat;
           }
           .hero h1 {
             font-size: clamp(1.35rem, 5.5vw, 1.7rem);
@@ -558,14 +559,6 @@ export default function AmbroisePartners() {
             <span>Fundraising</span>
             <span>Licensing</span>
             <span>Strategic Growth</span>
-          </div>
-          <p>
-            Ambroise Partners accompagne les dirigeants santé avec une approche banque d’affaires,
-            du positionnement stratégique à la signature des deals.
-          </p>
-          <div className="hero-actions">
-            <a className="btn" href="#contact"><span>Nous contacter</span></a>
-            <a className="btn-glass" href="#services">Découvrir nos services</a>
           </div>
         </div>
       </header>
