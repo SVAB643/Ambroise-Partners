@@ -143,7 +143,7 @@ export default function AmbroisePartners() {
 
         /* Hero */
         .hero {
-          padding: 6rem 5vw 5.5rem;
+          padding: 6rem 2.5vw 5.5rem;
           display: grid;
           gap: 1.8rem;
           max-width: 1500px;
@@ -153,7 +153,7 @@ export default function AmbroisePartners() {
           position: relative;
           overflow: hidden;
           border-radius: 26px;
-          padding: 7rem 5.5rem;
+          padding: 7rem 3.5rem;
           min-height: calc(100vh - 110px);
           width: 100%;
           display: flex;
@@ -188,7 +188,7 @@ export default function AmbroisePartners() {
           font-family: 'Gotham', 'Gotham SSm A', 'Gotham SSm B', 'Montserrat', 'Inter', sans-serif;
           font-size: 1.9rem;
           line-height: 1.3;
-          letter-spacing: 0.22em;
+          letter-spacing: 0.14em;
           text-transform: uppercase;
           margin-bottom: 1rem;
           color: #ffffff;
@@ -200,7 +200,7 @@ export default function AmbroisePartners() {
           justify-content: center;
           color: rgba(255, 255, 255, 0.9);
           font-size: 0.9rem;
-          letter-spacing: 0.2em;
+          letter-spacing: 0.14em;
           text-transform: uppercase;
         }
         .hero-tags span {
@@ -299,6 +299,16 @@ export default function AmbroisePartners() {
           grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 0;
         }
+        .services-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0;
+        }
+        .services-grid .card {
+          border: none;
+        }
+        .services-grid .card:nth-child(odd) { border-right: 1px solid var(--line); }
+        .services-grid .card:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+        .services-grid .card::after { display: none; }
         .card {
           background: transparent;
           border: none;
@@ -460,6 +470,7 @@ export default function AmbroisePartners() {
           .hero-card { padding: 3.2rem 2.4rem; }
           .grid-3 { grid-template-columns: 1fr; }
           .grid-3 .card::after { display: none; }
+          .services-grid .card { border: none; }
         }
 
         @media (max-width: 640px) {
@@ -512,11 +523,12 @@ export default function AmbroisePartners() {
 
       <header className="hero">
         <div className="hero-card fade-in visible">
-          <h1>Biotech M&A, precision and impact.</h1>
+          <h1>Healthcare focused advisory for healthcare leaders</h1>
           <div className="hero-tags">
             <span>M&A</span>
-            <span>Growth Financing</span>
-            <span>Special Situations</span>
+            <span>Fundraising</span>
+            <span>Licensing</span>
+            <span>Strategic Growth</span>
           </div>
         </div>
       </header>
@@ -544,44 +556,48 @@ export default function AmbroisePartners() {
 
       <section id="services" className={`fade-in ${isVisible['services'] ? 'visible' : ''}`}>
         <div className="section-head">
-          <div className="eyebrow">Our services</div>
-          <h2 className="title">End-to-end biotech expertise</h2>
-          <p className="lede">Tailor-made solutions to structure and secure your strategic transactions.</p>
+          <div className="eyebrow">Our Services</div>
+          <h2 className="title">Our Services</h2>
+          <p className="lede">We provide end-to-end support across all types of healthcare transactions, from early strategic positioning and preparation to execution and closing.</p>
         </div>
-        <div className="grid-3">
+        <div className="grid-3 services-grid">
+          <div className="card">
+            <h3>M&amp;A</h3>
+            <p>Buy-side, sell-side and strategic acquisitions across the global healthcare ecosystem.</p>
+          </div>
           <div className="card">
             <h3>Fundraising</h3>
-            <p>From investment strategy to term negotiation, with access to specialized investors (seed to Series C+).</p>
+            <p>Growth financing from early-stage to later rounds, partnering with leading healthcare-focused investors.</p>
           </div>
           <div className="card">
-            <h3>Biotech M&A</h3>
-            <p>Buy-side / sell-side, carve-out and licensing, run with the rigor of a sector-focused investment bank.</p>
+            <h3>Licensing &amp; Strategic Partnerships</h3>
+            <p>Structuring value-creating licensing and collaboration agreements with global strategic players.</p>
           </div>
           <div className="card">
-            <h3>Strategic advisory</h3>
-            <p>Valuation, financial modeling, option analysis and board-ready support.</p>
+            <h3>Strategic Advisory &amp; External Growth</h3>
+            <p>Independent advice on strategic options, portfolio positioning and long-term growth trajectories.</p>
           </div>
         </div>
       </section>
 
       <section id="why" className={`fade-in ${isVisible['why'] ? 'visible' : ''}`}>
         <div className="section-head">
-          <div className="eyebrow">Why us</div>
-          <h2 className="title">A distinctive approach</h2>
-          <p className="lede">We create value by orchestrating every step with precision and transparency.</p>
+          <div className="eyebrow">Our Approach</div>
+          <h2 className="title">Our Approach</h2>
+          <p className="lede"></p>
         </div>
         <div className="grid-3">
           <div className="card">
             <h3>Scientific expertise</h3>
-            <p>Deep understanding of R&D pipelines, regulatory milestones and market access models.</p>
+            <p>Deep understanding of healthcare science and ecosystems, backed by strong medical and scientific academic backgrounds within the team.</p>
           </div>
           <div className="card">
-            <h3>Investor network</h3>
-            <p>Direct relationships with biotech funds, corporate ventures and international family offices.</p>
+            <h3>Deep Network</h3>
+            <p>A global network of leading healthcare investors and strategic partners, developed through years of active involvement in the healthcare sector worldwide.</p>
           </div>
           <div className="card">
-            <h3>Track record</h3>
-            <p>€2bn+ advised, closing rate &gt;90%, cross-border EU/US experience.</p>
+            <h3>Execution excellence</h3>
+            <p>The rigor and standards of top-tier investment banks, built on more than 10 years of experience in top-tier institutions, combined with hands-on execution, agility and close client support.</p>
           </div>
         </div>
       </section>
