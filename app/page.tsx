@@ -482,13 +482,42 @@ export default function AmbroisePartners() {
           .hero { padding: 6.2rem 6vw 4.2rem; }
           .hero-card {
             min-height: auto;
-            padding: 3.8rem 1.4rem;
+            padding: 4.6rem 1.4rem 4.8rem;
             border-radius: 18px;
+            gap: 1rem;
+            background-size: 100% 170%;
+            background-position: top;
           }
-          .hero h1 { font-size: 1.45rem; letter-spacing: 0.12em; }
+          .hero h1 {
+            font-size: clamp(1.35rem, 5.5vw, 1.7rem);
+            letter-spacing: 0.06em;
+            line-height: 1.22;
+          }
           .hero-tags { gap: 0.9rem; font-size: 0.78rem; flex-wrap: wrap; }
           .hero-tags span { padding-left: 0.8rem; }
           .hero-tags span:not(:first-child)::before { height: 12px; }
+          .hero p {
+            display: block;
+            font-size: 0.98rem;
+            color: rgba(255, 255, 255, 0.92);
+            max-width: 34ch;
+            margin: 0.2rem auto 0.6rem;
+          }
+          .hero-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            width: 100%;
+            max-width: 320px;
+            margin: 0.4rem auto 0;
+          }
+          .hero-actions .btn,
+          .hero-actions .btn-glass {
+            width: 100%;
+            justify-content: center;
+            text-align: center;
+          }
+          .hero-actions .btn-glass { padding: 0.85rem 1.1rem; }
           .kpi-bar { padding: 1.6rem 5vw 0; }
           .kpi-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1.4rem; }
           .title { font-size: 1.55rem; }
@@ -529,6 +558,14 @@ export default function AmbroisePartners() {
             <span>Fundraising</span>
             <span>Licensing</span>
             <span>Strategic Growth</span>
+          </div>
+          <p>
+            Ambroise Partners accompagne les dirigeants santé avec une approche banque d’affaires,
+            du positionnement stratégique à la signature des deals.
+          </p>
+          <div className="hero-actions">
+            <a className="btn" href="#contact"><span>Nous contacter</span></a>
+            <a className="btn-glass" href="#services">Découvrir nos services</a>
           </div>
         </div>
       </header>
