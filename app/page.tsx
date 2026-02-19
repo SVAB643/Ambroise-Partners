@@ -120,6 +120,16 @@ export default function AmbroisePartners() {
           transition: color 0.2s ease;
         }
         .nav-links a:hover { color: #0d6bff; }
+        .alt-link {
+          border: 1px dashed rgba(255,255,255,0.65);
+          padding: 0.55rem 0.95rem;
+          border-radius: 999px;
+          font-size: 0.85rem;
+          color: inherit;
+          transition: all 0.2s ease;
+          opacity: 0.85;
+        }
+        .alt-link:hover { opacity: 1; background: rgba(255,255,255,0.08); }
         .cta { display: flex; gap: 0.75rem; }
         .btn {
           border: 1px solid ${scrolled ? '#0b1c3d' : '#ffffff'};
@@ -635,6 +645,7 @@ export default function AmbroisePartners() {
             <a href="#method">Method</a>
             <a href="#about">About</a>
             <a href="#contact">Contact</a>
+            <a className="alt-link" href="/1">Nouvelle version</a>
           </div>
           <div className="cta">
             <button className="mobile-menu-btn" onClick={() => setMobileMenuOpen(true)} aria-label="Open menu">
@@ -655,6 +666,7 @@ export default function AmbroisePartners() {
           <a href="#method" onClick={closeMobileMenu}>Method</a>
           <a href="#about" onClick={closeMobileMenu}>About</a>
           <a href="#contact" onClick={closeMobileMenu}>Contact</a>
+          <a href="/1" onClick={closeMobileMenu}>Nouvelle version</a>
         </div>
         <div className="mobile-cta">
           <a className="btn btn-primary" href="#contact" onClick={closeMobileMenu}>
