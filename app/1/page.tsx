@@ -479,7 +479,12 @@ export default function AmbroisePartnersModern() {
         });
       }
     }
-    function resize() { W=canvas.width=canvas.offsetWidth; H=canvas.height=canvas.offsetHeight; buildParticles(); }
+    function resize() {
+      if (!canvas) return;
+      W = canvas.width = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+      buildParticles();
+    }
 
     function animate() {
       ctx.clearRect(0,0,W,H);
