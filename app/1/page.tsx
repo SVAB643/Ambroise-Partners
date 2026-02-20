@@ -309,7 +309,7 @@ function DealsCarousel() {
                 onClick={() => setActiveIdx(idx)}
               >
                 <div className="deal-graph" style={{height: s.h}}>
-                  <GraphCanvas type={deal.graph as any} />
+                  <GraphCanvas type={deal.graph as 'bar' | 'line' | 'scatter' | 'donut' | 'area'} />
                 </div>
                 <div className="deal-info">
                   <div className="deal-category">{deal.category}</div>
@@ -948,9 +948,9 @@ export default function AmbroisePartnersModern() {
         <div className="contact-wrap">
           <div className="reveal">
             <span className="eyebrow">Get in touch</span>
-            <h2 className="section-title">Let's discuss your project</h2>
+            <h2 className="section-title">Let&apos;s discuss your project</h2>
             <p className="section-lede" style={{margin:'1rem auto 0',textAlign:'center'}}>
-              Let's explore together the best options for your next step.
+              Let&apos;s explore together the best options for your next step.
             </p>
           </div>
           <form className="contact-form reveal" onSubmit={handleSubmit}>

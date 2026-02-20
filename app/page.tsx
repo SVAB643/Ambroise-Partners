@@ -844,8 +844,8 @@ export default function AmbroisePartners() {
 
       <section id="contact" className={`fade-in ${isVisible['contact'] ? 'visible' : ''}`}>
         <div className="section-head">
-          <h2 className="title">Let's discuss your project</h2>
-          <p className="lede">Let's explore together the best options for your next step.</p>
+          <h2 className="title">Let&apos;s discuss your project</h2>
+          <p className="lede">Let&apos;s explore together the best options for your next step.</p>
         </div>
         <div className="contact-wrapper">
           <form onSubmit={handleContactSubmit} className="card contact-card">
