@@ -874,28 +874,6 @@ export default function AmbroisePartnersModern() {
 
       <DealsCarousel />
 
-      {/* VALUES */}
-      <section className="section section-bg" id="values">
-        <div className="section-head reveal">
-          <span className="eyebrow">Values</span>
-          <h2 className="section-title">Excellence &amp; alignment</h2>
-          <p className="section-lede">Principles that guide every engagement.</p>
-        </div>
-        <div className="values-grid">
-          {[
-            ['Rigor',       'Institutional-grade materials, sourced data, clear narrative: every deliverable is investor-ready.'],
-            ['Transparency','Roadmaps, milestones, clear reporting: you always know where we stand.'],
-            ['Alignment',   'Compensation model tied to deal success and value creation.'],
-          ].map(([tag,desc],i)=>(
-            <div className={`value-card reveal${i===1?' reveal-d1':i===2?' reveal-d2':''}`} key={tag}>
-              <span className="value-tag">{tag}</span>
-              <div className="value-title">{tag}</div>
-              <p className="value-desc">{desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* METHOD */}
       <section className="section section-bg" id="method">
         <div className="section-head reveal">

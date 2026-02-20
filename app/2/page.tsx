@@ -659,28 +659,6 @@ export default function AmbroisePartners() {
  </div>
  </div>
 
- <section id="values" className={`fade-in ${isVisible['values'] ? 'visible' : ''}`}>
- <div className="section-head">
- <div className="eyebrow">Values</div>
- <h2 className="title">Excellence & alignment</h2>
- <p className="lede">Principles that guide every engagement.</p>
- </div>
- <div className="grid-3">
- <div className="card">
- <h3>Rigor</h3>
- <p>Institutional-grade materials, sourced data, clear narrative: every deliverable is investor-ready.</p>
- </div>
- <div className="card">
- <h3>Transparency</h3>
- <p>Roadmaps, milestones, clear reporting: you always know where we stand.</p>
- </div>
- <div className="card">
- <h3>Alignment</h3>
- <p>Compensation model tied to deal success and value creation.</p>
- </div>
- </div>
- </section>
-
  <section id="method" className={`fade-in ${isVisible['method'] ? 'visible' : ''}`}>
  <div className="section-head">
  <div className="eyebrow">Methodology</div>
