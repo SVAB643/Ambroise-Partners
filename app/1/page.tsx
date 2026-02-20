@@ -2,87 +2,6 @@
 
 import React, { useEffect, useRef, useState, type FormEvent } from 'react';
 
-/* ─── Mini graph canvas for deal cards ─── */
-function GraphCanvas({ type }: { type: 'bar' | 'line' | 'scatter' | 'donut' | 'area' }) {
-  const ref = useRef<HTMLCanvasElement>(null);
-  useEffect(() => {
-    const canvas = ref.current; if (!canvas) return;
-    const ctx = canvas.getContext('2d')!;
-    let raf = 0, W = 0, H = 0, t = 0;
-    const resize = () => { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; };
-    const B = 'rgba(15,47,255,';
-    const px = 28, py = 20;
-
-    const draw = () => {
-      ctx.clearRect(0,0,W,H); t += 0.016;
-      const iW = W-px*2, iH = H-py*2;
-
-      if (type === 'area' || type === 'line') {
-        const N=50, pts=Array.from({length:N},(_,i)=>{
-          const f=i/(N-1);
-          return 0.1+f*0.72+Math.sin(f*Math.PI*2.5+t)*0.07*(1-f*.5);
-        });
-        [.25,.5,.75,1].forEach(g=>{
-          ctx.beginPath(); ctx.moveTo(px,py+iH*(1-g)); ctx.lineTo(px+iW,py+iH*(1-g));
-          ctx.strokeStyle='rgba(15,47,255,0.05)'; ctx.lineWidth=1; ctx.stroke();
-        });
-        ctx.beginPath(); ctx.moveTo(px,py+iH);
-        pts.forEach((v,i)=>ctx.lineTo(px+i/(N-1)*iW, py+iH*(1-v)));
-        ctx.lineTo(px+iW,py+iH); ctx.closePath();
-        const grd=ctx.createLinearGradient(0,py,0,py+iH);
-        grd.addColorStop(0,B+'0.12)'); grd.addColorStop(1,B+'0.01)');
-        ctx.fillStyle=grd; ctx.fill();
-        ctx.beginPath();
-        pts.forEach((v,i)=>{const x=px+i/(N-1)*iW,y=py+iH*(1-v); i?ctx.lineTo(x,y):ctx.moveTo(x,y);});
-        ctx.strokeStyle=B+'0.78)'; ctx.lineWidth=1.8; ctx.lineJoin='round'; ctx.stroke();
-        ctx.beginPath(); ctx.arc(px+iW, py+iH*(1-pts[N-1]), 3.5, 0, Math.PI*2);
-        ctx.fillStyle=B+'0.9)'; ctx.fill();
-      }
-
-      if (type === 'bar') {
-        const N=6;
-        const vals=[0.55,0.38,0.72,0.45,0.85,0.62];
-        const bw=iW/N*0.52, gap=iW/N;
-        vals.forEach((v,i)=>{
-          const bh=iH*v, x=px+i*gap+gap*.24, y=py+iH-bh;
-          const g=ctx.createLinearGradient(0,y,0,y+bh);
-          g.addColorStop(0,B+'0.72)'); g.addColorStop(1,B+'0.15)');
-          ctx.fillStyle=g; ctx.beginPath();
-          ctx.roundRect(x,y,bw,bh,[3,3,0,0]); ctx.fill();
-        });
-      }
-
-      if (type === 'scatter') {
-        const pts=[[.14,.68],[.26,.42],[.40,.58],[.52,.24],[.60,.52],[.68,.35],[.78,.62],[.88,.20],[.92,.46],[.22,.28],[.44,.78],[.62,.16],[.76,.70]];
-        pts.forEach(([fx,fy],i)=>{
-          const x=px+fx*iW, y=py+fy*iH;
-          ctx.beginPath(); ctx.arc(x,y,3,0,Math.PI*2);
-          ctx.fillStyle=B+(0.38+0.18*Math.sin(t*0.8+i))+')'; ctx.fill();
-        });
-        for(let i=0;i<pts.length;i++) for(let j=i+1;j<pts.length;j++){
-          const dx=(pts[i][0]-pts[j][0])*iW, dy=(pts[i][1]-pts[j][1])*iH, d=Math.sqrt(dx*dx+dy*dy);
-          if(d<iW*.20){ ctx.beginPath(); ctx.moveTo(px+pts[i][0]*iW,py+pts[i][1]*iH); ctx.lineTo(px+pts[j][0]*iW,py+pts[j][1]*iH); ctx.strokeStyle=B+(0.06*(1-d/(iW*.20)))+')'; ctx.lineWidth=1; ctx.stroke(); }
-        }
-      }
-
-      if (type === 'donut') {
-        const cx=W/2, cy=H/2, R=Math.min(iW,iH)*.38, ri=R*.58;
-        const segs=[{v:.42,a:.85},{v:.28,a:.44},{v:.18,a:.20},{v:.12,a:.09}];
-        let s=-Math.PI/2;
-        segs.forEach(({v,a})=>{ const e=s+v*Math.PI*2; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,R,s,e); ctx.fillStyle=B+a+')'; ctx.fill(); s=e; });
-        ctx.beginPath(); ctx.arc(cx,cy,ri,0,Math.PI*2); ctx.fillStyle='#f5f6ff'; ctx.fill();
-        ctx.fillStyle=B+'0.88)'; ctx.font=`600 ${Math.round(R*.38)}px Inter,sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('42%',cx,cy);
-      }
-
-      raf=requestAnimationFrame(draw);
-    };
-    resize(); draw();
-    window.addEventListener('resize',resize);
-    return ()=>{ cancelAnimationFrame(raf); window.removeEventListener('resize',resize); };
-  },[type]);
-  return <canvas ref={ref} style={{width:'100%',height:'100%',display:'block'}} />;
-}
-
 /* ─── Animated canvas for each approach pillar ─── */
 function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -229,103 +148,198 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
 }
 
 
-/* ─── Deals Carousel Section ─── */
-const DEALS = [
-  { id:1, category:'M&A', title:'Cross-border oncology acquisition', badges:[{dot:'green',label:'Closed · €180M'},{dot:'blue',label:'EU → US'}], graph:'area' },
-  { id:2, category:'Fundraising', title:'Series B — rare disease biotech', badges:[{dot:'green',label:'Closed · €45M'},{dot:'blue',label:'Lead investor secured'}], graph:'bar', featured:true },
-  { id:3, category:'Licensing', title:'Platform licensing to Big Pharma', badges:[{dot:'orange',label:'Upfront + milestones'},{dot:'blue',label:'Global rights'}], graph:'scatter' },
-  { id:4, category:'M&A', title:'Medtech buy-side mandate', badges:[{dot:'green',label:'Closed · €95M'},{dot:'blue',label:'Strategic fit'}], graph:'line' },
-  { id:5, category:'Strategic Advisory', title:'Portfolio repositioning', badges:[{dot:'blue',label:'3 assets'},{dot:'green',label:'Value unlocked'}], graph:'donut' },
-  { id:6, category:'Fundraising', title:'Series A — diagnostics platform', badges:[{dot:'green',label:'Closed · €22M'},{dot:'blue',label:'Pan-European'}], graph:'area' },
+/* ─── Expertise Section ─── */
+const DOMAINS = [
+  { id:1, name:'Biotechnology',   tagline:'From discovery to clinical-stage transactions',      desc:'We advise biotech companies at every stage — from seed financing to late-stage M&A. Our team combines deep scientific expertise with financial rigor to optimally position assets in an increasingly competitive market.',   tags:['Oncology','Gene Therapy','Immunology','Rare Diseases'],          color:'#e8e4f0', accentColor:'#3d1a6b' },
+  { id:2, name:'Pharmaceuticals', tagline:'Portfolio strategy and value-creating transactions',  desc:'From licensing deals to full acquisitions, we help pharma companies navigate complex strategic decisions — portfolio optimization, asset divestitures, in-licensing, and cross-border M&A with major industry players.', tags:['Licensing','Portfolio Optimization','Cross-border M&A','Spin-offs'], color:'#e4e8f0', accentColor:'#1a3a6b' },
+  { id:3, name:'Medical Devices',  tagline:'Connecting innovators with strategic buyers',         desc:'The medtech sector demands both technical precision and commercial insight. We advise device companies on fundraising, strategic partnerships, and M&A — from early-stage innovators to established platforms.',           tags:['Surgical Robotics','Implantables','Wearables','Capital Equipment'],  color:'#e4f0e8', accentColor:'#1a5a3d' },
+  { id:4, name:'Diagnostics',      tagline:'Structuring deals in a fast-moving landscape',        desc:'Diagnostics sits at the intersection of technology and medicine. We support IVD companies, molecular diagnostics platforms, and point-of-care innovators in capital raises, partnerships, and exit transactions.',        tags:['IVD','Molecular Diagnostics','Point-of-Care','Liquid Biopsy'],       color:'#f0e8e4', accentColor:'#6b3a1a' },
+  { id:5, name:'Digital Health',   tagline:'Where technology meets healthcare finance',           desc:'Digital health requires a unique blend of tech-sector fluency and healthcare domain knowledge. We advise SaaS, AI-driven platforms, and healthtech companies on growth financing, strategic alliances, and M&A.',        tags:['AI / ML','SaaS Platforms','Remote Monitoring','Health Data'],         color:'#e4e8ff', accentColor:'#0f2fff' },
 ];
 
-const TABS = ['All','M&A','Fundraising','Licensing','Strategic Advisory'];
+function ExpertiseSection() {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const N = DOMAINS.length;
+  const CARD_W = 340;
+  const GAP    = 24;
+  const UNIT   = CARD_W + GAP;
 
-function DealsCarousel() {
-  const [activeTab, setActiveTab] = React.useState('All');
-  const [activeIdx, setActiveIdx] = React.useState(1);
-
-  const filtered = activeTab === 'All' ? DEALS : DEALS.filter(d => d.category === activeTab);
-  const total = filtered.length;
-
-  React.useEffect(() => { setActiveIdx(Math.min(1, filtered.length-1)); }, [activeTab]);
-
-  const prev = () => setActiveIdx(i => Math.max(0, i-1));
-  const next = () => setActiveIdx(i => Math.min(total-1, i+1));
-
-  type CardLayout = { w:string; h:string; ty:number; scale:number; opacity:number; z:number; };
-  const layout: Record<number, CardLayout> = {
-    [-2]: { w:'220px', h:'140px', ty:80,  scale:.82, opacity:.38, z:1 },
-    [-1]: { w:'300px', h:'200px', ty:44,  scale:.91, opacity:.72, z:3 },
-    [0]:  { w:'420px', h:'280px', ty:0,   scale:1,   opacity:1,   z:5 },
-    [1]:  { w:'300px', h:'200px', ty:44,  scale:.91, opacity:.72, z:3 },
-    [2]:  { w:'220px', h:'140px', ty:80,  scale:.82, opacity:.38, z:1 },
-  };
+  const goTo = (i: number) => setActiveIdx(Math.max(0, Math.min(N - 1, i)));
 
   return (
-    <section className="deals-section">
-      <div className="deals-inner">
-        <div className="deals-header reveal">
-          <span className="eyebrow">Track record</span>
-          <h2 className="section-title">Selected transactions</h2>
-          <p className="section-lede">A sample of deals executed across our focus areas.</p>
-        </div>
+    <section style={{ background: '#f8f7f4', padding: '8rem 0', overflow: 'hidden' }}>
+      <div style={{ maxWidth: 1440, margin: '0 auto', display: 'grid', gridTemplateColumns: '360px 1fr', gap: '5rem', paddingLeft: '4vw' }}>
 
-        <div className="deals-controls reveal">
-          <button className="deals-nav" onClick={prev} disabled={activeIdx===0}>
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"/></svg>
-          </button>
-          <div className="deals-tab-sep"/>
-          {TABS.map((tab,i) => (
-            <React.Fragment key={tab}>
-              <button className={`deals-tab${activeTab===tab?' active':''}`} onClick={()=>setActiveTab(tab)}>{tab}</button>
-              {i < TABS.length-1 && <span style={{color:'var(--line)',fontSize:'.8rem',userSelect:'none'}}>·</span>}
-            </React.Fragment>
-          ))}
-          <div className="deals-tab-sep"/>
-          <button className="deals-nav" onClick={next} disabled={activeIdx>=total-1}>
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/></svg>
-          </button>
-        </div>
-      </div>
+        {/* ── LEFT: title + nav panel ── */}
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', paddingTop: '0.5rem', paddingBottom: '0.5rem' }} className="reveal">
+          <div>
+            <span className="eyebrow">Areas of expertise</span>
+            <h2 className="section-title" style={{ margin: '0.4rem 0 1.6rem' }}>Our Domains</h2>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: '0.88rem', lineHeight: 1.82, color: '#6b6b78', fontWeight: 300, maxWidth: 300, margin: 0 }}>
+              We operate at the forefront of five major healthcare verticals, bringing sector-specific expertise to every transaction.
+            </p>
+          </div>
 
-      <div className="deals-fan-outer">
-        <div className="deals-fan-track">
-          {filtered.map((deal, idx) => {
-            const pos = idx - activeIdx;
-            if (Math.abs(pos) > 2) return null;
-            const s = layout[pos];
-            const isActive = pos === 0;
-            return (
-              <div
-                key={deal.id}
-                className={`deal-card ${isActive ? 'active-card' : 'side-card'}`}
-                style={{
-                  width: s.w,
-                  transform: `translateY(${s.ty}px) scale(${s.scale})`,
-                  opacity: s.opacity,
-                  zIndex: s.z,
-                }}
-                onClick={() => setActiveIdx(idx)}
-              >
-                <div className="deal-graph" style={{height: s.h}}>
-                  <GraphCanvas type={deal.graph as 'bar' | 'line' | 'scatter' | 'donut' | 'area'} />
-                </div>
-                <div className="deal-info">
-                  <div className="deal-category">{deal.category}</div>
-                  <div className="deal-title">{deal.title}</div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="deals-active-meta">
-          {filtered[activeIdx]?.badges.map((b,i) => (
-            <div key={i} className="deal-badge">
-              <span className={`deal-dot ${b.dot}`}/>{b.label}
+          <div style={{ marginTop: '3rem' }}>
+            {/* Vertical domain list */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.1rem', marginBottom: '2.5rem' }}>
+              {DOMAINS.map((dom, i) => (
+                <button
+                  key={dom.id}
+                  onClick={() => goTo(i)}
+                  style={{ fontFamily: 'Inter,sans-serif', fontSize: '0.83rem', fontWeight: activeIdx === i ? 600 : 400, color: activeIdx === i ? '#1a1a1a' : '#a0a0a8', padding: '0.45rem 0', background: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'center', gap: '0.75rem', transition: 'color .25s' }}
+                >
+                  <span style={{ width: 20, height: 1.5, borderRadius: 2, background: activeIdx === i ? dom.accentColor : '#d8d8e0', display: 'inline-block', flexShrink: 0, transition: 'background .25s' }} />
+                  {dom.name}
+                </button>
+              ))}
             </div>
-          ))}
+
+            {/* Arrows + counter */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+              <button
+                onClick={() => goTo(activeIdx - 1)} disabled={activeIdx === 0}
+                style={{ width: 40, height: 40, borderRadius: '50%', background: activeIdx === 0 ? '#e8e8e8' : '#1a1a1a', color: activeIdx === 0 ? '#b0b0b8' : '#fff', border: 'none', cursor: activeIdx === 0 ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .2s, color .2s', flexShrink: 0 }}
+              >
+                <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"/></svg>
+              </button>
+              <button
+                onClick={() => goTo(activeIdx + 1)} disabled={activeIdx === N - 1}
+                style={{ width: 40, height: 40, borderRadius: '50%', background: activeIdx === N - 1 ? '#e8e8e8' : '#1a1a1a', color: activeIdx === N - 1 ? '#b0b0b8' : '#fff', border: 'none', cursor: activeIdx === N - 1 ? 'default' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .2s, color .2s', flexShrink: 0 }}
+              >
+                <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
+              </button>
+              <span style={{ fontFamily: 'Inter,sans-serif', fontSize: '0.72rem', color: '#a0a0a8', fontWeight: 300, marginLeft: '0.5rem' }}>
+                {String(activeIdx + 1).padStart(2, '0')} / {String(N).padStart(2, '0')}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* ── RIGHT: card track ── */}
+        <div style={{ overflow: 'hidden', paddingTop: '0.5rem', paddingBottom: '0.5rem' }}>
+          <div style={{
+            display: 'flex',
+            gap: GAP,
+            transform: `translateX(-${activeIdx * UNIT}px)`,
+            transition: 'transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          }}>
+            {DOMAINS.map((dom, i) => {
+              const isActive = i === activeIdx;
+              return (
+                <div
+                  key={dom.id}
+                  onClick={() => goTo(i)}
+                  style={{
+                    flexShrink: 0,
+                    width: CARD_W,
+                    borderRadius: 18,
+                    overflow: 'hidden',
+                    background: '#fff',
+                    border: `1.5px solid ${isActive ? dom.accentColor + '28' : '#e8e8f0'}`,
+                    boxShadow: isActive ? '0 20px 64px rgba(0,0,0,0.09), 0 2px 8px rgba(0,0,0,0.05)' : '0 2px 10px rgba(0,0,0,0.04)',
+                    opacity: isActive ? 1 : 0.55,
+                    transform: isActive ? 'scale(1)' : 'scale(0.97)',
+                    transition: 'opacity .45s ease, transform .45s ease, box-shadow .45s ease, border-color .45s ease',
+                    cursor: isActive ? 'default' : 'pointer',
+                  } as React.CSSProperties}
+                >
+                  {/* Photo placeholder */}
+                  <div style={{ height: 220, background: `linear-gradient(145deg, ${dom.color} 0%, ${dom.color}90 100%)`, display: 'flex', alignItems: 'flex-end', padding: '1.1rem 1.4rem' }}>
+                    <span style={{ fontFamily: 'Inter,sans-serif', fontSize: '0.58rem', fontWeight: 500, letterSpacing: '0.14em', textTransform: 'uppercase', color: dom.accentColor, opacity: 0.45 }}>Photo à venir</span>
+                  </div>
+
+                  {/* Content */}
+                  <div style={{ padding: '1.5rem 1.7rem 1.9rem' }}>
+                    <span style={{ display: 'block', fontFamily: 'Lora,Georgia,serif', fontStyle: 'italic', fontSize: '0.75rem', color: dom.accentColor, marginBottom: '0.4rem', opacity: 0.75 }}>
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <h3 style={{ fontFamily: 'Lora,Georgia,serif', fontWeight: 400, fontSize: '1.25rem', lineHeight: 1.18, letterSpacing: '-0.015em', color: '#1a1a1a', margin: '0 0 0.35rem' }}>
+                      {dom.name}
+                    </h3>
+                    <p style={{ fontFamily: 'Lora,Georgia,serif', fontStyle: 'italic', fontSize: '0.84rem', color: dom.accentColor, margin: '0 0 0.85rem', lineHeight: 1.45, opacity: 0.85 }}>
+                      {dom.tagline}
+                    </p>
+                    <p style={{ fontFamily: 'Inter,sans-serif', fontSize: '0.8rem', lineHeight: 1.76, color: '#6b6b78', fontWeight: 300, margin: '0 0 1rem' }}>
+                      {dom.desc}
+                    </p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem' }}>
+                      {dom.tags.map(tag => (
+                        <span key={tag} style={{ fontSize: '0.58rem', fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: dom.accentColor, border: `1px solid ${dom.accentColor}30`, borderRadius: 100, padding: '0.18rem 0.55rem', fontFamily: 'Inter,sans-serif' }}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+/* ─── Services Section ─── */
+const SERVICES = [
+  { title: 'M&A', desc: 'Buy-side, sell-side and strategic acquisitions across the global healthcare ecosystem.' },
+  { title: 'Fundraising', desc: 'Growth financing from early-stage to later rounds, partnering with leading healthcare-focused investors.' },
+  { title: 'Licensing & Strategic Partnerships', desc: 'Structuring value-creating licensing and collaboration agreements with global strategic players.' },
+  { title: 'Strategic Advisory & External Growth', desc: 'Independent advice on strategic options, portfolio positioning and long-term growth trajectories.' },
+  { title: 'Capital Raising Solutions for all Market Cycles', desc: 'We partner with companies across the healthcare landscape to design and implement optimal capital structures. We bring significant domain expertise across a broad spectrum of financing alternatives, including IPOs, Follow-on Offerings, At-the-Market transactions, Private Placements of Equity, Convertible Debt, and Term Loan Debt Facilities.' },
+];
+
+const svcS: Record<string, React.CSSProperties> = {
+  section: { background: '#fff', padding: '8rem 4vw' },
+  inner: { maxWidth: 1440, margin: '0 auto' },
+  header: { marginBottom: '4.5rem' },
+  eyebrow: { display: 'block', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#6b6b78', marginBottom: '0.8rem', fontFamily: 'Inter, sans-serif' },
+  title: { fontFamily: 'Lora, Georgia, serif', fontWeight: 400, fontSize: 'clamp(2.2rem, 4vw, 3.2rem)', lineHeight: 1.1, letterSpacing: '-0.02em', color: '#1a1a1a' },
+  grid: { border: '1px solid #e8e8f0', borderRadius: 2 },
+  topRow: { display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)' },
+  dividerRow: { display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', borderTop: '1px solid #e8e8f0', borderBottom: '1px solid #e8e8f0' },
+  bottomRow: { display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)' },
+  cell: { padding: '2.4rem 2.2rem', borderRight: '1px solid #e8e8f0' },
+  dividerCell: { padding: '0.6rem 2.2rem', borderRight: '1px solid #e8e8f0', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', position: 'relative' },
+  plus: { position: 'absolute', right: -10, top: '50%', transform: 'translateY(-50%)', fontSize: '1rem', color: '#b0b0be', fontFamily: 'Inter, sans-serif', fontWeight: 300, zIndex: 1, background: '#fff', padding: '0 2px' },
+  svcNum: { fontFamily: 'Lora, Georgia, serif', fontStyle: 'italic', fontSize: '0.9rem', color: '#0f2fff', marginBottom: '1rem', display: 'block' },
+  svcTitle: { fontFamily: 'Lora, Georgia, serif', fontWeight: 400, fontSize: '1.25rem', lineHeight: 1.25, letterSpacing: '-0.01em', color: '#1a1a1a' },
+  svcDesc: { fontFamily: 'Inter, sans-serif', fontSize: '0.93rem', lineHeight: 1.75, color: '#6b6b78', fontWeight: 300 },
+};
+
+function ServicesSection() {
+  return (
+    <section id="services" style={svcS.section}>
+      <div style={svcS.inner}>
+        <div style={svcS.header} className="reveal">
+          <span style={svcS.eyebrow}>What we do</span>
+          <h2 style={svcS.title}>Our Services</h2>
+        </div>
+        <div style={svcS.grid} className="reveal">
+          <div style={svcS.topRow}>
+            {SERVICES.map((svc, i) => (
+              <div key={i} style={svcS.cell}>
+                <span style={svcS.svcNum}>{String(i + 1).padStart(2, '0')}</span>
+                <h3 style={svcS.svcTitle}>{svc.title}</h3>
+              </div>
+            ))}
+          </div>
+          <div style={svcS.dividerRow}>
+            {SERVICES.map((_, i) => (
+              <div key={i} style={svcS.dividerCell}>
+                {i < SERVICES.length - 1 && <span style={svcS.plus}>+</span>}
+              </div>
+            ))}
+          </div>
+          <div style={svcS.bottomRow}>
+            {SERVICES.map((svc, i) => (
+              <div key={i} style={svcS.cell} className={i === SERVICES.length - 1 ? 'svc-scroll-cell' : ''}>
+                <p style={svcS.svcDesc}>{svc.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -398,82 +412,120 @@ export default function AmbroisePartnersModern() {
     function buildParticles() {
       particles = [];
 
-      const SX0 = W*0.15, SY0 = H*1.02;
-      const SX1 = W*0.85, SY1 = -H*0.02;
-      const dvx = SX1-SX0, dvy = SY1-SY0, spineLen = Math.sqrt(dvx*dvx+dvy*dvy);
-      const tx = dvx/spineLen, ty = dvy/spineLen;
-      const px = -ty, py = tx;
+      // Spine: bottom-left → top-right diagonal
+      const SX0 = W * 0.08, SY0 = H * 1.06;
+      const SX1 = W * 0.92, SY1 = -H * 0.06;
+      const dvx = SX1 - SX0, dvy = SY1 - SY0;
+      const spineLen = Math.sqrt(dvx * dvx + dvy * dvy);
+      const tx = dvx / spineLen, ty = dvy / spineLen;
+      const perpX = -ty, perpY = tx;
 
-      const TURNS = 3.5;
+      const TURNS = 4.2;
+      const AMP   = W * 0.12;
+      const DEPTH_Y = 0.13;
 
       for (let i = 0; i < PARTICLE_COUNT; i++) {
         const frac = Math.random();
-        const perspective = 0.35 + frac * 0.65;
-        const AMP = W * 0.09 * perspective;
 
-        const sx = SX0 + tx * spineLen * frac;
-        const sy = SY0 + ty * spineLen * frac;
+        const spX = SX0 + tx * spineLen * frac;
+        const spY = SY0 + ty * spineLen * frac;
 
-        const isA = Math.random() < 0.5;
-        const strandPhase = isA ? 0 : Math.PI;
-        const angle = frac * TURNS * Math.PI * 2 + strandPhase;
+        const rnd  = Math.random();
+        const role = rnd < 0.55 ? 'core'
+                   : rnd < 0.70 ? 'halo'
+                   : rnd < 0.84 ? 'rung'
+                   :              'atm';
 
-        const coreX = sx + px * Math.cos(angle) * AMP;
-        const coreY = sy + py * Math.cos(angle) * AMP;
+        const isA      = Math.random() < 0.5;
+        const phase    = isA ? 0 : Math.PI;
+        const angle    = frac * TURNS * Math.PI * 2 + phase;
+        const cosA     = Math.cos(angle);
+        const sinA     = Math.sin(angle);
+        const depthF   = (sinA + 1) * 0.5;
 
-        const isRung = Math.random() < 0.10;
-        let targetX = coreX, targetY = coreY;
-        if (isRung) {
-          const otherAngle = frac * TURNS * Math.PI * 2 + (isA ? Math.PI : 0);
-          const otherX = sx + px * Math.cos(otherAngle) * AMP;
-          const otherY = sy + py * Math.cos(otherAngle) * AMP;
-          const t2 = Math.random();
-          targetX = coreX + (otherX - coreX) * t2;
-          targetY = coreY + (otherY - coreY) * t2;
+        let tgtX = spX + perpX * cosA * AMP;
+        let tgtY = spY + perpY * cosA * AMP + sinA * AMP * DEPTH_Y;
+
+        let sigma: number, alpha: number, size: number;
+        let colR = 255, colG = 255, colB = 255;
+
+        if (role === 'core') {
+          sigma = W * 0.004 * (0.5 + Math.random() * 0.9);
+          alpha = 0.20 + 0.62 * depthF;
+          size  = 0.28 + 0.92 * depthF + Math.random() * 0.22;
+          if (Math.random() < 0.045) {
+            alpha = 0.65 + 0.30 * depthF;
+            size  = 1.0  + 1.0  * depthF;
+          }
+          if (isA && depthF > 0.62 && Math.random() < 0.20) {
+            colR = 178; colG = 200; colB = 255;
+          }
+        } else if (role === 'halo') {
+          sigma = W * 0.013 * (0.5 + Math.random());
+          alpha = 0.007 + 0.042 * depthF;
+          size  = 0.14 + 0.5 * Math.random();
+        } else if (role === 'rung') {
+          const aA      = frac * TURNS * Math.PI * 2;
+          const cosAA   = Math.cos(aA);
+          const sinAA   = Math.sin(aA);
+          const t2      = Math.random();
+          const rungLat = cosAA * AMP * (1 - 2 * t2);
+          const rungSin = sinAA * (1 - 2 * t2);
+          const rDepthF = (rungSin + 1) * 0.5;
+
+          tgtX  = spX + perpX * rungLat;
+          tgtY  = spY + perpY * rungLat + rungSin * AMP * DEPTH_Y;
+          sigma = W * 0.0028;
+          alpha = 0.05 + 0.22 * rDepthF;
+          size  = 0.17 + 0.36 * rDepthF;
+        } else {
+          const atmR = AMP * (1.2 + Math.random() * 2.0);
+          const atmA = Math.random() * Math.PI * 2;
+          tgtX  = spX + Math.cos(atmA) * atmR * 0.65;
+          tgtY  = spY + Math.sin(atmA) * atmR * 0.8;
+          sigma = W * 0.007;
+          alpha = 0.003 + Math.random() * 0.015;
+          size  = 0.1 + Math.random() * 0.3;
         }
 
-        const u1 = Math.max(Math.random(), 1e-5);
-        const mag = Math.sqrt(-2.0 * Math.log(u1));
-        const scatterAngle = Math.random() * Math.PI * 2;
-        const sigma = Math.pow(Math.random(), 0.65) * W * 0.018 * perspective;
-        const dnaX = targetX + Math.cos(scatterAngle) * mag * sigma;
-        const dnaY = targetY + Math.sin(scatterAngle) * mag * sigma;
+        // Gaussian scatter
+        const u1   = Math.max(Math.random(), 1e-7);
+        const mag  = Math.sqrt(-2 * Math.log(u1));
+        const scA  = Math.random() * Math.PI * 2;
+        const dnaX = tgtX + Math.cos(scA) * mag * sigma;
+        const dnaY = tgtY + Math.sin(scA) * mag * sigma;
 
-        const dist = Math.sqrt((dnaX - targetX)**2 + (dnaY - targetY)**2);
-        const normDist = Math.min(dist / (W * 0.018), 1);
-        const coreness = 1 - normDist;
-
-        const isBright = Math.random() < 0.07;
-        const sizeScale = 0.5 + perspective * 0.5;
-        const size = isBright
-          ? (Math.random() * 0.9 + 0.4) * sizeScale
-          : (Math.random() * 0.35 + 0.05) * sizeScale;
-
-        const alpha = isBright
-          ? Math.random() * 0.5 + 0.38
-          : Math.max(0.01, coreness * coreness * (Math.random() * 0.65 + 0.12) + Math.random() * 0.025);
+        const dist       = Math.hypot(dnaX - tgtX, dnaY - tgtY);
+        const falloff    = Math.max(0, 1 - dist / (sigma * 2.2));
+        const finalAlpha = alpha * (0.22 + 0.78 * falloff);
+        const finalSize  = Math.max(0.1, size);
 
         const disperseX = Math.random() * W;
         const disperseY = Math.random() * H;
+        const spd = Math.random() * 0.065 + 0.012;
+        const ph  = Math.random() * Math.PI * 2;
+        const floatAmp = role === 'core' ? 0.70
+                       : role === 'rung' ? 0.45
+                       : role === 'halo' ? 1.4
+                       : 2.2;
 
-        const spd = Math.random() * 0.10 + 0.025;
-        const ph = Math.random() * Math.PI * 2;
+        const colorStr = `rgba(${colR},${colG},${colB},`;
         let x = dnaX, y = dnaY;
 
         particles.push({
           update(prog, t) {
             const eased = prog < .5 ? 2*prog*prog : 1 - Math.pow(-2*prog+2, 2)/2;
-            const baseX = dnaX + (disperseX - dnaX) * eased;
-            const baseY = dnaY + (disperseY - dnaY) * eased;
-            x = baseX + Math.sin(t * spd + ph) * (1.5 + eased * 2.0);
-            y = baseY + Math.cos(t * spd * 0.88 + ph) * (1.2 + eased * 1.8);
+            const bX = dnaX + (disperseX - dnaX) * eased;
+            const bY = dnaY + (disperseY - dnaY) * eased;
+            x = bX + Math.sin(t * spd + ph)        * floatAmp * (1 + eased * 1.8);
+            y = bY + Math.cos(t * spd * 0.85 + ph) * floatAmp * 0.9 * (1 + eased * 1.8);
           },
           draw(prog) {
             const eased = prog < .5 ? 2*prog*prog : 1 - Math.pow(-2*prog+2, 2)/2;
-            const dispAlpha = alpha * (1 - eased * 0.3);
+            const a = finalAlpha * (1 - eased * 0.28);
             ctx.beginPath();
-            ctx.arc(x, y, size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255,255,255,${dispAlpha})`;
+            ctx.arc(x, y, finalSize, 0, Math.PI * 2);
+            ctx.fillStyle = colorStr + a + ')';
             ctx.fill();
           },
         });
@@ -557,20 +609,23 @@ export default function AmbroisePartnersModern() {
         .nav-links a{font-size:.84rem;font-weight:400;color:rgba(255,255,255,0.78);padding:.5rem 1rem;transition:color .18s;}
         .nav-links a:hover{color:#fff;}
         .nav-cta{
-          margin-left:.5rem;background:#fff!important;color:var(--ink)!important;
-          padding:.55rem 1.45rem!important;border-radius:999px;
-          font-size:.82rem!important;font-weight:500!important;
-          transition:background .22s!important,color .22s!important,box-shadow .22s!important;
+          margin-left:.5rem;
+          background:#fff!important;color:var(--ink)!important;
+          padding:.65rem 1.7rem!important;border-radius:9999px;
+          display:inline-flex;align-items:center;justify-content:center;
+          font-size:.85rem!important;font-weight:600!important;
+          border:1px solid rgba(255,255,255,0.55);
+          transition:background .22s!important,color .22s!important,box-shadow .22s!important,border-color .18s var(--ease),border-radius .18s var(--ease);
         }
-        .nav-cta:hover{background:var(--blue)!important;color:#fff!important;}
+        .nav-cta:hover{background:var(--blue)!important;color:#fff!important;border-color:transparent;border-radius:9999px;}
         .nav-scrolled nav{background:rgba(255,255,255,0.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line);box-shadow:0 1px 12px rgba(0,0,0,0.06);}
         .nav-scrolled .logo-ap{color:var(--ink);}
         .nav-scrolled .logo-sep{background:var(--line);}
         .nav-scrolled .logo-name{color:var(--muted);}
         .nav-scrolled .nav-links a{color:var(--muted);}
         .nav-scrolled .nav-links a:hover{color:var(--ink);}
-        .nav-scrolled .nav-cta{background:var(--ink)!important;color:#fff!important;}
-        .nav-scrolled .nav-cta:hover{background:var(--blue)!important;}
+        .nav-scrolled .nav-cta{background:var(--ink)!important;color:#fff!important;border-radius:9999px;border-color:var(--ink);}
+        .nav-scrolled .nav-cta:hover{background:var(--blue)!important;border-color:var(--blue);}
 
         /* ── HERO ── */
         .hero{
@@ -636,7 +691,7 @@ export default function AmbroisePartnersModern() {
         .hero-footnote{margin-top:1.2rem;font-size:.78rem;color:rgba(255,255,255,.38);font-weight:300;opacity:0;animation:fadeUp .9s .9s var(--ease) forwards;}
 
         /* ── SECTIONS ── */
-        .section{max-width:1280px;margin:0 auto;padding:8rem 5vw;color:var(--ink);}
+        .section{max-width:1440px;margin:0 auto;padding:8rem 4vw;color:var(--ink);}
         .section-bg{background:var(--white);}
         .eyebrow{display:block;font-size:.72rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;}
         .section-title{font-family:var(--serif);font-weight:400;font-size:clamp(2.2rem,4vw,3.6rem);line-height:1.1;letter-spacing:-.02em;margin-bottom:1rem;}
@@ -702,58 +757,60 @@ export default function AmbroisePartnersModern() {
         .submit-btn{align-self:center;background:var(--ink);color:#fff;border:none;padding:1rem 3rem;border-radius:100px;font-family:var(--sans);font-size:.75rem;font-weight:500;letter-spacing:.06em;cursor:pointer;transition:background .22s,transform .2s,box-shadow .22s;}
         .submit-btn:hover{background:var(--blue);transform:translateY(-2px);box-shadow:0 10px 28px rgba(15,47,255,.2);}
 
-        /* ── FOOTER ── */
-        footer{background:linear-gradient(0deg,#010510 0%,#020818 10%,#051428 28%,#092a56 50%,#0f4f98 68%,#3485d8 82%,#a8ccf5 92%,#e0eeff 97%,#ffffff 100%);color:#fff;padding:16rem 5vw 4rem;}
-        .footer-inner{max-width:1280px;margin:0 auto;}
-        .footer-top{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:3rem;border-bottom:1px solid rgba(255,255,255,.1);flex-wrap:wrap;gap:2.5rem;}
-        .footer-logo{font-family:var(--serif);font-style:italic;font-size:1.6rem;color:#fff;}
-        .footer-tagline{margin-top:.4rem;color:rgba(255,255,255,.38);font-size:.67rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;}
-        .footer-links{display:flex;gap:3.5rem;flex-wrap:wrap;}
-        .footer-col-title{font-size:.67rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:1.1rem;}
-        .footer-col a{display:block;font-size:.9rem;color:rgba(255,255,255,.52);margin-bottom:.65rem;transition:color .18s;}
-        .footer-col a:hover{color:#fff;}
-        .footer-bottom{margin-top:2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
-        .footer-copy{font-size:.67rem;color:rgba(255,255,255,.3);}
+        /* ── SERVICE SCROLL CELL ── */
+        .svc-scroll-cell{position:relative;max-height:9.5rem;overflow:hidden;}
+        .svc-scroll-cell::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2.8rem;background:linear-gradient(to bottom,transparent,#fff);pointer-events:none;transition:opacity .22s;}
+        .svc-scroll-cell:hover{overflow-y:auto;}
+        .svc-scroll-cell:hover::after{opacity:0;}
 
-        /* ── DEALS CAROUSEL ── */
-        .deals-section{background:#f7f7fa;padding:7rem 0 6rem;}
-        .deals-inner{max-width:900px;margin:0 auto;padding:0 5vw;}
-        .deals-header{text-align:center;margin-bottom:2.5rem;}
-        .deals-header .section-title{margin-bottom:.5rem;}
-        .deals-header .section-lede{margin:0 auto;text-align:center;}
-        .deals-controls{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:3.5rem;flex-wrap:wrap;}
-        .deals-tab{font-size:.82rem;font-weight:400;color:var(--muted);padding:.38rem 1rem;cursor:pointer;background:transparent;border:none;font-family:var(--sans);transition:color .18s;white-space:nowrap;}
-        .deals-tab:hover{color:var(--ink);}
-        .deals-tab.active{font-weight:700;color:var(--ink);}
-        .deals-tab-sep{width:1px;height:16px;background:var(--line);flex-shrink:0;}
-        .deals-nav{width:40px;height:40px;border-radius:50%;background:var(--ink);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;flex-shrink:0;}
-        .deals-nav:hover{background:var(--blue);}
-        .deals-nav:disabled{opacity:.28;cursor:default;}
-        .deals-nav svg{width:16px;height:16px;}
-        .deals-fan-outer{overflow:visible;position:relative;display:flex;flex-direction:column;align-items:center;}
-        .deals-fan-track{display:flex;align-items:flex-end;justify-content:center;gap:16px;width:100vw;position:relative;}
-        .deal-card{flex-shrink:0;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line);cursor:pointer;transition:width .52s cubic-bezier(0.22,0.61,0.36,1),transform .52s cubic-bezier(0.22,0.61,0.36,1),box-shadow .52s cubic-bezier(0.22,0.61,0.36,1),opacity .45s ease;}
-        .deal-card.active-card{box-shadow:0 16px 48px rgba(0,0,0,0.13);}
-        .deal-card.side-card{box-shadow:0 2px 12px rgba(0,0,0,0.06);}
-        .deal-graph{background:#f5f6ff;overflow:hidden;border-bottom:1px solid var(--line);transition:height .52s cubic-bezier(0.22,0.61,0.36,1);}
-        .deal-graph canvas{width:100%;height:100%;display:block;}
-        .deal-info{padding:1.3rem 1.4rem 1.6rem;}
-        .deal-category{font-size:.67rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:.45rem;}
-        .deal-title{font-family:var(--serif);font-weight:400;font-size:1.05rem;letter-spacing:-.01em;line-height:1.25;}
-        .deal-meta{display:flex;gap:.9rem;margin-top:.75rem;flex-wrap:wrap;}
-        .deal-badge{display:flex;align-items:center;gap:.32rem;font-size:.72rem;color:var(--muted);font-weight:300;}
-        .deal-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-        .deal-dot.green{background:#22c55e;}
-        .deal-dot.orange{background:#f97316;}
-        .deal-dot.blue{background:var(--blue);}
-        .deals-active-meta{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-top:1.4rem;min-height:1.8rem;}
-        .deals-active-meta .deal-badge{font-size:.78rem;}
+        /* ── FOOTER ── */
+        footer{background:linear-gradient(0deg,#010510 0%,#020818 10%,#051428 28%,#092a56 50%,#0f4f98 68%,#3485d8 82%,#a8ccf5 92%,#e0eeff 97%,#ffffff 100%);color:#fff;padding:13rem 4vw 4rem;}
+        .footer-inner{max-width:1440px;margin:0 auto;}
+
+        /* CTA strip */
+        .footer-cta{display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;padding-bottom:4rem;border-bottom:1px solid rgba(255,255,255,.1);flex-wrap:wrap;}
+        .footer-cta-headline{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,3.8vw,3.6rem);line-height:1.08;letter-spacing:-.02em;}
+        .footer-cta-headline em{font-style:italic;opacity:.75;}
+        .footer-cta-btn{display:inline-flex;align-items:center;gap:.55rem;background:#fff;color:var(--ink);padding:.9rem 2.2rem;border-radius:100px;font-size:.84rem;font-weight:500;letter-spacing:.01em;white-space:nowrap;flex-shrink:0;transition:background .2s,transform .2s var(--ease);}
+        .footer-cta-btn:hover{background:#dce8ff;transform:translateY(-2px);}
+        .footer-cta-btn svg{transition:transform .2s;}
+        .footer-cta-btn:hover svg{transform:translateX(3px);}
+
+        /* Main grid */
+        .footer-top{display:grid;grid-template-columns:1fr auto;gap:5rem;padding:4rem 0 3.5rem;border-bottom:1px solid rgba(255,255,255,.08);align-items:start;}
+        .footer-brand{}
+        .footer-logo{font-family:var(--serif);font-style:italic;font-size:2.1rem;color:#fff;letter-spacing:-.01em;}
+        .footer-brand-name{font-size:.65rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.35);margin:.3rem 0 1.4rem;}
+        .footer-brand-desc{font-size:.87rem;line-height:1.78;color:rgba(255,255,255,.38);font-weight:300;max-width:28ch;margin-bottom:1.8rem;}
+        .footer-contact{display:flex;flex-direction:column;gap:.38rem;}
+        .footer-contact a,.footer-contact span{font-size:.8rem;color:rgba(255,255,255,.42);font-weight:300;transition:color .18s;}
+        .footer-contact a:hover{color:#fff;}
+
+        .footer-links{display:flex;gap:4rem;flex-wrap:wrap;}
+        .footer-col-title{font-size:.6rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:1.3rem;}
+        .footer-col a{display:block;font-size:.87rem;color:rgba(255,255,255,.5);margin-bottom:.72rem;transition:color .18s;font-weight:300;}
+        .footer-col a:hover{color:#fff;}
+
+        /* Bottom bar */
+        .footer-bottom{padding-top:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+        .footer-copy{font-size:.65rem;color:rgba(255,255,255,.25);letter-spacing:.04em;}
+        .footer-right{display:flex;align-items:center;gap:1.8rem;}
+        .footer-cities{font-size:.65rem;color:rgba(255,255,255,.25);letter-spacing:.06em;text-transform:uppercase;}
+        .footer-social{display:flex;gap:.6rem;}
+        .footer-social a{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.45);transition:border-color .18s,color .18s,background .18s;}
+        .footer-social a:hover{border-color:rgba(255,255,255,.5);color:#fff;background:rgba(255,255,255,.08);}
+
+        /* ── EXPERTISE CAROUSEL ── */
+        .expertise-domain-tab{font-size:.82rem;font-weight:400;color:var(--muted);padding:.38rem 1rem;cursor:pointer;background:transparent;border:none;font-family:var(--sans);transition:color .18s;white-space:nowrap;}
+        .expertise-domain-tab:hover{color:var(--ink);}
+        .expertise-domain-tab.active{font-weight:700;color:var(--ink);}
 
         /* ── REVEAL ── */
         .reveal{opacity:0;transform:translateY(20px);transition:opacity .65s var(--ease),transform .65s var(--ease);}
         .reveal.visible{opacity:1;transform:translateY(0);}
         .reveal-d1{transition-delay:.1s;}
         .reveal-d2{transition-delay:.2s;}
+        .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
 
         @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
 
@@ -768,7 +825,7 @@ export default function AmbroisePartnersModern() {
           .step-arrow{display:none;}
         }
         @media(max-width:600px){
-          .section{padding:4rem 5vw;}
+          .section{padding:4rem 4vw;}
           .hero-h1{font-size:clamp(2.6rem,10vw,3.5rem);}
           .footer-top{flex-direction:column;}
           .footer-links{gap:2rem;}
@@ -816,31 +873,10 @@ export default function AmbroisePartnersModern() {
       </header>
 
       {/* SERVICES */}
-      <section className="section section-bg" id="services">
-        <div className="section-head reveal">
-          <h2 className="section-title">Our Services</h2>
-          <p className="section-lede">We provide end-to-end support across all types of healthcare transactions, from early strategic positioning and preparation to execution and closing.</p>
-        </div>
-        <div className="services-grid">
-          {[
-            ['01','M&A','Buy-side, sell-side and strategic acquisitions across the global healthcare ecosystem.'],
-            ['02','Fundraising','Growth financing from early-stage to later rounds, partnering with leading healthcare-focused investors.'],
-            ['03','Licensing & Strategic Partnerships','Structuring value-creating licensing and collaboration agreements with global strategic players.'],
-            ['04','Strategic Advisory & External Growth','Independent advice on strategic options, portfolio positioning and long-term growth trajectories.'],
-            ['05','Capital Raising Solutions for all Market Cycles',
-             'We partner with companies across the healthcare landscape to design and implement optimal capital structures that allow them to execute against their strategic objectives. We bring significant domain expertise across a broad spectrum of financing alternatives, including Initial Public Offerings, Publicly & Confidentially Marketed Follow-on Offerings, At-the-Market transactions, Private Placements of Equity, Convertible Debt, Term Loan Debt Facilities.'],
-          ].map(([num,title,desc],i)=>(
-            <div className={`svc-card reveal${i%2===1?' reveal-d1':''}`} key={num}>
-              <div className="svc-num">{num}</div>
-              <div className="svc-title">{title}</div>
-              <p className="svc-desc">{desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <ServicesSection />
 
       {/* APPROACH */}
-      <section className="section section-bg" id="approach" style={{paddingBottom:'6rem'}}>
+      <section className="section section-bg" id="approach">
         <div className="section-head reveal">
           <h2 className="section-title">Our Approach</h2>
         </div>
@@ -872,7 +908,7 @@ export default function AmbroisePartnersModern() {
         </div>
       </section>
 
-      <DealsCarousel />
+      <ExpertiseSection />
 
       {/* VALUES */}
       <section className="section section-bg" id="values">
@@ -921,28 +957,6 @@ export default function AmbroisePartnersModern() {
         </div>
       </section>
 
-      {/* ABOUT */}
-      <section className="section section-bg" id="about">
-        <div className="about-split">
-          <div className="reveal">
-            <span className="eyebrow">Leadership</span>
-            <h2 className="section-title">A biotech-dedicated team</h2>
-            <p className="about-lede">15+ years in sector investment banking (EU &amp; US), IPOs, licensing deals and multi‑billion M&amp;A.</p>
-            <p className="about-lede" style={{marginTop:'.8rem'}}>Make top-tier biotech M&amp;A advisory accessible to innovative companies, whatever their stage.</p>
-            <div className="about-links">
-              <a href="mailto:contact@ambroise-partners.com" className="btn-dark">Email us</a>
-              <a href="#" className="btn-outline" target="_blank" rel="noreferrer">LinkedIn</a>
-            </div>
-          </div>
-          <div className="about-dark reveal reveal-d1">
-            <div className="about-dark-label">Key figures</div>
-            <p style={{color:'rgba(255,255,255,.72)',fontSize:'.95rem',lineHeight:'1.75'}}>
-              €2bn+ advised · &gt;90% closing · 40+ cross-border biotech deals · 100% life sciences focus.
-            </p>
-          </div>
-        </div>
-      </section>
-
       {/* CONTACT */}
       <div style={{background:'var(--white)',borderTop:'1px solid var(--line)'}} id="contact">
         <div className="contact-wrap">
@@ -966,11 +980,34 @@ export default function AmbroisePartnersModern() {
       {/* FOOTER */}
       <footer>
         <div className="footer-inner">
+
+          {/* ── CTA strip ── */}
+          <div className="footer-cta">
+            <p className="footer-cta-headline">
+              Ready to discuss<br /><em>your next transaction?</em>
+            </p>
+            <a href="#contact" className="footer-cta-btn">
+              Get in touch
+              <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+
+          {/* ── Main grid: brand + links ── */}
           <div className="footer-top">
-            <div>
+            <div className="footer-brand">
               <div className="footer-logo">AP</div>
-              <div className="footer-tagline">Ambroise Partners — Biotech &amp; medtech advisory · EU / US</div>
+              <div className="footer-brand-name">Ambroise Partners</div>
+              <p className="footer-brand-desc">
+                Healthcare-focused investment banking,<br />serving innovation across EU &amp; US.
+              </p>
+              <div className="footer-contact">
+                <a href="mailto:contact@ambroise-partners.com">contact@ambroise-partners.com</a>
+                <span>Paris · New York</span>
+              </div>
             </div>
+
             <div className="footer-links">
               <div className="footer-col">
                 <div className="footer-col-title">Services</div>
@@ -978,26 +1015,40 @@ export default function AmbroisePartnersModern() {
                 <a href="#services">Fundraising</a>
                 <a href="#services">Licensing</a>
                 <a href="#services">Strategic Advisory</a>
+                <a href="#services">Capital Raising</a>
               </div>
               <div className="footer-col">
                 <div className="footer-col-title">Company</div>
+                <a href="#approach">Our Domains</a>
                 <a href="#approach">Expertise</a>
                 <a href="#method">Method</a>
                 <a href="#about">About</a>
                 <a href="#contact">Contact</a>
               </div>
               <div className="footer-col">
-                <div className="footer-col-title">Connect</div>
-                <a href="mailto:contact@ambroise-partners.com">contact@ambroise-partners.com</a>
-                <a href="#">LinkedIn</a>
+                <div className="footer-col-title">Legal</div>
                 <a href="#">Legal notice</a>
+                <a href="#">Privacy policy</a>
+                <a href="#">Cookie policy</a>
               </div>
             </div>
           </div>
+
+          {/* ── Bottom bar ── */}
           <div className="footer-bottom">
             <div className="footer-copy">© 2026 Ambroise Partners. All rights reserved.</div>
-            <div className="footer-copy">Paris · New York</div>
+            <div className="footer-right">
+              <span className="footer-cities">Paris · New York</span>
+              <div className="footer-social">
+                <a href="https://linkedin.com" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
           </div>
+
         </div>
       </footer>
     </>
