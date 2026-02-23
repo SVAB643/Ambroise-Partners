@@ -295,8 +295,8 @@ export default function AmbroisePartnersModern() {
     if (!canvas || !hero) return;
 
     const ctx = canvas.getContext('2d')!;
-    const PARTICLE_COUNT = 40000;
     const isMobile = window.innerWidth <= 600;
+    const PARTICLE_COUNT = isMobile ? 18000 : 40000;
     const STICKY_PX = isMobile ? 800 : 1500;
     let W = 0, H = 0, scrollProgress = 0, raf = 0;
 
@@ -319,44 +319,49 @@ export default function AmbroisePartnersModern() {
     fadeEl.id = 'hero-fade';
     hero.appendChild(fadeEl);
 
-    interface IParticle { update(p:number,t:number):void; draw(p:number):void; }
-    let particles: IParticle[] = [];
+    /* Typed arrays for SoA particle data — avoids per-particle objects & GC */
+    let pDnaX: Float32Array, pDnaY: Float32Array;
+    let pDispX: Float32Array, pDispY: Float32Array;
+    let pSpd: Float32Array, pPh: Float32Array;
+    let pSize: Float32Array, pAlpha: Float32Array;
+    let pX: Float32Array, pY: Float32Array;
+    /* Alpha buckets for batched drawing (10 buckets) */
+    const ALPHA_BUCKETS = 10;
 
     function buildParticles() {
-      particles = [];
+      const N = PARTICLE_COUNT;
+      pDnaX = new Float32Array(N); pDnaY = new Float32Array(N);
+      pDispX = new Float32Array(N); pDispY = new Float32Array(N);
+      pSpd = new Float32Array(N); pPh = new Float32Array(N);
+      pSize = new Float32Array(N); pAlpha = new Float32Array(N);
+      pX = new Float32Array(N); pY = new Float32Array(N);
 
-      /* Use a reference size that doesn't collapse on narrow portrait screens */
       const ref = Math.max(W, H * 0.5);
-
       const SX0 = W*0.15, SY0 = H*1.02;
       const SX1 = W*0.85, SY1 = -H*0.02;
       const dvx = SX1-SX0, dvy = SY1-SY0, spineLen = Math.sqrt(dvx*dvx+dvy*dvy);
       const tx = dvx/spineLen, ty = dvy/spineLen;
       const px = -ty, py = tx;
-
       const TURNS = 3.5;
+      const TWO_PI = Math.PI * 2;
 
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
+      for (let i = 0; i < N; i++) {
         const frac = Math.random();
         const perspective = 0.35 + frac * 0.65;
         const AMP = ref * 0.09 * perspective;
-
         const sx = SX0 + tx * spineLen * frac;
         const sy = SY0 + ty * spineLen * frac;
-
         const isA = Math.random() < 0.5;
-        const strandPhase = isA ? 0 : Math.PI;
-        const angle = frac * TURNS * Math.PI * 2 + strandPhase;
+        const angle = frac * TURNS * TWO_PI + (isA ? 0 : Math.PI);
+        const cosA = Math.cos(angle);
+        const coreX = sx + px * cosA * AMP;
+        const coreY = sy + py * cosA * AMP;
 
-        const coreX = sx + px * Math.cos(angle) * AMP;
-        const coreY = sy + py * Math.cos(angle) * AMP;
-
-        const isRung = Math.random() < 0.10;
         let targetX = coreX, targetY = coreY;
-        if (isRung) {
-          const otherAngle = frac * TURNS * Math.PI * 2 + (isA ? Math.PI : 0);
-          const otherX = sx + px * Math.cos(otherAngle) * AMP;
-          const otherY = sy + py * Math.cos(otherAngle) * AMP;
+        if (Math.random() < 0.10) {
+          const otherCos = Math.cos(frac * TURNS * TWO_PI + (isA ? Math.PI : 0));
+          const otherX = sx + px * otherCos * AMP;
+          const otherY = sy + py * otherCos * AMP;
           const t2 = Math.random();
           targetX = coreX + (otherX - coreX) * t2;
           targetY = coreY + (otherY - coreY) * t2;
@@ -364,51 +369,30 @@ export default function AmbroisePartnersModern() {
 
         const u1 = Math.max(Math.random(), 1e-5);
         const mag = Math.sqrt(-2.0 * Math.log(u1));
-        const scatterAngle = Math.random() * Math.PI * 2;
+        const scA = Math.random() * TWO_PI;
         const sigma = Math.pow(Math.random(), 0.65) * ref * 0.018 * perspective;
-        const dnaX = targetX + Math.cos(scatterAngle) * mag * sigma;
-        const dnaY = targetY + Math.sin(scatterAngle) * mag * sigma;
+        const dnaX = targetX + Math.cos(scA) * mag * sigma;
+        const dnaY = targetY + Math.sin(scA) * mag * sigma;
 
         const dist = Math.sqrt((dnaX - targetX)**2 + (dnaY - targetY)**2);
-        const normDist = Math.min(dist / (ref * 0.018), 1);
-        const coreness = 1 - normDist;
-
+        const coreness = 1 - Math.min(dist / (ref * 0.018), 1);
         const isBright = Math.random() < 0.07;
         const sizeScale = 0.5 + perspective * 0.5;
-        const size = isBright
+
+        pDnaX[i] = dnaX; pDnaY[i] = dnaY;
+        pDispX[i] = Math.random() * W; pDispY[i] = Math.random() * H;
+        pSpd[i] = Math.random() * 0.10 + 0.025;
+        pPh[i] = Math.random() * TWO_PI;
+        pSize[i] = isBright
           ? (Math.random() * 0.9 + 0.4) * sizeScale
           : (Math.random() * 0.35 + 0.05) * sizeScale;
-
-        const alpha = isBright
+        pAlpha[i] = isBright
           ? Math.random() * 0.5 + 0.38
           : Math.max(0.01, coreness * coreness * (Math.random() * 0.65 + 0.12) + Math.random() * 0.025);
-
-        const disperseX = Math.random() * W;
-        const disperseY = Math.random() * H;
-
-        const spd = Math.random() * 0.10 + 0.025;
-        const ph = Math.random() * Math.PI * 2;
-        let x = dnaX, y = dnaY;
-
-        particles.push({
-          update(prog, t) {
-            const eased = prog < .5 ? 2*prog*prog : 1 - Math.pow(-2*prog+2, 2)/2;
-            const baseX = dnaX + (disperseX - dnaX) * eased;
-            const baseY = dnaY + (disperseY - dnaY) * eased;
-            x = baseX + Math.sin(t * spd + ph) * (1.5 + eased * 2.0);
-            y = baseY + Math.cos(t * spd * 0.88 + ph) * (1.2 + eased * 1.8);
-          },
-          draw(prog) {
-            const eased = prog < .5 ? 2*prog*prog : 1 - Math.pow(-2*prog+2, 2)/2;
-            const dispAlpha = alpha * (1 - eased * 0.3);
-            ctx.beginPath();
-            ctx.arc(x, y, size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255,255,255,${dispAlpha})`;
-            ctx.fill();
-          },
-        });
+        pX[i] = dnaX; pY[i] = dnaY;
       }
     }
+
     function resize() {
       if (!canvas) return;
       const dpr = window.devicePixelRatio || 1;
@@ -423,8 +407,38 @@ export default function AmbroisePartnersModern() {
     function animate() {
       const dpr = window.devicePixelRatio || 1;
       ctx.clearRect(0, 0, W * dpr, H * dpr);
-      const t=Date.now()*.001;
-      for (const p of particles) { p.update(scrollProgress,t); p.draw(scrollProgress); }
+      const t = Date.now() * .001;
+      const prog = scrollProgress;
+      const eased = prog < .5 ? 2*prog*prog : 1 - Math.pow(-2*prog+2, 2)/2;
+      const N = PARTICLE_COUNT;
+      const TWO_PI = Math.PI * 2;
+
+      /* Update all positions (tight numeric loop) */
+      const wobbleScale = 1.5 + eased * 2.0;
+      const wobbleScaleY = 1.2 + eased * 1.8;
+      for (let i = 0; i < N; i++) {
+        const baseX = pDnaX[i] + (pDispX[i] - pDnaX[i]) * eased;
+        const baseY = pDnaY[i] + (pDispY[i] - pDnaY[i]) * eased;
+        const phase = t * pSpd[i] + pPh[i];
+        pX[i] = baseX + Math.sin(phase) * wobbleScale;
+        pY[i] = baseY + Math.cos(phase * 0.88) * wobbleScaleY;
+      }
+
+      /* Draw batched by alpha bucket — drastically reduces fillStyle switches */
+      const alphaFade = 1 - eased * 0.3;
+      for (let b = 0; b < ALPHA_BUCKETS; b++) {
+        const lo = b / ALPHA_BUCKETS, hi = (b + 1) / ALPHA_BUCKETS;
+        const bucketAlpha = ((lo + hi) / 2) * alphaFade;
+        ctx.fillStyle = `rgba(255,255,255,${bucketAlpha.toFixed(3)})`;
+        ctx.beginPath();
+        for (let i = 0; i < N; i++) {
+          if (pAlpha[i] >= lo && pAlpha[i] < hi) {
+            ctx.moveTo(pX[i] + pSize[i], pY[i]);
+            ctx.arc(pX[i], pY[i], pSize[i], 0, TWO_PI);
+          }
+        }
+        ctx.fill();
+      }
       if (fadeEl) {
         const fadeOpacity = Math.min(Math.max((scrollProgress - 0.15) / 0.60, 0), 1);
         fadeEl.style.opacity = String(fadeOpacity);
@@ -703,7 +717,7 @@ export default function AmbroisePartnersModern() {
         .footer-social a:hover{border-color:rgba(255,255,255,.5);color:#fff;background:rgba(255,255,255,.08);}
 
         /* ── DOMAINS GRID ── */
-        .domains-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;}
+        .domains-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px;}
         .domain-card{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:1/2;cursor:pointer;}
         .domain-img{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .55s cubic-bezier(0.16,1,0.3,1);}
         .domain-card:hover .domain-img{transform:scale(1.05);}
@@ -733,7 +747,7 @@ export default function AmbroisePartnersModern() {
           .method-step{grid-template-columns:60px 1fr;}
           .step-arrow{display:none;}
           .svc-cards-track{grid-template-columns:repeat(2,1fr);gap:14px;}
-          .domains-grid{grid-template-columns:repeat(3,1fr);gap:12px;}
+          .domains-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
         }
         @media(max-width:600px){
           /* Nav */
@@ -770,7 +784,7 @@ export default function AmbroisePartnersModern() {
           .approach-canvas-wrap{min-height:180px;padding:1.5rem;}
 
           /* Domains */
-          .domains-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+          .domains-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
           .domain-card{border-radius:10px;}
           .domain-label{padding:1rem 1rem;}
           .domain-name{font-size:1.15rem;}
