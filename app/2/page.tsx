@@ -464,18 +464,23 @@ export default function AmbroisePartnersModern() {
 
     let fadeEl: HTMLElement | null = null;
 
-    /* Fix hero height to exact pixels so mobile address-bar resize won't cause jumps */
-    const fixedH = window.innerHeight;
-    hero.style.height = `${fixedH}px`;
-    hero.style.minHeight = `${fixedH}px`;
+    /* Hero height — update on resize so the animation always fills the viewport */
+    let lastW = window.innerWidth;
+    const updateHeroH = () => {
+      const h = window.innerHeight;
+      hero.style.height = `${h}px`;
+      hero.style.minHeight = `${h}px`;
+      wrapper.style.height = `${h + STICKY_PX}px`;
+    };
 
     const wrapper = document.createElement('div');
     wrapper.id = 'hero-wrapper';
-    wrapper.style.cssText = `position:relative;height:${fixedH + STICKY_PX}px;`;
+    wrapper.style.cssText = `position:relative;height:${window.innerHeight + STICKY_PX}px;`;
     hero.parentNode!.insertBefore(wrapper, hero);
     wrapper.appendChild(hero);
     hero.style.position = 'sticky';
     hero.style.top = '0';
+    updateHeroH();
 
     fadeEl = document.createElement('div');
     fadeEl.id = 'hero-fade';
@@ -610,7 +615,14 @@ export default function AmbroisePartnersModern() {
 
     const onScroll=()=>{ scrollProgress=Math.min(Math.max(window.scrollY/STICKY_PX,0),1); };
     window.addEventListener('scroll',onScroll,{passive:true});
-    window.addEventListener('resize',resize);
+
+    const onResize = () => {
+      const curW = window.innerWidth;
+      /* On mobile, skip height-only changes (address-bar toggle) */
+      if (curW !== lastW || curW > 600) { updateHeroH(); lastW = curW; }
+      resize();
+    };
+    window.addEventListener('resize', onResize);
 
     /* Safari may report wrong offsetWidth/Height on first paint.
        Run resize() after layout is guaranteed stable. */
@@ -631,7 +643,7 @@ export default function AmbroisePartnersModern() {
     return ()=>{
       cancelAnimationFrame(raf);
       window.removeEventListener('scroll',onScroll);
-      window.removeEventListener('resize',resize);
+      window.removeEventListener('resize',onResize);
       if(fadeEl && fadeEl.parentNode) fadeEl.parentNode.removeChild(fadeEl);
       if(wrapper.parentNode){wrapper.parentNode.insertBefore(hero,wrapper);wrapper.parentNode.removeChild(wrapper);}
       hero.style.position=''; hero.style.top='';
