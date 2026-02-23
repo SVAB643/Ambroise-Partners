@@ -523,7 +523,22 @@ export default function AmbroisePartnersModern() {
     const onScroll=()=>{ scrollProgress=Math.min(Math.max(window.scrollY/STICKY_PX,0),1); };
     window.addEventListener('scroll',onScroll,{passive:true});
     window.addEventListener('resize',resize);
-    resize(); animate();
+
+    /* Safari may report wrong offsetWidth/Height on first paint.
+       Run resize() after layout is guaranteed stable. */
+    const ensureReady = () => {
+      resize();
+      if (W === 0 || H === 0) {
+        requestAnimationFrame(ensureReady);
+      } else {
+        animate();
+      }
+    };
+    if (document.readyState === 'complete') {
+      ensureReady();
+    } else {
+      window.addEventListener('load', ensureReady, { once: true });
+    }
 
     return ()=>{
       cancelAnimationFrame(raf);
