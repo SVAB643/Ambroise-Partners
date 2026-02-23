@@ -984,7 +984,7 @@ export default function AmbroisePartnersModern() {
               </p>
               <div className="footer-contact">
                 <a href="mailto:contact@ambroise-partners.com">contact@ambroise-partners.com</a>
-                <span>Paris · New York</span>
+                <span>Paris · London</span>
               </div>
             </div>
 
@@ -1018,7 +1018,7 @@ export default function AmbroisePartnersModern() {
           <div className="footer-bottom">
             <div className="footer-copy">© 2026 Ambroise Partners. All rights reserved.</div>
             <div className="footer-right">
-              <span className="footer-cities">Paris · New York</span>
+              <span className="footer-cities">Paris · London</span>
               <div className="footer-social">
                 <a href="https://linkedin.com" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">

@@ -130,7 +130,7 @@ export default function CookiePolicyPage() {
         <p>We may update this Cookie Policy from time to time. Any changes will be posted on this page with an updated revision date.</p>
 
         <h2>Contact</h2>
-        <p>For questions about our use of cookies, please contact us at <a href="mailto:camille@ambroisepartners.com" style={{ color: 'var(--blue)' }}>camille@ambroisepartners.com</a>.</p>
+        <p>For questions about our use of cookies, please contact us at <a href="mailto:contact@ambroisepartners.com" style={{ color: 'var(--blue)' }}>contact@ambroisepartners.com</a>.</p>
       </div>
 
       <div className="legal-footer">

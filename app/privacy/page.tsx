@@ -73,7 +73,7 @@ export default function PrivacyPolicyPage() {
         <p>Ambroise Partners (&ldquo;we&rdquo;, &ldquo;our&rdquo;, &ldquo;us&rdquo;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your personal data when you visit our website or interact with our services.</p>
 
         <h2>Data Controller</h2>
-        <p><strong>Ambroise Partners</strong><br />Registered in Paris, France<br />Contact: <a href="mailto:camille@ambroisepartners.com" style={{ color: 'var(--blue)' }}>camille@ambroisepartners.com</a></p>
+        <p><strong>Ambroise Partners</strong><br />Registered in Paris, France<br />Contact: <a href="mailto:contact@ambroisepartners.com" style={{ color: 'var(--blue)' }}>contact@ambroisepartners.com</a></p>
 
         <h2>Data We Collect</h2>
         <p>We may collect the following categories of personal data:</p>
@@ -122,7 +122,7 @@ export default function PrivacyPolicyPage() {
           <li>Data portability</li>
           <li>Withdraw consent at any time</li>
         </ul>
-        <p>To exercise any of these rights, please contact us at <a href="mailto:camille@ambroisepartners.com" style={{ color: 'var(--blue)' }}>camille@ambroisepartners.com</a>.</p>
+        <p>To exercise any of these rights, please contact us at <a href="mailto:contact@ambroisepartners.com" style={{ color: 'var(--blue)' }}>contact@ambroisepartners.com</a>.</p>
 
         <h2>International Transfers</h2>
         <p>Your data may be transferred to, and processed in, countries outside the European Economic Area (EEA). When we do so, we ensure appropriate safeguards are in place in accordance with GDPR requirements.</p>

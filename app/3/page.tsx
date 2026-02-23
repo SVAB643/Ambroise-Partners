@@ -974,7 +974,7 @@ export default function AmbroisePartnersModern() {
           </div>
           <div className="footer-bottom">
             <div className="footer-copy">© 2026 Ambroise Partners. All rights reserved.</div>
-            <div className="footer-copy">Paris · New York</div>
+            <div className="footer-copy">Paris · London</div>
           </div>
         </div>
       </footer>
