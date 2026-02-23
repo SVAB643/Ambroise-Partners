@@ -288,7 +288,7 @@ export default function AmbroisePartnersModern() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  /* ── DNA particle system — original ── */
+  /* ── DNA particle system ── */
   useEffect(() => {
     const canvas = canvasRef.current;
     const hero   = heroRef.current;
@@ -297,48 +297,23 @@ export default function AmbroisePartnersModern() {
     const ctx = canvas.getContext('2d')!;
     const PARTICLE_COUNT = 40000;
     const isMobile = window.innerWidth <= 600;
-    const STICKY_PX      = 1500;
+    const STICKY_PX = isMobile ? 800 : 1500;
     let W = 0, H = 0, scrollProgress = 0, raf = 0;
-
-    /* Mobile: capture touch swipes to drive animation while body is locked */
-    let mobileCumulative = 0;
-    let mobileTouchStartY = 0;
-    let mobileLastTouchY = 0;
-    const MOBILE_SWIPE_TOTAL = 500; // total px of swipe to complete animation
-    let mobileUnlocked = false;
 
     let fadeEl: HTMLElement | null = null;
 
+    /* Fix hero height to exact pixels so mobile address-bar resize won't cause jumps */
+    const fixedH = window.innerHeight;
+    hero.style.height = `${fixedH}px`;
+    hero.style.minHeight = `${fixedH}px`;
+
     const wrapper = document.createElement('div');
     wrapper.id = 'hero-wrapper';
-    wrapper.style.cssText = isMobile
-      ? `position:relative;height:100dvh;`
-      : `position:relative;height:calc(100dvh + ${STICKY_PX}px);`;
+    wrapper.style.cssText = `position:relative;height:${fixedH + STICKY_PX}px;`;
     hero.parentNode!.insertBefore(wrapper, hero);
     wrapper.appendChild(hero);
-    if (!isMobile) {
-      hero.style.position = 'sticky';
-      hero.style.top = '0';
-    }
-
-    /* Lock body scroll on mobile until animation completes */
-    const savedScrollY = window.scrollY;
-    if (isMobile) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.top = `-${savedScrollY}px`;
-    }
-
-    const unlockMobile = () => {
-      if (!isMobile || mobileUnlocked) return;
-      mobileUnlocked = true;
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.top = '';
-      window.scrollTo(0, 0);
-    };
+    hero.style.position = 'sticky';
+    hero.style.top = '0';
 
     fadeEl = document.createElement('div');
     fadeEl.id = 'hero-fade';
@@ -448,12 +423,6 @@ export default function AmbroisePartnersModern() {
     function animate() {
       const dpr = window.devicePixelRatio || 1;
       ctx.clearRect(0, 0, W * dpr, H * dpr);
-
-      /* Unlock mobile body once animation finishes */
-      if (isMobile && !mobileUnlocked && scrollProgress >= 1) {
-        unlockMobile();
-      }
-
       const t=Date.now()*.001;
       for (const p of particles) { p.update(scrollProgress,t); p.draw(scrollProgress); }
       if (fadeEl) {
@@ -463,31 +432,7 @@ export default function AmbroisePartnersModern() {
       raf=requestAnimationFrame(animate);
     }
 
-    /* ── Mobile touch handlers ── */
-    const onTouchStart = (e: TouchEvent) => {
-      if (mobileUnlocked) return;
-      mobileTouchStartY = e.touches[0].clientY;
-      mobileLastTouchY = mobileTouchStartY;
-    };
-    const onTouchMove = (e: TouchEvent) => {
-      if (mobileUnlocked) return;
-      e.preventDefault(); // block native scroll while animation plays
-      const currentY = e.touches[0].clientY;
-      const delta = mobileLastTouchY - currentY; // positive = swipe up (scroll down)
-      mobileLastTouchY = currentY;
-      mobileCumulative = Math.max(0, mobileCumulative + delta);
-      scrollProgress = Math.min(mobileCumulative / MOBILE_SWIPE_TOTAL, 1);
-    };
-
-    if (isMobile) {
-      window.addEventListener('touchstart', onTouchStart, { passive: true });
-      window.addEventListener('touchmove', onTouchMove, { passive: false });
-    }
-
-    /* ── Desktop scroll handler ── */
-    const onScroll=()=>{
-      if (!isMobile) scrollProgress=Math.min(Math.max(window.scrollY/STICKY_PX,0),1);
-    };
+    const onScroll=()=>{ scrollProgress=Math.min(Math.max(window.scrollY/STICKY_PX,0),1); };
     window.addEventListener('scroll',onScroll,{passive:true});
     window.addEventListener('resize',resize);
 
@@ -511,14 +456,10 @@ export default function AmbroisePartnersModern() {
       cancelAnimationFrame(raf);
       window.removeEventListener('scroll',onScroll);
       window.removeEventListener('resize',resize);
-      if (isMobile) {
-        window.removeEventListener('touchstart', onTouchStart);
-        window.removeEventListener('touchmove', onTouchMove);
-        unlockMobile();
-      }
       if(fadeEl && fadeEl.parentNode) fadeEl.parentNode.removeChild(fadeEl);
       if(wrapper.parentNode){wrapper.parentNode.insertBefore(hero,wrapper);wrapper.parentNode.removeChild(wrapper);}
       hero.style.position=''; hero.style.top='';
+      hero.style.height=''; hero.style.minHeight='';
     };
   }, []);
 
