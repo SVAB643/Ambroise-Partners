@@ -209,11 +209,11 @@ function ExpertiseSection() {
 
 /* ─── Services Section ─── */
 const SERVICES = [
-  { title: 'M&A', desc: 'Sell-side, buy-side and strategic transaction advisory across the global healthcare ecosystem.', accentColor: '#1a3a6b' },
-  { title: 'Fundraising', desc: 'Targeted growth capital advisory from Pre-Seed to Series B, partnering with leading healthcare investors.', accentColor: '#3d1a6b' },
-  { title: 'Licensing & Strategic Partnerships', desc: 'Value-creating licensing and partnership advisory alongside global and regional healthcare leaders.', accentColor: '#1a5a3d' },
-  { title: 'Strategic Advisory & External Growth', desc: 'Independent strategic counsel on portfolio positioning, growth pathway and long-term value creation.', accentColor: '#6b3a1a' },
-  { title: 'Capital Raising Solutions', desc: 'Capital markets and structured financing advisory, including IPOs, follow-ons, private placements and convertible debt.', accentColor: '#2a5cb8' },
+  { main: 'M&A', sub: '', desc: 'Sell-side, buy-side and strategic transaction advisory across the global healthcare ecosystem.' },
+  { main: 'Fundraising', sub: '', desc: 'Targeted growth capital advisory from Pre-Seed to Series B, partnering with leading healthcare investors.' },
+  { main: 'Licensing', sub: '& Strategic Partnerships', desc: 'Value-creating licensing and partnership advisory alongside global and regional healthcare leaders.' },
+  { main: 'Strategic Advisory', sub: '& External Growth', desc: 'Independent strategic counsel on portfolio positioning, growth pathway and long-term value creation.' },
+  { main: 'Capital Raising', sub: 'Solutions', desc: 'Capital markets and structured financing advisory, including IPOs, follow-ons, private placements and convertible debt.' },
 ];
 
 function ServicesSection() {
@@ -228,11 +228,10 @@ function ServicesSection() {
         <div className="svc-cards-track reveal">
           {SERVICES.map((svc, i) => (
             <div key={i} className="svc-card-item">
-              {/* Row 1: Title */}
-              <h3 className="svc-title">{svc.title}</h3>
-              {/* Row 3: Divider */}
-              <div className="svc-divider" />
-              {/* Row 4: Description */}
+              <h3 className="svc-title">
+                <span className="svc-main">{svc.main}</span>
+                {svc.sub && <span className="svc-sub">{svc.sub}</span>}
+              </h3>
               <p className="svc-desc">{svc.desc}</p>
             </div>
           ))}
@@ -555,12 +554,32 @@ export default function AmbroisePartnersModern() {
           position:absolute;inset:0;z-index:1;pointer-events:none;
           background:linear-gradient(to top,
             #ffffff 0%,
+            #fcfdff 1%,
+            #f8faff 2%,
+            #f0f4ff 4%,
+            #e0eaff 6%,
             #d0e0ff 8%,
+            #b8d2f5 11%,
+            #a0c2f0 14%,
             #7aacec 18%,
+            #5a90d8 22%,
+            #3e74c8 25%,
             #2a5cb8 28%,
+            #1e48a0 32%,
+            #143690 36%,
             #0a1880 42%,
+            #071260 48%,
+            #050e42 53%,
             #030a24 58%,
-            transparent 78%
+            rgba(3,10,36,0.85) 62%,
+            rgba(3,10,36,0.7) 65%,
+            rgba(3,10,36,0.55) 68%,
+            rgba(3,10,36,0.4) 71%,
+            rgba(3,10,36,0.28) 74%,
+            rgba(3,10,36,0.16) 77%,
+            rgba(3,10,36,0.08) 80%,
+            rgba(3,10,36,0.03) 84%,
+            transparent 88%
           );
           opacity:0;
           transition:opacity 0.05s linear;
@@ -673,15 +692,16 @@ export default function AmbroisePartnersModern() {
         .submit-btn:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-2px);box-shadow:0 10px 28px rgba(42,92,184,.2);}
 
         /* ── SERVICES ROW ── */
-        .svc-cards-track{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;}
-        .svc-card-item{display:grid;grid-template-rows:subgrid;grid-row:span 3;padding:1.8rem 1.5rem 2rem;border-radius:18px;background:#fff;border:1.5px solid #e8e8f0;box-shadow:0 2px 10px rgba(0,0,0,0.04);transition:box-shadow .35s ease,transform .35s ease,border-color .35s ease;}
-        .svc-card-item:hover{box-shadow:0 20px 64px rgba(0,0,0,0.09),0 2px 8px rgba(0,0,0,0.05);transform:translateY(-4px);border-color:transparent;}
-        .svc-title{font-family:var(--serif);font-weight:600;font-size:1rem;line-height:1.25;letter-spacing:.03em;text-transform:uppercase;color:var(--ink);margin:0 0 1rem;}
-        .svc-divider{width:100%;height:1px;background:var(--line);margin:0 0 0.85rem;}
-        .svc-desc{font-family:var(--sans);font-size:0.82rem;line-height:1.76;color:#6b6b78;font-weight:300;margin:0;}
+        .svc-cards-track{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+        .svc-card-item{display:grid;grid-template-rows:subgrid;grid-row:span 2;padding:1.3rem 1.2rem 1.5rem;border-radius:12px;background:#fff;border:1px solid var(--line);transition:box-shadow .3s ease,transform .3s ease;}
+        .svc-card-item:hover{box-shadow:0 8px 30px rgba(0,0,0,0.08);transform:translateY(-3px);}
+        .svc-title{margin:0 0 .8rem;display:flex;flex-direction:column;}
+        .svc-main{font-family:var(--serif);font-weight:600;font-size:1.6rem;line-height:1.15;letter-spacing:-.01em;color:var(--ink);display:block;}
+        .svc-sub{font-family:var(--sans);font-weight:400;font-size:.78rem;line-height:1.3;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);display:block;margin-top:.35rem;}
+        .svc-desc{font-family:var(--sans);font-size:.9rem;line-height:1.75;color:var(--muted);font-weight:300;margin:0;}
 
         /* ── FOOTER ── */
-        footer{background:linear-gradient(0deg,#030a24 0%,#0a1880 14%,#2a5cb8 26%,#7aacec 40%,#d0e0ff 55%,#ffffff 72%);color:#fff;padding:28rem 4vw 4rem;}
+        footer{background:linear-gradient(0deg,#030a24 0%,#0a1880 14%,#2a5cb8 26%,#7aacec 40%,#d0e0ff 55%,#ffffff 72%);color:#fff;padding:20rem 4vw 4rem;margin-top:-8rem;}
         .footer-inner{max-width:1440px;margin:0 auto;}
 
         /* CTA strip */
@@ -720,15 +740,17 @@ export default function AmbroisePartnersModern() {
         .footer-social a:hover{border-color:rgba(255,255,255,.5);color:#fff;background:rgba(255,255,255,.08);}
 
         /* ── DOMAINS GRID ── */
-        .domains-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:14px;}
-        .domain-card{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:2/5;cursor:pointer;}
+        .domains-grid{display:flex;gap:10px;}
+        .domain-card{position:relative;border-radius:14px;overflow:hidden;flex:1;height:420px;cursor:pointer;transition:flex .5s cubic-bezier(0.22,0.61,0.36,1);}
+        .domains-grid:hover .domain-card{flex:0.85;}
+        .domains-grid:hover .domain-card:hover{flex:2;}
         .domain-img{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .55s cubic-bezier(0.16,1,0.3,1);}
-        .domain-card:hover .domain-img{transform:scale(1.05);}
-        .domain-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.05) 50%,transparent 100%);transition:background .35s ease;}
-        .domain-card:hover .domain-overlay{background:linear-gradient(to top,rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.1) 60%,transparent 100%);}
-        .domain-label{position:absolute;bottom:0;left:0;right:0;padding:1.8rem 1.5rem;}
-        .domain-num{display:block;font-family:var(--serif);font-style:italic;font-size:0.75rem;color:rgba(255,255,255,0.6);margin-bottom:0.4rem;}
-        .domain-name{font-family:var(--serif);font-weight:500;font-size:1.15rem;line-height:1.18;letter-spacing:-0.02em;color:#fff;margin:0;text-shadow:0 1px 8px rgba(0,0,0,0.3);}
+        .domain-card:hover .domain-img{transform:none;}
+        .domain-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.05) 50%,transparent 100%);transition:background .35s ease;}
+        .domain-card:hover .domain-overlay{background:linear-gradient(to top,rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.1) 60%,transparent 100%);}
+        .domain-label{position:absolute;bottom:0;left:0;right:0;padding:1.2rem 1rem;}
+        .domain-num{display:none;}
+        .domain-name{font-family:var(--serif);font-weight:500;font-size:1rem;line-height:1.2;letter-spacing:-0.01em;color:#fff;margin:0;text-shadow:0 1px 10px rgba(0,0,0,0.4);}
 
         /* ── REVEAL ── */
         .reveal{opacity:0;transform:translateY(20px);transition:opacity .65s var(--ease),transform .65s var(--ease);}
@@ -750,7 +772,8 @@ export default function AmbroisePartnersModern() {
           .method-step{grid-template-columns:60px 1fr;}
           .step-arrow{display:none;}
           .svc-cards-track{grid-template-columns:repeat(2,1fr);gap:14px;}
-          .domains-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
+          .domains-grid{flex-wrap:wrap;gap:10px;}
+          .domain-card{flex:1 1 calc(25% - 10px)!important;aspect-ratio:3/4;}
         }
         @media(max-width:600px){
           /* Nav */
@@ -776,9 +799,9 @@ export default function AmbroisePartnersModern() {
 
           /* Services */
           .svc-cards-track{grid-template-columns:1fr;gap:12px;}
-          .svc-card-item{padding:1.3rem 1.4rem 1.5rem;}
+          .svc-card-item{padding:1.8rem 1.6rem 2rem;}
           .svc-title{font-size:1.1rem;}
-          .svc-desc{font-size:.78rem;}
+          .svc-desc{font-size:.88rem;}
 
           /* Approach */
           .approach-text{padding:2.5rem 2rem;}
@@ -787,11 +810,10 @@ export default function AmbroisePartnersModern() {
           .approach-canvas-wrap{min-height:180px;padding:1.5rem;}
 
           /* Domains */
-          .domains-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
-          .domain-card{border-radius:10px;}
-          .domain-label{padding:1rem 1rem;}
-          .domain-name{font-size:1.15rem;}
-          .domain-num{font-size:.6rem;}
+          .domains-grid{flex-wrap:wrap;gap:8px;}
+          .domain-card{flex:1 1 calc(50% - 8px)!important;aspect-ratio:3/4;border-radius:10px;}
+          .domain-label{padding:1rem .8rem;}
+          .domain-name{font-size:.9rem;}
 
           /* Method */
           .method-step{grid-template-columns:48px 1fr;gap:1.5rem;padding:1.5rem .3rem;}
