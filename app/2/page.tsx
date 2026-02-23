@@ -504,7 +504,7 @@ export default function AmbroisePartnersModern() {
           --ease:   cubic-bezier(0.22,0.61,0.36,1);
         }
 
-        html{scroll-behavior:smooth;overflow-x:hidden;}
+        html{scroll-behavior:smooth;}
         body{font-family:var(--sans);background:var(--white);color:var(--ink);overflow-x:hidden;line-height:1.65;-webkit-font-smoothing:antialiased;}
         a{color:inherit;text-decoration:none;}
 
