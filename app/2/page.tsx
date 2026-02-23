@@ -12,140 +12,158 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
     const ctx = canvas.getContext('2d')!;
     let raf = 0;
     let W = 0, H = 0;
+    let started = false;
 
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
       W = canvas.offsetWidth;
       H = canvas.offsetHeight;
+      if (W === 0 || H === 0) return;
       canvas.width = W * dpr;
       canvas.height = H * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
-    if (type === 'brain') {
-      const nodes: { x: number; y: number; vx: number; vy: number; r: number }[] = [];
-      const N = 55;
-      const init = () => {
-        nodes.length = 0;
-        for (let i = 0; i < N; i++)
-          nodes.push({ x: Math.random()*W, y: Math.random()*H,
-            vx:(Math.random()-.5)*.6, vy:(Math.random()-.5)*.6, r:Math.random()*2+1.2 });
-      };
-      const draw = () => {
-        ctx.clearRect(0,0,W,H);
-        nodes.forEach(n => {
-          n.x += n.vx; n.y += n.vy;
-          if (n.x<0||n.x>W) n.vx*=-1;
-          if (n.y<0||n.y>H) n.vy*=-1;
-        });
-        for (let i=0;i<N;i++) for (let j=i+1;j<N;j++) {
-          const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y;
-          const d=Math.sqrt(dx*dx+dy*dy);
-          if (d<110) {
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x,nodes[i].y);
-            ctx.lineTo(nodes[j].x,nodes[j].y);
-            ctx.strokeStyle=`rgba(15,47,255,${0.18*(1-d/110)})`;
-            ctx.lineWidth=0.8;
-            ctx.stroke();
-          }
+    /* ── brain ── */
+    const nodes: { x: number; y: number; vx: number; vy: number; r: number }[] = [];
+    const N = 55;
+    const initBrain = () => {
+      nodes.length = 0;
+      for (let i = 0; i < N; i++)
+        nodes.push({ x: Math.random()*W, y: Math.random()*H,
+          vx:(Math.random()-.5)*.6, vy:(Math.random()-.5)*.6, r:Math.random()*2+1.2 });
+    };
+    const drawBrain = () => {
+      ctx.clearRect(0,0,W,H);
+      nodes.forEach(n => {
+        n.x += n.vx; n.y += n.vy;
+        if (n.x<0||n.x>W) n.vx*=-1;
+        if (n.y<0||n.y>H) n.vy*=-1;
+      });
+      for (let i=0;i<N;i++) for (let j=i+1;j<N;j++) {
+        const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if (d<110) {
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x,nodes[i].y);
+          ctx.lineTo(nodes[j].x,nodes[j].y);
+          ctx.strokeStyle=`rgba(15,47,255,${0.18*(1-d/110)})`;
+          ctx.lineWidth=0.8;
+          ctx.stroke();
         }
-        nodes.forEach(n => {
-          ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
-          ctx.fillStyle='rgba(15,47,255,0.55)'; ctx.fill();
-        });
-        raf = requestAnimationFrame(draw);
-      };
-      resize(); init(); draw();
-      window.addEventListener('resize', () => { resize(); init(); });
-      return () => cancelAnimationFrame(raf);
+      }
+      nodes.forEach(n => {
+        ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+        ctx.fillStyle='rgba(15,47,255,0.55)'; ctx.fill();
+      });
+      raf = requestAnimationFrame(drawBrain);
+    };
+
+    /* ── network ── */
+    const hubs = [
+      { x:.5, y:.5, r:6 },
+      { x:.18, y:.28, r:3.5 }, { x:.82, y:.28, r:3.5 },
+      { x:.18, y:.72, r:3.5 }, { x:.82, y:.72, r:3.5 },
+      { x:.5,  y:.12, r:2.8 }, { x:.5,  y:.88, r:2.8 },
+      { x:.12, y:.5,  r:2.8 }, { x:.88, y:.5,  r:2.8 },
+    ];
+    let nt = 0;
+    const drawNetwork = () => {
+      ctx.clearRect(0,0,W,H);
+      nt += 0.018;
+      const cx = hubs[0].x*W, cy = hubs[0].y*H;
+      const grad = ctx.createRadialGradient(cx,cy,0,cx,cy,W*.28);
+      grad.addColorStop(0,'rgba(15,47,255,0.12)');
+      grad.addColorStop(1,'rgba(15,47,255,0)');
+      ctx.fillStyle=grad; ctx.beginPath(); ctx.arc(cx,cy,W*.28,0,Math.PI*2); ctx.fill();
+      hubs.slice(1).forEach((h,i) => {
+        const hx=h.x*W, hy=h.y*H;
+        ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(hx,hy);
+        ctx.strokeStyle=`rgba(15,47,255,${0.18+0.08*Math.sin(nt+i)})`; ctx.lineWidth=1; ctx.stroke();
+        const p = (Math.sin(nt*0.8+i*1.1)+1)/2;
+        const px2 = cx+(hx-cx)*p, py2 = cy+(hy-cy)*p;
+        ctx.beginPath(); ctx.arc(px2,py2,2,0,Math.PI*2);
+        ctx.fillStyle='rgba(15,47,255,0.7)'; ctx.fill();
+        ctx.beginPath(); ctx.arc(hx,hy,h.r,0,Math.PI*2);
+        ctx.fillStyle=`rgba(15,47,255,${0.45+0.15*Math.sin(nt+i)})`; ctx.fill();
+      });
+      ctx.beginPath(); ctx.arc(cx,cy,hubs[0].r*(1+.12*Math.sin(nt)),0,Math.PI*2);
+      ctx.fillStyle='rgba(15,47,255,0.8)'; ctx.fill();
+      raf = requestAnimationFrame(drawNetwork);
+    };
+
+    /* ── curve ── */
+    let ct = 0;
+    const drawCurve = () => {
+      ctx.clearRect(0,0,W,H);
+      ct += 0.022;
+      const pts = 80;
+      const pad = { x: W*.1, y: H*.12 };
+      const iW = W-pad.x*2, iH = H-pad.y*2;
+      for (let i=0;i<=4;i++) {
+        const y = pad.y + iH*(1-i/4);
+        ctx.beginPath(); ctx.moveTo(pad.x,y); ctx.lineTo(pad.x+iW,y);
+        ctx.strokeStyle='rgba(15,47,255,0.07)'; ctx.lineWidth=1; ctx.stroke();
+      }
+      ctx.beginPath();
+      ctx.moveTo(pad.x, pad.y+iH);
+      for (let i=0;i<=pts;i++) {
+        const fx = i/pts;
+        const fy = Math.pow(fx,1.6) + Math.sin(fx*Math.PI*2+ct)*0.06*(1-fx*.5);
+        const x = pad.x + fx*iW;
+        const y = pad.y + iH*(1-Math.min(fy,1));
+        i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+      }
+      ctx.lineTo(pad.x+iW, pad.y+iH);
+      ctx.closePath();
+      const fill = ctx.createLinearGradient(0,pad.y,0,pad.y+iH);
+      fill.addColorStop(0,'rgba(15,47,255,0.14)');
+      fill.addColorStop(1,'rgba(15,47,255,0.01)');
+      ctx.fillStyle=fill; ctx.fill();
+      ctx.beginPath();
+      for (let i=0;i<=pts;i++) {
+        const fx = i/pts;
+        const fy = Math.pow(fx,1.6) + Math.sin(fx*Math.PI*2+ct)*0.06*(1-fx*.5);
+        const x = pad.x + fx*iW;
+        const y = pad.y + iH*(1-Math.min(fy,1));
+        i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+      }
+      ctx.strokeStyle='rgba(15,47,255,0.75)'; ctx.lineWidth=2.2;
+      ctx.lineJoin='round'; ctx.stroke();
+      const lastFy = Math.pow(1,1.6)+Math.sin(Math.PI*2+ct)*0.06*.5;
+      const dotY = pad.y+iH*(1-Math.min(lastFy,1));
+      ctx.beginPath(); ctx.arc(pad.x+iW, dotY, 4.5, 0, Math.PI*2);
+      ctx.fillStyle='rgba(15,47,255,0.9)'; ctx.fill();
+      raf = requestAnimationFrame(drawCurve);
+    };
+
+    /* ── Start: wait for valid dimensions (Safari fix) ── */
+    const start = () => {
+      if (started) return;
+      resize();
+      if (W === 0 || H === 0) { requestAnimationFrame(start); return; }
+      started = true;
+      if (type === 'brain') { initBrain(); drawBrain(); }
+      else if (type === 'network') { drawNetwork(); }
+      else { drawCurve(); }
+    };
+
+    const onResize = () => {
+      resize();
+      if (type === 'brain') initBrain();
+    };
+    window.addEventListener('resize', onResize);
+
+    if (document.readyState === 'complete') {
+      start();
+    } else {
+      window.addEventListener('load', start, { once: true });
     }
 
-    if (type === 'network') {
-      const hubs = [
-        { x:.5, y:.5, r:6 },
-        { x:.18, y:.28, r:3.5 }, { x:.82, y:.28, r:3.5 },
-        { x:.18, y:.72, r:3.5 }, { x:.82, y:.72, r:3.5 },
-        { x:.5,  y:.12, r:2.8 }, { x:.5,  y:.88, r:2.8 },
-        { x:.12, y:.5,  r:2.8 }, { x:.88, y:.5,  r:2.8 },
-      ];
-      let t = 0;
-      const draw = () => {
-        ctx.clearRect(0,0,W,H);
-        t += 0.018;
-        const cx = hubs[0].x*W, cy = hubs[0].y*H;
-        const grad = ctx.createRadialGradient(cx,cy,0,cx,cy,W*.28);
-        grad.addColorStop(0,'rgba(15,47,255,0.12)');
-        grad.addColorStop(1,'rgba(15,47,255,0)');
-        ctx.fillStyle=grad; ctx.beginPath(); ctx.arc(cx,cy,W*.28,0,Math.PI*2); ctx.fill();
-        hubs.slice(1).forEach((h,i) => {
-          const hx=h.x*W, hy=h.y*H;
-          ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(hx,hy);
-          ctx.strokeStyle=`rgba(15,47,255,${0.18+0.08*Math.sin(t+i)})`; ctx.lineWidth=1; ctx.stroke();
-          const p = (Math.sin(t*0.8+i*1.1)+1)/2;
-          const px2 = cx+(hx-cx)*p, py2 = cy+(hy-cy)*p;
-          ctx.beginPath(); ctx.arc(px2,py2,2,0,Math.PI*2);
-          ctx.fillStyle='rgba(15,47,255,0.7)'; ctx.fill();
-          ctx.beginPath(); ctx.arc(hx,hy,h.r,0,Math.PI*2);
-          ctx.fillStyle=`rgba(15,47,255,${0.45+0.15*Math.sin(t+i)})`; ctx.fill();
-        });
-        ctx.beginPath(); ctx.arc(cx,cy,hubs[0].r*(1+.12*Math.sin(t)),0,Math.PI*2);
-        ctx.fillStyle='rgba(15,47,255,0.8)'; ctx.fill();
-        raf = requestAnimationFrame(draw);
-      };
-      resize(); draw();
-      window.addEventListener('resize', resize);
-      return () => cancelAnimationFrame(raf);
-    }
-
-    if (type === 'curve') {
-      let t = 0;
-      const draw = () => {
-        ctx.clearRect(0,0,W,H);
-        t += 0.022;
-        const pts = 80;
-        const pad = { x: W*.1, y: H*.12 };
-        const iW = W-pad.x*2, iH = H-pad.y*2;
-        for (let i=0;i<=4;i++) {
-          const y = pad.y + iH*(1-i/4);
-          ctx.beginPath(); ctx.moveTo(pad.x,y); ctx.lineTo(pad.x+iW,y);
-          ctx.strokeStyle='rgba(15,47,255,0.07)'; ctx.lineWidth=1; ctx.stroke();
-        }
-        ctx.beginPath();
-        ctx.moveTo(pad.x, pad.y+iH);
-        for (let i=0;i<=pts;i++) {
-          const fx = i/pts;
-          const fy = Math.pow(fx,1.6) + Math.sin(fx*Math.PI*2+t)*0.06*(1-fx*.5);
-          const x = pad.x + fx*iW;
-          const y = pad.y + iH*(1-Math.min(fy,1));
-          i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-        }
-        ctx.lineTo(pad.x+iW, pad.y+iH);
-        ctx.closePath();
-        const fill = ctx.createLinearGradient(0,pad.y,0,pad.y+iH);
-        fill.addColorStop(0,'rgba(15,47,255,0.14)');
-        fill.addColorStop(1,'rgba(15,47,255,0.01)');
-        ctx.fillStyle=fill; ctx.fill();
-        ctx.beginPath();
-        for (let i=0;i<=pts;i++) {
-          const fx = i/pts;
-          const fy = Math.pow(fx,1.6) + Math.sin(fx*Math.PI*2+t)*0.06*(1-fx*.5);
-          const x = pad.x + fx*iW;
-          const y = pad.y + iH*(1-Math.min(fy,1));
-          i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-        }
-        ctx.strokeStyle='rgba(15,47,255,0.75)'; ctx.lineWidth=2.2;
-        ctx.lineJoin='round'; ctx.stroke();
-        const lastFy = Math.pow(1,1.6)+Math.sin(Math.PI*2+t)*0.06*.5;
-        const dotY = pad.y+iH*(1-Math.min(lastFy,1));
-        ctx.beginPath(); ctx.arc(pad.x+iW, dotY, 4.5, 0, Math.PI*2);
-        ctx.fillStyle='rgba(15,47,255,0.9)'; ctx.fill();
-        raf = requestAnimationFrame(draw);
-      };
-      resize(); draw();
-      window.addEventListener('resize', resize);
-      return () => cancelAnimationFrame(raf);
-    }
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', onResize);
+    };
   }, [type]);
 
   return <canvas ref={ref} style={{ width:'100%', height:'100%', display:'block' }} />;
@@ -678,15 +696,15 @@ export default function AmbroisePartnersModern() {
         .footer-social a:hover{border-color:rgba(255,255,255,.5);color:#fff;background:rgba(255,255,255,.08);}
 
         /* ── DOMAINS GRID ── */
-        .domains-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;}
-        .domain-card{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:3/4;cursor:pointer;}
+        .domains-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;}
+        .domain-card{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:1/2;cursor:pointer;}
         .domain-img{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .55s cubic-bezier(0.16,1,0.3,1);}
         .domain-card:hover .domain-img{transform:scale(1.05);}
         .domain-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.05) 50%,transparent 100%);transition:background .35s ease;}
         .domain-card:hover .domain-overlay{background:linear-gradient(to top,rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.1) 60%,transparent 100%);}
-        .domain-label{position:absolute;bottom:0;left:0;right:0;padding:1.4rem 1.3rem;}
-        .domain-num{display:block;font-family:var(--serif);font-style:italic;font-size:0.7rem;color:rgba(255,255,255,0.6);margin-bottom:0.3rem;}
-        .domain-name{font-family:var(--serif);font-weight:500;font-size:1.55rem;line-height:1.12;letter-spacing:-0.02em;color:#fff;margin:0;text-shadow:0 1px 8px rgba(0,0,0,0.3);}
+        .domain-label{position:absolute;bottom:0;left:0;right:0;padding:1.8rem 1.5rem;}
+        .domain-num{display:block;font-family:var(--serif);font-style:italic;font-size:0.75rem;color:rgba(255,255,255,0.6);margin-bottom:0.4rem;}
+        .domain-name{font-family:var(--serif);font-weight:500;font-size:1.7rem;line-height:1.12;letter-spacing:-0.02em;color:#fff;margin:0;text-shadow:0 1px 8px rgba(0,0,0,0.3);}
 
         /* ── REVEAL ── */
         .reveal{opacity:0;transform:translateY(20px);transition:opacity .65s var(--ease),transform .65s var(--ease);}
@@ -950,9 +968,9 @@ export default function AmbroisePartnersModern() {
               </div>
               <div className="footer-col">
                 <div className="footer-col-title">Legal</div>
-                <a href="#">Legal notice</a>
-                <a href="#">Privacy policy</a>
-                <a href="#">Cookie policy</a>
+                <a href="/legal">Legal notice</a>
+                <a href="/privacy">Privacy policy</a>
+                <a href="/cookies">Cookie policy</a>
               </div>
             </div>
           </div>
