@@ -296,14 +296,15 @@ export default function AmbroisePartnersModern() {
 
     const ctx = canvas.getContext('2d')!;
     const PARTICLE_COUNT = 40000;
-    const STICKY_PX      = 1500;
+    const isMobile = window.innerWidth <= 600;
+    const STICKY_PX      = isMobile ? 600 : 1500;
     let W = 0, H = 0, scrollProgress = 0, raf = 0;
 
     let fadeEl: HTMLElement | null = null;
 
     const wrapper = document.createElement('div');
     wrapper.id = 'hero-wrapper';
-    wrapper.style.cssText = `position:relative;height:calc(100vh + ${STICKY_PX}px);`;
+    wrapper.style.cssText = `position:relative;height:calc(100dvh + ${STICKY_PX}px);`;
     hero.parentNode!.insertBefore(wrapper, hero);
     wrapper.appendChild(hero);
     hero.style.position = 'sticky';
@@ -521,7 +522,7 @@ export default function AmbroisePartnersModern() {
 
         /* ── HERO ── */
         .hero{
-          position:relative;min-height:100vh;overflow:hidden;
+          position:relative;min-height:100vh;min-height:100dvh;overflow:hidden;
           display:flex;flex-direction:column;align-items:center;justify-content:center;
           padding:0 5vw;color:#fff;
           /* Richer deep-navy background with subtle radial warmth for life-science feel */
