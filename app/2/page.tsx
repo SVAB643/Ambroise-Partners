@@ -256,23 +256,25 @@ const DOMAINS_ALT = [
 /* Carousel arc geometry — parameterised for responsive sizing */
 const carouselScaleF = (r: number) => 1 / (1 + r * 0.28);
 
-function buildCumulativeX(baseW: number, gap: number) {
+function buildCumulativeX(baseW: number, gap: number, centerW: number) {
   const cumX: number[] = [0];
-  for (let i = 0; i < 7; i++) {
+  /* First step: center card half-width → gap → first neighbour half-width */
+  cumX.push(centerW / 2 + gap + (baseW * carouselScaleF(1)) / 2);
+  for (let i = 1; i < 7; i++) {
     cumX.push(cumX[i] + (baseW * carouselScaleF(i)) / 2 + gap + (baseW * carouselScaleF(i + 1)) / 2);
   }
   return cumX;
 }
 
-function getSlotStyle(rel: number, baseW: number, baseH: number, cumX: number[], yFactor: number) {
+function getSlotStyle(rel: number, baseW: number, baseH: number, cumX: number[], yFactor: number, centerW: number, centerH: number) {
   const absRel = Math.abs(rel);
   if (absRel > 7) return null;
   const x = (rel >= 0 ? 1 : -1) * cumX[absRel];
   const y = absRel * absRel * yFactor;
   const rot = rel * 2.5;
   const scale = carouselScaleF(absRel);
-  const w = Math.round(baseW * scale);
-  const h = Math.round(baseH * scale);
+  const w = absRel === 0 ? centerW : Math.round(baseW * scale);
+  const h = absRel === 0 ? centerH : Math.round(baseH * scale);
   const opacity = Math.max(0.12, 1 - absRel * 0.16);
   const z = 20 - absRel;
   const sa = Math.max(0.02, 0.12 - absRel * 0.02);
@@ -286,22 +288,22 @@ function ExpertiseSectionAlt() {
   const tabsRef = useRef<HTMLDivElement>(null);
   const total = DOMAINS_ALT.length;
 
-  /* Responsive card dimensions */
-  const [dims, setDims] = useState({ w: 250, h: 350, gap: 20, yF: 8 });
+  /* Responsive card dimensions — center card is square & wider */
+  const [dims, setDims] = useState({ w: 250, h: 350, gap: 20, yF: 8, cW: 400, cH: 400 });
   useEffect(() => {
     const update = () => {
       const vw = window.innerWidth;
-      if (vw <= 480)      setDims({ w: 140, h: 196, gap: 10, yF: 4 });
-      else if (vw <= 600) setDims({ w: 170, h: 238, gap: 14, yF: 5 });
-      else if (vw <= 960) setDims({ w: 210, h: 294, gap: 16, yF: 6 });
-      else                setDims({ w: 250, h: 350, gap: 20, yF: 8 });
+      if (vw <= 480)      setDims({ w: 140, h: 196, gap: 10, yF: 4, cW: 220, cH: 220 });
+      else if (vw <= 600) setDims({ w: 170, h: 238, gap: 14, yF: 5, cW: 270, cH: 270 });
+      else if (vw <= 960) setDims({ w: 210, h: 294, gap: 16, yF: 6, cW: 340, cH: 340 });
+      else                setDims({ w: 250, h: 350, gap: 20, yF: 8, cW: 400, cH: 400 });
     };
     update();
     window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
   }, []);
 
-  const cumX = useMemo(() => buildCumulativeX(dims.w, dims.gap), [dims.w, dims.gap]);
+  const cumX = useMemo(() => buildCumulativeX(dims.w, dims.gap, dims.cW), [dims.w, dims.gap, dims.cW]);
 
   const navigate = useCallback((newIndex: number) => {
     if (newIndex < 0 || newIndex >= total || newIndex === activeIndex) return;
@@ -359,7 +361,7 @@ function ExpertiseSectionAlt() {
         {/* Carousel */}
         <div className="dalt-carousel">
           {visibleCards.map(({ catIndex, rel }) => {
-            const slot = getSlotStyle(rel, dims.w, dims.h, cumX, dims.yF);
+            const slot = getSlotStyle(rel, dims.w, dims.h, cumX, dims.yF, dims.cW, dims.cH);
             if (!slot) return null;
             const absRel = Math.abs(rel);
             const isCenter = rel === 0;
@@ -917,7 +919,7 @@ export default function AmbroisePartnersModern() {
         .dalt-arrow{width:42px;height:42px;border-radius:50%;border:1.5px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .2s,color .2s;}
         .dalt-arrow:hover:not(:disabled){border-color:var(--blue);color:var(--blue);}
         .dalt-arrow:disabled{opacity:.25;cursor:default;}
-        .dalt-tabs{display:flex;gap:0;overflow-x:auto;flex:1;justify-content:center;scrollbar-width:none;-ms-overflow-style:none;position:relative;padding-bottom:3px;}
+        .dalt-tabs{display:flex;gap:0;overflow-x:auto;flex:1;scrollbar-width:none;-ms-overflow-style:none;position:relative;padding-bottom:3px;}
         .dalt-tabs::-webkit-scrollbar{display:none;}
         .dalt-tab{white-space:nowrap;padding:10px 16px;font-size:.84rem;border:none;background:none;font-family:var(--sans);cursor:pointer;color:var(--muted);font-weight:400;transition:color .25s ease;letter-spacing:.01em;}
         .dalt-tab:hover{color:var(--ink);}
