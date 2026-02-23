@@ -297,13 +297,6 @@ const svcS: Record<string, React.CSSProperties> = {
   header: { marginBottom: '4.5rem' },
   eyebrow: { display: 'block', fontSize: '0.72rem', fontWeight: 500, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#6b6b78', marginBottom: '0.8rem', fontFamily: 'Inter, sans-serif' },
   title: { fontFamily: 'Lora, Georgia, serif', fontWeight: 400, fontSize: 'clamp(2.2rem, 4vw, 3.2rem)', lineHeight: 1.1, letterSpacing: '-0.02em', color: '#1a1a1a' },
-  grid: { border: '1px solid #e8e8f0', borderRadius: 2 },
-  topRow: { display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)' },
-  dividerRow: { display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', borderTop: '1px solid #e8e8f0', borderBottom: '1px solid #e8e8f0' },
-  bottomRow: { display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)' },
-  cell: { padding: '2.4rem 2.2rem', borderRight: '1px solid #e8e8f0' },
-  dividerCell: { padding: '0.6rem 2.2rem', borderRight: '1px solid #e8e8f0', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', position: 'relative' },
-  plus: { position: 'absolute', right: -10, top: '50%', transform: 'translateY(-50%)', fontSize: '1rem', color: '#b0b0be', fontFamily: 'Inter, sans-serif', fontWeight: 300, zIndex: 1, background: '#fff', padding: '0 2px' },
   svcNum: { fontFamily: 'Lora, Georgia, serif', fontStyle: 'italic', fontSize: '0.9rem', color: '#0f2fff', marginBottom: '1rem', display: 'block' },
   svcTitle: { fontFamily: 'Lora, Georgia, serif', fontWeight: 400, fontSize: '1.25rem', lineHeight: 1.25, letterSpacing: '-0.01em', color: '#1a1a1a' },
   svcDesc: { fontFamily: 'Inter, sans-serif', fontSize: '0.93rem', lineHeight: 1.75, color: '#6b6b78', fontWeight: 300 },
@@ -317,29 +310,40 @@ function ServicesSection() {
           <span style={svcS.eyebrow}>What we do</span>
           <h2 style={svcS.title}>Our Services</h2>
         </div>
-        <div style={svcS.grid} className="reveal">
-          <div style={svcS.topRow}>
+        {/* Desktop: 3-row table layout */}
+        <div className="svc-grid svc-grid-desktop reveal">
+          <div className="svc-row svc-top-row">
             {SERVICES.map((svc, i) => (
-              <div key={i} style={svcS.cell}>
+              <div key={i} className="svc-cell">
                 <span style={svcS.svcNum}>{String(i + 1).padStart(2, '0')}</span>
                 <h3 style={svcS.svcTitle}>{svc.title}</h3>
               </div>
             ))}
           </div>
-          <div style={svcS.dividerRow}>
+          <div className="svc-row svc-divider-row">
             {SERVICES.map((_, i) => (
-              <div key={i} style={svcS.dividerCell}>
-                {i < SERVICES.length - 1 && <span style={svcS.plus}>+</span>}
+              <div key={i} className="svc-divider-cell">
+                {i < SERVICES.length - 1 && <span className="svc-plus">+</span>}
               </div>
             ))}
           </div>
-          <div style={svcS.bottomRow}>
+          <div className="svc-row svc-bottom-row">
             {SERVICES.map((svc, i) => (
-              <div key={i} style={svcS.cell} className={i === SERVICES.length - 1 ? 'svc-scroll-cell' : ''}>
+              <div key={i} className={`svc-cell${i === SERVICES.length - 1 ? ' svc-scroll-cell' : ''}`}>
                 <p style={svcS.svcDesc}>{svc.desc}</p>
               </div>
             ))}
           </div>
+        </div>
+        {/* Mobile: stacked cards */}
+        <div className="svc-grid-mobile reveal">
+          {SERVICES.map((svc, i) => (
+            <div key={i} className="svc-mobile-card">
+              <span style={svcS.svcNum}>{String(i + 1).padStart(2, '0')}</span>
+              <h3 style={svcS.svcTitle}>{svc.title}</h3>
+              <p style={{ ...svcS.svcDesc, marginTop: '0.8rem' }}>{svc.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -724,11 +728,22 @@ export default function AmbroisePartnersModern() {
         .submit-btn{align-self:center;background:var(--ink);color:#fff;border:none;padding:1rem 3rem;border-radius:100px;font-family:var(--sans);font-size:.75rem;font-weight:500;letter-spacing:.06em;cursor:pointer;transition:background .22s,transform .2s,box-shadow .22s;}
         .submit-btn:hover{background:var(--blue);transform:translateY(-2px);box-shadow:0 10px 28px rgba(15,47,255,.2);}
 
-        /* ── SERVICE SCROLL CELL ── */
+        /* ── SERVICES GRID ── */
+        .svc-grid{border:1px solid #e8e8f0;border-radius:2px;}
+        .svc-row{display:grid;grid-template-columns:repeat(5,1fr);}
+        .svc-divider-row{border-top:1px solid #e8e8f0;border-bottom:1px solid #e8e8f0;}
+        .svc-cell{padding:2.4rem 2.2rem;border-right:1px solid #e8e8f0;}
+        .svc-cell:last-child{border-right:none;}
+        .svc-divider-cell{padding:0.6rem 2.2rem;border-right:1px solid #e8e8f0;display:flex;align-items:center;justify-content:flex-end;position:relative;}
+        .svc-divider-cell:last-child{border-right:none;}
+        .svc-plus{position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-size:1rem;color:#b0b0be;font-family:Inter,sans-serif;font-weight:300;z-index:1;background:#fff;padding:0 2px;}
         .svc-scroll-cell{position:relative;max-height:9.5rem;overflow:hidden;}
         .svc-scroll-cell::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2.8rem;background:linear-gradient(to bottom,transparent,#fff);pointer-events:none;transition:opacity .22s;}
         .svc-scroll-cell:hover{overflow-y:auto;}
         .svc-scroll-cell:hover::after{opacity:0;}
+        .svc-grid-mobile{display:none;}
+        .svc-mobile-card{padding:2rem 0;border-bottom:1px solid #e8e8f0;}
+        .svc-mobile-card:first-child{border-top:1px solid #e8e8f0;}
 
         /* ── FOOTER ── */
         footer{background:linear-gradient(0deg,#010510 0%,#040c30 20%,#0a1880 42%,#1a3fff 58%,#6699ff 72%,#d0e0ff 86%,#ffffff 96%);color:#fff;padding:13rem 4vw 4rem;}
@@ -786,10 +801,12 @@ export default function AmbroisePartnersModern() {
           .nav-links a:not(.nav-cta){display:none;}
           .approach-panel{grid-template-columns:1fr;}
           .approach-canvas-wrap{min-height:220px;}
-          .services-grid,.values-grid{grid-template-columns:1fr;}
+          .values-grid{grid-template-columns:1fr;}
           .about-split{grid-template-columns:1fr;gap:3rem;}
           .method-step{grid-template-columns:60px 1fr;}
           .step-arrow{display:none;}
+          .svc-grid-desktop{display:none;}
+          .svc-grid-mobile{display:block;}
         }
         @media(max-width:600px){
           .section{padding:4rem 4vw;}
