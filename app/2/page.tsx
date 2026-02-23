@@ -504,7 +504,7 @@ export default function AmbroisePartnersModern() {
           --ease:   cubic-bezier(0.22,0.61,0.36,1);
         }
 
-        html{scroll-behavior:smooth;}
+        html{scroll-behavior:smooth;overflow-x:hidden;}
         body{font-family:var(--sans);background:var(--white);color:var(--ink);overflow-x:hidden;line-height:1.65;-webkit-font-smoothing:antialiased;}
         a{color:inherit;text-decoration:none;}
 
@@ -681,7 +681,7 @@ export default function AmbroisePartnersModern() {
         .svc-desc{font-family:var(--sans);font-size:0.82rem;line-height:1.76;color:#6b6b78;font-weight:300;margin:0;}
 
         /* ── FOOTER ── */
-        footer{background:linear-gradient(0deg,#030a24 0%,#0a1880 18%,#2a5cb8 32%,#7aacec 48%,#d0e0ff 64%,#ffffff 80%);color:#fff;padding:13rem 4vw 4rem;}
+        footer{background:linear-gradient(0deg,#030a24 0%,#0a1880 14%,#2a5cb8 26%,#7aacec 40%,#d0e0ff 55%,#ffffff 72%);color:#fff;padding:28rem 4vw 4rem;}
         .footer-inner{max-width:1440px;margin:0 auto;}
 
         /* CTA strip */
@@ -931,8 +931,8 @@ export default function AmbroisePartnersModern() {
         <div className="contact-wrap">
           <div className="reveal">
             <span className="eyebrow">Get in touch</span>
-            <h2 className="section-title" style={{whiteSpace:'nowrap'}}>Let&apos;s discuss your project</h2>
-            <p className="section-lede" style={{margin:'1rem auto 0',textAlign:'center',maxWidth:'100%',fontSize:'1.35rem',whiteSpace:'nowrap'}}>
+            <h2 className="section-title">Let&apos;s discuss your project</h2>
+            <p className="section-lede" style={{margin:'1rem auto 0',textAlign:'center',maxWidth:'100%',fontSize:'1.35rem'}}>
               Reach out to explore how we can help you achieve your strategic objectives.
             </p>
           </div>
