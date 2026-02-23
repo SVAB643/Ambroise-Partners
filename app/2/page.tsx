@@ -944,7 +944,7 @@ export default function AmbroisePartnersModern() {
                 Healthcare-focused investment banking,<br />serving innovation across EU &amp; US.
               </p>
               <div className="footer-contact">
-                <a href="mailto:contact@ambroise-partners.com">contact@ambroise-partners.com</a>
+                <a href="mailto:camille@ambroisepartners.com">camille@ambroisepartners.com</a>
                 <span>Paris · New York</span>
               </div>
             </div>
