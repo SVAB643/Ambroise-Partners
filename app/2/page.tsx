@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, type FormEvent } from 'react';
+import React, { useEffect, useRef, useState, useCallback, useMemo, type FormEvent } from 'react';
 
 /* ─── Animated canvas for each approach pillar ─── */
 function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
@@ -184,7 +184,7 @@ const DOMAINS = [
 
 function ExpertiseSection() {
   return (
-    <section id="domains" style={{ background: '#ffffff', padding: '8rem 4vw' }}>
+    <section id="domains" style={{ background: '#ffffff', padding: '5.5rem 4vw' }}>
       <div style={{ maxWidth: 1440, margin: '0 auto' }}>
         <div style={{ marginBottom: '4.5rem' }} className="reveal">
           <span className="eyebrow">Areas of expertise</span>
@@ -218,7 +218,7 @@ const SERVICES = [
 
 function ServicesSection() {
   return (
-    <section id="services" style={{ background: '#ffffff', padding: '8rem 4vw' }}>
+    <section id="services" style={{ background: '#ffffff', padding: '5.5rem 4vw' }}>
       <div style={{ maxWidth: 1440, margin: '0 auto' }}>
         <div style={{ marginBottom: '2.5rem' }} className="reveal">
           <span className="eyebrow">What we do</span>
@@ -235,6 +235,165 @@ function ServicesSection() {
               <p className="svc-desc">{svc.desc}</p>
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Domains Carousel (alternative version) ─── */
+const DOMAINS_ALT = [
+  { name:'Biotechnology',              image:'/images/biotech.jpg' },
+  { name:'Pharmaceuticals',            image:'/images/pharma.jpg' },
+  { name:'Medical Devices',            image:'/images/meddevice.jpg' },
+  { name:'Diagnostics',                image:'/images/diagnostics.jpg' },
+  { name:'Digital Health',             image:'/images/digital.jpg' },
+  { name:'Life Science Services',      image:'/images/meddevice2.jpg' },
+  { name:'Healthcare Services',        image:'/images/diagnostics2.jpg' },
+  { name:'Consumer Health & Wellness', image:'/images/pharma.jpg' },
+];
+
+/* Carousel arc geometry — parameterised for responsive sizing */
+const carouselScaleF = (r: number) => 1 / (1 + r * 0.28);
+
+function buildCumulativeX(baseW: number, gap: number) {
+  const cumX: number[] = [0];
+  for (let i = 0; i < 7; i++) {
+    cumX.push(cumX[i] + (baseW * carouselScaleF(i)) / 2 + gap + (baseW * carouselScaleF(i + 1)) / 2);
+  }
+  return cumX;
+}
+
+function getSlotStyle(rel: number, baseW: number, baseH: number, cumX: number[], yFactor: number) {
+  const absRel = Math.abs(rel);
+  if (absRel > 7) return null;
+  const x = (rel >= 0 ? 1 : -1) * cumX[absRel];
+  const y = absRel * absRel * yFactor;
+  const rot = rel * 2.5;
+  const scale = carouselScaleF(absRel);
+  const w = Math.round(baseW * scale);
+  const h = Math.round(baseH * scale);
+  const opacity = Math.max(0.12, 1 - absRel * 0.16);
+  const z = 20 - absRel;
+  const sa = Math.max(0.02, 0.12 - absRel * 0.02);
+  const shadow = `0 ${Math.max(2, 12 - absRel * 2)}px ${Math.max(6, 40 - absRel * 6)}px rgba(0,0,0,${sa.toFixed(3)})`;
+  return { x, y, w, h, rot, opacity, z, shadow };
+}
+
+function ExpertiseSectionAlt() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [labelVisible, setLabelVisible] = useState(true);
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const total = DOMAINS_ALT.length;
+
+  /* Responsive card dimensions */
+  const [dims, setDims] = useState({ w: 250, h: 350, gap: 20, yF: 8 });
+  useEffect(() => {
+    const update = () => {
+      const vw = window.innerWidth;
+      if (vw <= 480)      setDims({ w: 140, h: 196, gap: 10, yF: 4 });
+      else if (vw <= 600) setDims({ w: 170, h: 238, gap: 14, yF: 5 });
+      else if (vw <= 960) setDims({ w: 210, h: 294, gap: 16, yF: 6 });
+      else                setDims({ w: 250, h: 350, gap: 20, yF: 8 });
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  const cumX = useMemo(() => buildCumulativeX(dims.w, dims.gap), [dims.w, dims.gap]);
+
+  const navigate = useCallback((newIndex: number) => {
+    if (newIndex < 0 || newIndex >= total || newIndex === activeIndex) return;
+    setLabelVisible(false);
+    setActiveIndex(newIndex);
+    setTimeout(() => setLabelVisible(true), 280);
+  }, [activeIndex, total]);
+
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+
+  useEffect(() => {
+    if (!tabsRef.current) return;
+    const tabEl = tabsRef.current.children[activeIndex] as HTMLElement;
+    if (tabEl) {
+      const container = tabsRef.current;
+      const scrollLeft = tabEl.offsetLeft - container.offsetWidth / 2 + tabEl.offsetWidth / 2;
+      container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+      setIndicatorStyle({ left: tabEl.offsetLeft, width: tabEl.offsetWidth });
+    }
+  }, [activeIndex]);
+
+  /* Render ALL cards — far ones naturally fade & shrink into the margins */
+  const visibleCards: { catIndex: number; rel: number }[] = [];
+  for (let i = 0; i < total; i++) {
+    visibleCards.push({ catIndex: i, rel: i - activeIndex });
+  }
+
+  return (
+    <section className="domains-alt-section" id="domains-alt">
+      <div style={{ maxWidth: 1440, margin: '0 auto' }}>
+        <div style={{ marginBottom: '1rem', textAlign: 'center' }} className="reveal">
+          <span className="eyebrow">Areas of expertise</span>
+          <h2 className="section-title">Our Domains</h2>
+          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.3rem', lineHeight: 1.5, margin: '0 auto' }}>Our advisory spans the full spectrum of healthcare innovation.</p>
+        </div>
+
+        {/* Tabs with nav arrows */}
+        <div className="dalt-nav reveal">
+          <button className="dalt-arrow" onClick={() => navigate(activeIndex - 1)} disabled={activeIndex === 0}>
+            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/></svg>
+          </button>
+          <div className="dalt-tabs" ref={tabsRef}>
+            {DOMAINS_ALT.map((dom, i) => (
+              <button key={dom.name} className={`dalt-tab${i === activeIndex ? ' active' : ''}`} onClick={() => navigate(i)}>
+                {dom.name}
+              </button>
+            ))}
+            <div className="dalt-indicator" style={{ left: indicatorStyle.left, width: indicatorStyle.width }} />
+          </div>
+          <button className="dalt-arrow" onClick={() => navigate(activeIndex + 1)} disabled={activeIndex === total - 1}>
+            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+          </button>
+        </div>
+
+        {/* Carousel */}
+        <div className="dalt-carousel">
+          {visibleCards.map(({ catIndex, rel }) => {
+            const slot = getSlotStyle(rel, dims.w, dims.h, cumX, dims.yF);
+            if (!slot) return null;
+            const absRel = Math.abs(rel);
+            const isCenter = rel === 0;
+            const dom = DOMAINS_ALT[catIndex];
+            return (
+              <div
+                key={catIndex}
+                className="dalt-card"
+                onClick={() => !isCenter && navigate(catIndex)}
+                style={{
+                  width: slot.w,
+                  height: slot.h,
+                  transform: `translateX(${slot.x - slot.w / 2}px) translateY(${slot.y - slot.h / 2}px) rotate(${slot.rot}deg)`,
+                  zIndex: slot.z,
+                  opacity: slot.opacity,
+                  boxShadow: slot.shadow,
+                  cursor: isCenter ? 'default' : 'pointer',
+                }}
+              >
+                <img src={dom.image} alt={dom.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                <div className="dalt-card-overlay" />
+                {absRel <= 2 && (
+                  <div className="dalt-card-label" style={{ opacity: isCenter ? 1 : 0.5 }}>
+                    <h3 className="dalt-card-name">{dom.name}</h3>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Active domain name below carousel */}
+        <div className="dalt-active-label" style={{ opacity: labelVisible ? 1 : 0, transform: labelVisible ? 'translateY(0)' : 'translateY(8px)' }}>
+          <span>{DOMAINS_ALT[activeIndex].name}</span>
         </div>
       </div>
     </section>
@@ -625,7 +784,7 @@ export default function AmbroisePartnersModern() {
         .hero-footnote{margin-top:1.2rem;font-size:.78rem;color:rgba(255,255,255,.38);font-weight:300;opacity:0;animation:fadeUp .9s .9s var(--ease) forwards;}
 
         /* ── SECTIONS ── */
-        .section{max-width:1440px;margin:0 auto;padding:8rem 4vw;color:var(--ink);}
+        .section{max-width:1440px;margin:0 auto;padding:5.5rem 4vw;color:var(--ink);}
         .section-bg{background:var(--white);}
         .eyebrow{display:block;font-size:.72rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;}
         .section-title{font-family:var(--serif);font-weight:400;font-size:clamp(2.2rem,4vw,3.6rem);line-height:1.1;letter-spacing:-.02em;margin-bottom:1rem;}
@@ -645,8 +804,8 @@ export default function AmbroisePartnersModern() {
         .approach-panel{display:grid;grid-template-columns:1fr 1fr;background:#f8f7f4;min-height:280px;}
         .approach-text{padding:4rem 3.5rem;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--line);}
         .approach-num{font-family:var(--serif);font-style:italic;font-size:.9rem;color:var(--blue);margin-bottom:1.2rem;display:block;}
-        .approach-title{font-family:var(--serif);font-weight:400;font-size:1.65rem;letter-spacing:-.01em;margin-bottom:1rem;line-height:1.15;}
-        .approach-desc{color:var(--muted);font-size:.95rem;line-height:1.75;font-weight:300;}
+        .approach-title{font-family:var(--serif);font-weight:500;font-size:1.9rem;letter-spacing:-.01em;margin-bottom:1rem;line-height:1.15;}
+        .approach-desc{color:var(--muted);font-size:1.05rem;line-height:1.75;font-weight:300;}
         .approach-canvas-wrap{background:#f8f7f4;min-height:260px;display:flex;align-items:center;justify-content:center;padding:2rem;}
 
         /* ── VALUES ── */
@@ -662,8 +821,8 @@ export default function AmbroisePartnersModern() {
         .method-step{display:grid;grid-template-columns:80px 1fr 24px;align-items:center;gap:2.5rem;padding:2rem .5rem;border-bottom:1px solid var(--line);border-radius:4px;cursor:default;transition:box-shadow .35s ease,transform .35s ease,background .35s ease;}
         .method-step:hover{transform:translateY(-4px);box-shadow:0 20px 64px rgba(0,0,0,0.09),0 2px 8px rgba(0,0,0,0.05);background:#fff;}
         .step-num{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--blue);}
-        .step-body h4{font-family:var(--serif);font-weight:400;font-size:1.4rem;letter-spacing:-.01em;margin-bottom:.3rem;}
-        .step-body p{color:var(--muted);font-size:.95rem;line-height:1.65;font-weight:300;}
+        .step-body h4{font-family:var(--serif);font-weight:500;font-size:1.6rem;letter-spacing:-.01em;margin-bottom:.4rem;}
+        .step-body p{color:var(--muted);font-size:1.05rem;line-height:1.65;font-weight:300;}
         .step-arrow{width:20px;height:20px;color:#ccc;flex-shrink:0;transition:color .35s ease,transform .35s ease;}
         .method-step:hover .step-arrow{color:var(--blue);transform:translateX(4px);}
 
@@ -680,7 +839,7 @@ export default function AmbroisePartnersModern() {
         .about-dark-label{font-family:var(--serif);font-weight:400;font-size:1.3rem;letter-spacing:-.01em;margin-bottom:1.5rem;position:relative;}
 
         /* ── CONTACT ── */
-        .contact-wrap{max-width:860px;margin:0 auto;padding:8rem 5vw;text-align:center;display:flex;flex-direction:column;align-items:center;}
+        .contact-wrap{max-width:860px;margin:0 auto;padding:5.5rem 5vw;text-align:center;display:flex;flex-direction:column;align-items:center;}
         .contact-form{margin-top:3.5rem;text-align:left;display:flex;flex-direction:column;gap:1.2rem;width:100%;max-width:600px;}
         .fl{display:block;font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.45rem;}
         .fi,.ft{width:100%;background:var(--white);border:1.5px solid #dddde8;border-radius:8px;padding:.9rem 1.15rem;font-family:var(--sans);font-size:.95rem;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;}
@@ -697,8 +856,8 @@ export default function AmbroisePartnersModern() {
         .svc-card-item:hover{box-shadow:0 8px 30px rgba(0,0,0,0.08);transform:translateY(-3px);}
         .svc-title{margin:0 0 .8rem;display:flex;flex-direction:column;}
         .svc-main{font-family:var(--serif);font-weight:600;font-size:1.6rem;line-height:1.15;letter-spacing:-.01em;color:var(--ink);display:block;}
-        .svc-sub{font-family:var(--sans);font-weight:400;font-size:.78rem;line-height:1.3;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);display:block;margin-top:.35rem;}
-        .svc-desc{font-family:var(--sans);font-size:.9rem;line-height:1.75;color:var(--muted);font-weight:300;margin:0;}
+        .svc-sub{font-family:var(--sans);font-weight:400;font-size:.85rem;line-height:1.3;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);display:block;margin-top:.35rem;}
+        .svc-desc{font-family:var(--sans);font-size:1rem;line-height:1.75;color:var(--muted);font-weight:300;margin:0;}
 
         /* ── FOOTER ── */
         footer{background:linear-gradient(0deg,#030a24 0%,#0a1880 14%,#2a5cb8 26%,#7aacec 40%,#d0e0ff 55%,#ffffff 72%);color:#fff;padding:20rem 4vw 4rem;margin-top:-8rem;}
@@ -752,6 +911,26 @@ export default function AmbroisePartnersModern() {
         .domain-num{display:none;}
         .domain-name{font-family:var(--serif);font-weight:500;font-size:1rem;line-height:1.2;letter-spacing:-0.01em;color:#fff;margin:0;text-shadow:0 1px 10px rgba(0,0,0,0.4);}
 
+        /* ── DOMAINS CAROUSEL (v2) ── */
+        .domains-alt-section{background:#fff;padding:5.5rem 4vw;overflow:hidden;}
+        .dalt-nav{display:flex;align-items:center;gap:8px;margin-top:2.5rem;max-width:900px;margin-left:auto;margin-right:auto;}
+        .dalt-arrow{width:42px;height:42px;border-radius:50%;border:1.5px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .2s,color .2s;}
+        .dalt-arrow:hover:not(:disabled){border-color:var(--blue);color:var(--blue);}
+        .dalt-arrow:disabled{opacity:.25;cursor:default;}
+        .dalt-tabs{display:flex;gap:0;overflow-x:auto;flex:1;justify-content:center;scrollbar-width:none;-ms-overflow-style:none;position:relative;padding-bottom:3px;}
+        .dalt-tabs::-webkit-scrollbar{display:none;}
+        .dalt-tab{white-space:nowrap;padding:10px 16px;font-size:.84rem;border:none;background:none;font-family:var(--sans);cursor:pointer;color:var(--muted);font-weight:400;transition:color .25s ease;letter-spacing:.01em;}
+        .dalt-tab:hover{color:var(--ink);}
+        .dalt-tab.active{color:var(--ink);font-weight:500;}
+        .dalt-indicator{position:absolute;bottom:0;height:2px;background:var(--ink);border-radius:1px;transition:left .4s cubic-bezier(0.33,1,0.68,1),width .4s cubic-bezier(0.33,1,0.68,1);pointer-events:none;}
+        .dalt-carousel{width:100%;margin-top:2.5rem;position:relative;height:460px;}
+        .dalt-card{position:absolute;left:50%;top:50%;border-radius:14px;overflow:hidden;transition:transform .7s cubic-bezier(0.33,1,0.68,1),opacity .5s ease,width .7s cubic-bezier(0.33,1,0.68,1),height .7s cubic-bezier(0.33,1,0.68,1),box-shadow .5s ease;will-change:transform,opacity,width,height;}
+        .dalt-card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.05) 45%,transparent 100%);}
+        .dalt-card-label{position:absolute;bottom:0;left:0;right:0;padding:1.5rem 1.3rem;transition:opacity .3s ease;}
+        .dalt-card-name{font-family:var(--serif);font-weight:500;font-size:1.1rem;line-height:1.2;color:#fff;margin:0;text-shadow:0 1px 10px rgba(0,0,0,0.4);}
+        .dalt-active-label{text-align:center;margin-top:.5rem;transition:opacity .35s ease,transform .35s ease;}
+        .dalt-active-label span{font-family:var(--serif);font-weight:500;font-size:1.6rem;letter-spacing:-.01em;color:var(--ink);}
+
         /* ── REVEAL ── */
         .reveal{opacity:0;transform:translateY(20px);transition:opacity .65s var(--ease),transform .65s var(--ease);}
         .reveal.visible{opacity:1;transform:translateY(0);}
@@ -774,6 +953,8 @@ export default function AmbroisePartnersModern() {
           .svc-cards-track{grid-template-columns:repeat(2,1fr);gap:14px;}
           .domains-grid{flex-wrap:wrap;gap:10px;}
           .domain-card{flex:1 1 calc(25% - 10px)!important;aspect-ratio:3/4;}
+          .dalt-carousel{height:400px;}
+          .domains-alt-section{padding:5rem 4vw;}
         }
         @media(max-width:600px){
           /* Nav */
@@ -814,6 +995,13 @@ export default function AmbroisePartnersModern() {
           .domain-card{flex:1 1 calc(50% - 8px)!important;aspect-ratio:3/4;border-radius:10px;}
           .domain-label{padding:1rem .8rem;}
           .domain-name{font-size:.9rem;}
+
+          /* Domains carousel */
+          .domains-alt-section{padding:4rem 4vw;}
+          .dalt-carousel{height:380px;}
+          .dalt-arrow{width:36px;height:36px;}
+          .dalt-tab{font-size:.75rem;padding:6px 8px;}
+          .dalt-active-label span{font-size:1.2rem;}
 
           /* Method */
           .method-step{grid-template-columns:48px 1fr;gap:1.5rem;padding:1.5rem .3rem;}
@@ -919,6 +1107,9 @@ export default function AmbroisePartnersModern() {
       </div>
 
       <ExpertiseSection />
+
+      {/* DOMAINS V2 — carousel alternative */}
+      <ExpertiseSectionAlt />
 
       {/* METHOD */}
       <div style={{ background: '#f8f7f4', width: '100%' }}>
