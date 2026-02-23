@@ -416,6 +416,9 @@ export default function AmbroisePartnersModern() {
     function buildParticles() {
       particles = [];
 
+      /* Use a reference size that doesn't collapse on narrow portrait screens */
+      const ref = Math.max(W, H * 0.5);
+
       const SX0 = W*0.15, SY0 = H*1.02;
       const SX1 = W*0.85, SY1 = -H*0.02;
       const dvx = SX1-SX0, dvy = SY1-SY0, spineLen = Math.sqrt(dvx*dvx+dvy*dvy);
@@ -427,7 +430,7 @@ export default function AmbroisePartnersModern() {
       for (let i = 0; i < PARTICLE_COUNT; i++) {
         const frac = Math.random();
         const perspective = 0.35 + frac * 0.65;
-        const AMP = W * 0.09 * perspective;
+        const AMP = ref * 0.09 * perspective;
 
         const sx = SX0 + tx * spineLen * frac;
         const sy = SY0 + ty * spineLen * frac;
@@ -453,12 +456,12 @@ export default function AmbroisePartnersModern() {
         const u1 = Math.max(Math.random(), 1e-5);
         const mag = Math.sqrt(-2.0 * Math.log(u1));
         const scatterAngle = Math.random() * Math.PI * 2;
-        const sigma = Math.pow(Math.random(), 0.65) * W * 0.018 * perspective;
+        const sigma = Math.pow(Math.random(), 0.65) * ref * 0.018 * perspective;
         const dnaX = targetX + Math.cos(scatterAngle) * mag * sigma;
         const dnaY = targetY + Math.sin(scatterAngle) * mag * sigma;
 
         const dist = Math.sqrt((dnaX - targetX)**2 + (dnaY - targetY)**2);
-        const normDist = Math.min(dist / (W * 0.018), 1);
+        const normDist = Math.min(dist / (ref * 0.018), 1);
         const coreness = 1 - normDist;
 
         const isBright = Math.random() < 0.07;
