@@ -297,14 +297,21 @@ export default function AmbroisePartnersModern() {
     const ctx = canvas.getContext('2d')!;
     const PARTICLE_COUNT = 40000;
     const isMobile = window.innerWidth <= 600;
-    const STICKY_PX      = isMobile ? 600 : 1500;
+    const STICKY_PX      = isMobile ? 0 : 1500;
     let W = 0, H = 0, scrollProgress = 0, raf = 0;
+
+    /* Mobile: time-based auto-play instead of scroll */
+    let autoStart = 0;
+    const AUTO_DELAY = 800;   // ms before dispersal starts
+    const AUTO_DURATION = 2200; // ms for full dispersal
 
     let fadeEl: HTMLElement | null = null;
 
     const wrapper = document.createElement('div');
     wrapper.id = 'hero-wrapper';
-    wrapper.style.cssText = `position:relative;height:calc(100dvh + ${STICKY_PX}px);`;
+    wrapper.style.cssText = isMobile
+      ? `position:relative;height:100dvh;`
+      : `position:relative;height:calc(100dvh + ${STICKY_PX}px);`;
     hero.parentNode!.insertBefore(wrapper, hero);
     wrapper.appendChild(hero);
     hero.style.position = 'sticky';
@@ -418,6 +425,15 @@ export default function AmbroisePartnersModern() {
     function animate() {
       const dpr = window.devicePixelRatio || 1;
       ctx.clearRect(0, 0, W * dpr, H * dpr);
+
+      /* Mobile: drive progress by time instead of scroll */
+      if (isMobile && autoStart > 0) {
+        const elapsed = Date.now() - autoStart;
+        if (elapsed > AUTO_DELAY) {
+          scrollProgress = Math.min((elapsed - AUTO_DELAY) / AUTO_DURATION, 1);
+        }
+      }
+
       const t=Date.now()*.001;
       for (const p of particles) { p.update(scrollProgress,t); p.draw(scrollProgress); }
       if (fadeEl) {
@@ -427,7 +443,9 @@ export default function AmbroisePartnersModern() {
       raf=requestAnimationFrame(animate);
     }
 
-    const onScroll=()=>{ scrollProgress=Math.min(Math.max(window.scrollY/STICKY_PX,0),1); };
+    const onScroll=()=>{
+      if (!isMobile) scrollProgress=Math.min(Math.max(window.scrollY/STICKY_PX,0),1);
+    };
     window.addEventListener('scroll',onScroll,{passive:true});
     window.addEventListener('resize',resize);
 
@@ -438,6 +456,7 @@ export default function AmbroisePartnersModern() {
       if (W === 0 || H === 0) {
         requestAnimationFrame(ensureReady);
       } else {
+        if (isMobile) autoStart = Date.now();
         animate();
       }
     };
