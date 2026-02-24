@@ -815,12 +815,12 @@ export default function AmbroisePartnersModern() {
 
         /* ── APPROACH ── */
         .approach-panels{display:flex;flex-direction:column;gap:1px;background:var(--line);}
-        .approach-panel{display:grid;grid-template-columns:1fr 1fr;background:#f8f7f4;min-height:280px;}
-        .approach-text{padding:4rem 3.5rem;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--line);}
+        .approach-panel{display:grid;grid-template-columns:1fr 1fr;background:#f8f7f4;min-height:180px;}
+        .approach-text{padding:2rem 2.5rem;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--line);}
         .approach-num{font-family:var(--serif);font-style:italic;font-size:.9rem;color:var(--blue);margin-bottom:1.2rem;display:block;}
-        .approach-title{font-family:var(--serif);font-weight:500;font-size:1.9rem;letter-spacing:-.01em;margin-bottom:1rem;line-height:1.15;}
-        .approach-desc{color:var(--muted);font-size:1.05rem;line-height:1.75;font-weight:300;}
-        .approach-canvas-wrap{background:#f8f7f4;min-height:260px;display:flex;align-items:center;justify-content:center;padding:2rem;}
+        .approach-title{font-family:var(--serif);font-weight:500;font-size:1.5rem;letter-spacing:-.01em;margin-bottom:.6rem;line-height:1.15;}
+        .approach-desc{color:var(--muted);font-size:.9rem;line-height:1.65;font-weight:300;}
+        .approach-canvas-wrap{background:#f8f7f4;min-height:170px;display:flex;align-items:center;justify-content:center;padding:1.2rem;}
 
         /* ── VALUES ── */
         .values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);}
@@ -874,7 +874,7 @@ export default function AmbroisePartnersModern() {
         .svc-desc{font-family:var(--sans);font-size:1rem;line-height:1.75;color:var(--muted);font-weight:300;margin:0;}
 
         /* ── FOOTER ── */
-        footer{background:linear-gradient(0deg,#030a24 0%,#0a1880 14%,#2a5cb8 26%,#7aacec 40%,#d0e0ff 55%,#ffffff 72%);color:#fff;padding:20rem 4vw 4rem;margin-top:-8rem;}
+        footer{background:#030a24;color:#fff;padding:3.5rem 4vw 2.5rem;}
         .footer-inner{max-width:1440px;margin:0 auto;}
 
         /* CTA strip */
@@ -1057,7 +1057,6 @@ export default function AmbroisePartnersModern() {
             <a href="#approach">Expertise</a>
             <a href="#domains">Domains</a>
             <a href="#method">Method</a>
-            <a href="#about">About</a>
             <a href="#contact" className="nav-cta">Contact us</a>
           </div>
         </nav>
@@ -1070,7 +1069,7 @@ export default function AmbroisePartnersModern() {
           <h1 className="hero-h1">
             <span className="hero-line hero-line-1">Independent strategic </span>
             <span className="hero-line hero-line-2">and financial advisory</span>
-            <span className="hero-line hero-line-3"><em> dedicated to healthcare innovation</em></span>
+            <span className="hero-line hero-line-3"> dedicated <em>to healthcare innovation</em></span>
           </h1>
         </div>
         <div className="hero-bottom">
@@ -1089,10 +1088,11 @@ export default function AmbroisePartnersModern() {
 
       {/* APPROACH */}
       <div style={{ background: '#f8f7f4', width: '100%' }}>
-      <section className="section" id="approach">
-        <div className="section-head reveal">
+      <section style={{ maxWidth: 1440, margin: '0 auto', padding: '4rem 4vw' }} id="approach">
+        <div style={{ marginBottom: '2rem', textAlign: 'left' }} className="reveal">
+          <span className="eyebrow">What sets us apart</span>
           <h2 className="section-title">Our Approach</h2>
-          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.3rem', lineHeight: 1.5 }}>What sets us apart is a unique combination of scientific depth, strategic networks and institutional-grade execution; purpose-built for healthcare companies.</p>
+          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.15rem', lineHeight: 1.5 }}>A unique combination of scientific depth, strategic networks and institutional-grade execution; purpose-built for healthcare companies.</p>
         </div>
         <div className="approach-panels">
           <div className="approach-panel reveal">
@@ -1144,9 +1144,6 @@ export default function AmbroisePartnersModern() {
             <div className="method-step reveal" key={num}>
               <div className="step-num">{num}</div>
               <div className="step-body"><h4>{title}</h4><p>{copy}</p></div>
-              <svg className="step-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/>
-              </svg>
             </div>
           ))}
         </div>
