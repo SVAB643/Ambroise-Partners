@@ -216,23 +216,24 @@ const SERVICES = [
   { main: 'Capital Raising', sub: 'Solutions', desc: 'Capital markets and structured financing advisory, including IPOs, follow-ons, private placements and convertible debt.' },
 ];
 
+
 function ServicesSection() {
   return (
     <section id="services" style={{ background: '#ffffff', padding: '5.5rem 4vw' }}>
       <div style={{ maxWidth: 1440, margin: '0 auto' }}>
-        <div style={{ marginBottom: '2.5rem' }} className="reveal">
+        <div style={{ marginBottom: '3.5rem' }} className="reveal">
           <span className="eyebrow">What we do</span>
           <h2 className="section-title">Our Services</h2>
-          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.3rem', lineHeight: 1.5 }}>We partner with healthcare companies at every stage of their journey, delivering tailored strategic, transactional and capital advisory.</p>
+          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.15rem', lineHeight: 1.5 }}>We partner with healthcare companies at every stage of their journey, delivering tailored strategic, transactional and capital advisory.</p>
         </div>
-        <div className="svc-cards-track reveal">
+        <div className="svc-flex reveal">
           {SERVICES.map((svc, i) => (
-            <div key={i} className="svc-card-item">
-              <h3 className="svc-title">
-                <span className="svc-main">{svc.main}</span>
-                {svc.sub && <span className="svc-sub">{svc.sub}</span>}
-              </h3>
-              <p className="svc-desc">{svc.desc}</p>
+            <div key={i} className="svc-card">
+              <div className="svc-card-top">
+                <h3 className="svc-card-title">{svc.main}</h3>
+                {svc.sub && <span className="svc-card-sub">{svc.sub}</span>}
+                <p className="svc-card-desc">{svc.desc}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -718,7 +719,7 @@ export default function AmbroisePartnersModern() {
         .hero{
           position:relative;min-height:100vh;min-height:100dvh;overflow:hidden;
           display:flex;flex-direction:column;align-items:center;justify-content:center;
-          padding:0 5vw;color:#fff;
+          padding:0 4vw;color:#fff;
           /* Richer deep-navy background with subtle radial warmth for life-science feel */
           background:radial-gradient(ellipse 80% 60% at 50% 40%, #05122e 0%, #020a1e 50%, #010510 100%);
         }
@@ -805,22 +806,14 @@ export default function AmbroisePartnersModern() {
         .section-lede{color:var(--muted);font-size:.78rem;max-width:26ch;font-weight:300;line-height:1.72;}
         .section-head{margin-bottom:4.5rem;}
 
-        /* ── SERVICES ── */
-        .services-grid{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line);}
-        .svc-card{padding:3.5rem 3rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background .25s;}
-        .svc-card:hover{background:#f8f8fc;}
-        .svc-num{font-family:var(--serif);font-style:italic;font-size:.9rem;color:var(--blue);margin-bottom:1.4rem;}
-        .svc-title{font-family:var(--serif);font-weight:400;font-size:1.5rem;letter-spacing:-.01em;margin-bottom:.9rem;line-height:1.2;}
-        .svc-desc{color:var(--muted);font-size:.95rem;line-height:1.72;font-weight:300;}
-
         /* ── APPROACH ── */
         .approach-panels{display:flex;flex-direction:column;gap:1px;background:var(--line);}
-        .approach-panel{display:grid;grid-template-columns:1fr 1fr;background:#f8f7f4;min-height:180px;}
-        .approach-text{padding:2rem 2.5rem;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--line);}
+        .approach-panel{display:grid;grid-template-columns:1fr 1fr;background:#f8f7f4;}
+        .approach-text{padding:1.2rem 2rem 1.2rem 0;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--line);}
         .approach-num{font-family:var(--serif);font-style:italic;font-size:.9rem;color:var(--blue);margin-bottom:1.2rem;display:block;}
-        .approach-title{font-family:var(--serif);font-weight:500;font-size:1.5rem;letter-spacing:-.01em;margin-bottom:.6rem;line-height:1.15;}
-        .approach-desc{color:var(--muted);font-size:.9rem;line-height:1.65;font-weight:300;}
-        .approach-canvas-wrap{background:#f8f7f4;min-height:170px;display:flex;align-items:center;justify-content:center;padding:1.2rem;}
+        .approach-title{font-family:var(--serif);font-weight:400;font-size:clamp(1.6rem,2.2vw,2.2rem);letter-spacing:-.02em;margin-bottom:.4rem;line-height:1.1;}
+        .approach-desc{color:var(--muted);font-size:.9rem;line-height:1.55;font-weight:300;}
+        .approach-canvas-wrap{background:#f8f7f4;min-height:100px;display:flex;align-items:center;justify-content:center;padding:.5rem;}
 
         /* ── VALUES ── */
         .values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);}
@@ -832,13 +825,10 @@ export default function AmbroisePartnersModern() {
 
         /* ── METHOD ── */
         .method-list{margin-top:4.5rem;border-top:1px solid var(--line);}
-        .method-step{display:grid;grid-template-columns:80px 1fr 24px;align-items:center;gap:2.5rem;padding:2rem .5rem;border-bottom:1px solid var(--line);border-radius:4px;cursor:default;transition:box-shadow .35s ease,transform .35s ease,background .35s ease;}
-        .method-step:hover{transform:translateY(-4px);box-shadow:0 20px 64px rgba(0,0,0,0.09),0 2px 8px rgba(0,0,0,0.05);background:#fff;}
+        .method-step{display:grid;grid-template-columns:80px 1fr;align-items:center;gap:2.5rem;padding:2rem 0;border-bottom:1px solid var(--line);}
         .step-num{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--blue);}
         .step-body h4{font-family:var(--serif);font-weight:500;font-size:1.6rem;letter-spacing:-.01em;margin-bottom:.4rem;}
         .step-body p{color:var(--muted);font-size:1.05rem;line-height:1.65;font-weight:300;}
-        .step-arrow{width:20px;height:20px;color:#ccc;flex-shrink:0;transition:color .35s ease,transform .35s ease;}
-        .method-step:hover .step-arrow{color:var(--blue);transform:translateX(4px);}
 
         /* ── ABOUT ── */
         .about-split{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;}
@@ -853,7 +843,7 @@ export default function AmbroisePartnersModern() {
         .about-dark-label{font-family:var(--serif);font-weight:400;font-size:1.3rem;letter-spacing:-.01em;margin-bottom:1.5rem;position:relative;}
 
         /* ── CONTACT ── */
-        .contact-wrap{max-width:860px;margin:0 auto;padding:5.5rem 5vw;text-align:center;display:flex;flex-direction:column;align-items:center;}
+        .contact-wrap{max-width:860px;margin:0 auto;padding:5.5rem 4vw;text-align:center;display:flex;flex-direction:column;align-items:center;}
         .contact-form{margin-top:3.5rem;text-align:left;display:flex;flex-direction:column;gap:1.2rem;width:100%;max-width:600px;}
         .fl{display:block;font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.45rem;}
         .fi,.ft{width:100%;background:var(--white);border:1.5px solid #dddde8;border-radius:8px;padding:.9rem 1.15rem;font-family:var(--sans);font-size:.95rem;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;}
@@ -864,14 +854,17 @@ export default function AmbroisePartnersModern() {
         .submit-btn{align-self:center;background:var(--ink);color:#fff;border:1.5px solid var(--ink);padding:1rem 3rem;border-radius:9999px;font-family:var(--sans);font-size:.85rem;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:background .22s,transform .2s,box-shadow .22s,color .22s,border-color .22s;}
         .submit-btn:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-2px);box-shadow:0 10px 28px rgba(42,92,184,.2);}
 
-        /* ── SERVICES ROW ── */
-        .svc-cards-track{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
-        .svc-card-item{display:grid;grid-template-rows:subgrid;grid-row:span 2;padding:1.3rem 1.2rem 1.5rem;border-radius:12px;background:#fff;border:1px solid var(--line);transition:box-shadow .3s ease,transform .3s ease;}
-        .svc-card-item:hover{box-shadow:0 8px 30px rgba(0,0,0,0.08);transform:translateY(-3px);}
-        .svc-title{margin:0 0 .8rem;display:flex;flex-direction:column;}
-        .svc-main{font-family:var(--serif);font-weight:600;font-size:1.6rem;line-height:1.15;letter-spacing:-.01em;color:var(--ink);display:block;}
-        .svc-sub{font-family:var(--sans);font-weight:400;font-size:.85rem;line-height:1.3;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);display:block;margin-top:.35rem;}
-        .svc-desc{font-family:var(--sans);font-size:1rem;line-height:1.75;color:var(--muted);font-weight:300;margin:0;}
+        /* ── SERVICES ── */
+        .svc-flex{display:flex;gap:0;}
+        .svc-card{display:flex;flex-direction:column;flex:1;cursor:pointer;background:#fff;border-right:1px solid var(--line);transition:flex .5s cubic-bezier(0.22,0.61,0.36,1);}
+        .svc-card:last-child{border-right:none;}
+        .svc-flex:hover .svc-card{flex:0.85;}
+        .svc-flex:hover .svc-card:hover{flex:2;}
+        .svc-card-top{padding:1.4rem 1.3rem;}
+        .svc-card-title{font-family:var(--serif);font-weight:600;font-size:clamp(1.3rem,1.8vw,1.8rem);line-height:1.1;letter-spacing:-.01em;color:var(--ink);margin:0;}
+        .svc-card-sub{font-family:var(--sans);font-weight:400;font-size:.65rem;line-height:1.3;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);display:block;margin-top:.3rem;}
+        .svc-card-desc{color:var(--muted);font-size:.85rem;line-height:1.65;font-weight:300;margin:0;max-height:0;opacity:0;overflow:hidden;padding-top:0;transition:max-height .45s var(--ease),opacity .35s ease,padding-top .45s var(--ease);}
+        .svc-card:hover .svc-card-desc{max-height:180px;opacity:1;padding-top:.9rem;}
 
         /* ── FOOTER ── */
         footer{background:#030a24;color:#fff;padding:3.5rem 4vw 2.5rem;}
@@ -949,7 +942,10 @@ export default function AmbroisePartnersModern() {
         .reveal{opacity:0;transform:translateY(20px);transition:opacity .65s var(--ease),transform .65s var(--ease);}
         .reveal.visible{opacity:1;transform:translateY(0);}
         .reveal-d1{transition-delay:.1s;}
-        .reveal-d2{transition-delay:.2s;}
+        .reveal-d2{transition-delay:.18s;}
+        .reveal-d3{transition-delay:.26s;}
+        .reveal-d4{transition-delay:.34s;}
+        .reveal-d5{transition-delay:.42s;}
         .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
 
         @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
@@ -964,7 +960,9 @@ export default function AmbroisePartnersModern() {
           .about-split{grid-template-columns:1fr;gap:3rem;}
           .method-step{grid-template-columns:60px 1fr;}
           .step-arrow{display:none;}
-          .svc-cards-track{grid-template-columns:repeat(2,1fr);gap:14px;}
+          .svc-flex{flex-wrap:wrap;gap:0;}
+          .svc-card{flex:1 1 calc(50% - 0px)!important;height:240px;border-right:none;border-bottom:1px solid var(--line);}
+          .svc-card-title{font-size:1.2rem;}
           .domains-grid{flex-wrap:wrap;gap:10px;}
           .domain-card{flex:1 1 calc(25% - 10px)!important;aspect-ratio:3/4;}
           .dalt-carousel{height:400px;}
@@ -979,7 +977,7 @@ export default function AmbroisePartnersModern() {
           .nav-cta{padding:.48rem 1.1rem!important;font-size:.72rem!important;}
 
           /* Hero */
-          .hero{padding:0 6vw;}
+          .hero{padding:0 4vw;}
           .hero-h1{font-size:clamp(2.2rem,9vw,3.2rem);}
           .hero-inner{padding-top:3.5rem;padding-bottom:1.5rem;}
           .hero-ctas{gap:.6rem;}
@@ -987,19 +985,21 @@ export default function AmbroisePartnersModern() {
           .hero-tags span{font-size:.7rem;}
 
           /* Sections */
-          .section{padding:4.5rem 5vw;}
+          .section{padding:4.5rem 4vw;}
           .section-title{font-size:clamp(1.8rem,7vw,2.4rem);}
           .section-head{margin-bottom:3rem;}
           .eyebrow{font-size:.65rem;margin-bottom:.7rem;}
 
           /* Services */
-          .svc-cards-track{grid-template-columns:1fr;gap:12px;}
-          .svc-card-item{padding:1.8rem 1.6rem 2rem;}
-          .svc-title{font-size:1.1rem;}
-          .svc-desc{font-size:.88rem;}
+          .svc-flex{flex-direction:column;gap:0;}
+          .svc-card{flex:none!important;height:200px;border-right:none;border-bottom:1px solid var(--line);}
+          .svc-card:last-child{border-bottom:none;}
+          .svc-card-content{padding:1.1rem 1rem;}
+          .svc-card-title{font-size:1.2rem;}
+          .svc-card-desc{font-size:.8rem;}
 
           /* Approach */
-          .approach-text{padding:2.5rem 2rem;}
+          .approach-text{padding:1.5rem 1.5rem 1.5rem 0;}
           .approach-title{font-size:1.3rem;}
           .approach-desc{font-size:.85rem;}
           .approach-canvas-wrap{min-height:180px;padding:1.5rem;}
@@ -1018,17 +1018,17 @@ export default function AmbroisePartnersModern() {
           .dalt-active-label span{font-size:1.2rem;}
 
           /* Method */
-          .method-step{grid-template-columns:48px 1fr;gap:1.5rem;padding:1.5rem .3rem;}
+          .method-step{grid-template-columns:48px 1fr;gap:1.5rem;padding:1.5rem 0;}
           .step-num{font-size:.95rem;}
           .step-body h4{font-size:1.15rem;}
           .step-body p{font-size:.85rem;}
 
           /* Contact */
-          .contact-wrap{padding:4.5rem 5vw;}
+          .contact-wrap{padding:4.5rem 4vw;}
           .fi,.ft{padding:.8rem 1rem;font-size:.9rem;}
 
           /* Footer */
-          footer{padding:8rem 5vw 3rem;}
+          footer{padding:8rem 4vw 3rem;}
           .footer-cta{flex-direction:column;align-items:flex-start;}
           .footer-cta-headline{font-size:clamp(1.6rem,6vw,2.2rem);}
           .footer-top{grid-template-columns:1fr;gap:3rem;}
@@ -1088,8 +1088,8 @@ export default function AmbroisePartnersModern() {
 
       {/* APPROACH */}
       <div style={{ background: '#f8f7f4', width: '100%' }}>
-      <section style={{ maxWidth: 1440, margin: '0 auto', padding: '4rem 4vw' }} id="approach">
-        <div style={{ marginBottom: '2rem', textAlign: 'left' }} className="reveal">
+      <section style={{ maxWidth: 1440, margin: '0 auto', padding: '5.5rem 4vw' }} id="approach">
+        <div style={{ marginBottom: '3.5rem', textAlign: 'left' }} className="reveal">
           <span className="eyebrow">What sets us apart</span>
           <h2 className="section-title">Our Approach</h2>
           <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.15rem', lineHeight: 1.5 }}>A unique combination of scientific depth, strategic networks and institutional-grade execution; purpose-built for healthcare companies.</p>
