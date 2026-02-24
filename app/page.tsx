@@ -1041,6 +1041,7 @@ export default function AmbroisePartnersModern() {
           <div className="nav-links">
             <a href="#services">Services</a>
             <a href="#approach">Approach</a>
+            <a href="#domains-alt">Domains</a>
             <a href="#method">Method</a>
             <a href="#contact" className="nav-cta">Contact us</a>
           </div>
@@ -1202,6 +1203,7 @@ export default function AmbroisePartnersModern() {
                 <div className="footer-col-title">Company</div>
                 <a href="#services">Services</a>
                 <a href="#approach">Approach</a>
+                <a href="#domains-alt">Domains</a>
                 <a href="#method">Method</a>
                 <a href="#contact">Contact</a>
               </div>
