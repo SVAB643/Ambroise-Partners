@@ -178,13 +178,13 @@ const DOMAINS = [
   { id:4, name:'Diagnostics',     image:'/images/diagnostics.jpg',color:'#f0e8e4' },
   { id:5, name:'Digital Health',  image:'/images/digital.jpg',    color:'#e4e8ff' },
   { id:6, name:'Life Science Services', image:'/images/lifescience.jpg', color:'#e8f0e4' },
-  { id:7, name:'Healthcare Services',   image:'/images/healthcare.jpg',  color:'#f0e4ea' },
+  { id:7, name:'HC Services',   image:'/images/healthcare.jpg',  color:'#f0e4ea' },
   { id:8, name:'Consumer Health & Wellness', image:'/images/wellness.jpg', color:'#f0ece4' },
 ];
 
 function ExpertiseSection() {
   return (
-    <section id="domains" style={{ background: '#ffffff', padding: '5.5rem 4vw' }}>
+    <section id="domains" style={{ background: '#ffffff', padding: '5.5rem 2.5vw' }}>
       <div style={{ maxWidth: 1440, margin: '0 auto' }}>
         <div style={{ marginBottom: '4.5rem' }} className="reveal">
           <span className="eyebrow">Areas of expertise</span>
@@ -211,122 +211,31 @@ function ExpertiseSection() {
 const SERVICES = [
   { main: 'M&A', sub: '', desc: 'Sell-side, buy-side and strategic transaction advisory across the global healthcare ecosystem.' },
   { main: 'Fundraising', sub: '', desc: 'Targeted growth capital advisory from Pre-Seed to Series B, partnering with leading healthcare investors.' },
-  { main: 'Licensing', sub: '& Strategic Partnerships', desc: 'Value-creating licensing and partnership advisory alongside global and regional healthcare leaders.' },
-  { main: 'Strategic Advisory', sub: '& External Growth', desc: 'Independent strategic counsel on portfolio positioning, growth pathway and long-term value creation.' },
-  { main: 'Capital Raising', sub: 'Solutions', desc: 'Capital markets and structured financing advisory, including IPOs, follow-ons, private placements and convertible debt.' },
+  { main: 'Strategic Partnerships', sub: '', desc: 'Value-creating licensing and partnership advisory alongside global and regional healthcare leaders.' },
+  { main: 'Strategic Advisory', sub: '', desc: 'Independent strategic counsel on portfolio positioning, growth pathway and long-term value creation.' },
+  { main: 'Capital Raising', sub: '', desc: 'Capital markets and structured financing advisory, including IPOs, follow-ons, private placements and convertible debt.' },
 ];
 
 
 function ServicesSection() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [labelVisible, setLabelVisible] = useState(true);
-  const tabsRef = useRef<HTMLDivElement>(null);
-  const total = SERVICES.length;
-
-  const [dims, setDims] = useState({ w: 250, h: 350, gap: 20, yF: 8, cW: 400, cH: 400 });
-  useEffect(() => {
-    const update = () => {
-      const vw = window.innerWidth;
-      if (vw <= 480)      setDims({ w: 140, h: 196, gap: 10, yF: 4, cW: 220, cH: 220 });
-      else if (vw <= 600) setDims({ w: 170, h: 238, gap: 14, yF: 5, cW: 270, cH: 270 });
-      else if (vw <= 960) setDims({ w: 210, h: 294, gap: 16, yF: 6, cW: 340, cH: 340 });
-      else                setDims({ w: 250, h: 350, gap: 20, yF: 8, cW: 400, cH: 400 });
-    };
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, []);
-
-  const cumX = useMemo(() => buildCumulativeX(dims.w, dims.gap, dims.cW), [dims.w, dims.gap, dims.cW]);
-
-  const navigate = useCallback((newIndex: number) => {
-    if (newIndex < 0 || newIndex >= total || newIndex === activeIndex) return;
-    setLabelVisible(false);
-    setActiveIndex(newIndex);
-    setTimeout(() => setLabelVisible(true), 280);
-  }, [activeIndex, total]);
-
-  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
-
-  useEffect(() => {
-    if (!tabsRef.current) return;
-    const tabEl = tabsRef.current.children[activeIndex] as HTMLElement;
-    if (tabEl) {
-      const container = tabsRef.current;
-      const scrollLeft = tabEl.offsetLeft - container.offsetWidth / 2 + tabEl.offsetWidth / 2;
-      container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
-      setIndicatorStyle({ left: tabEl.offsetLeft, width: tabEl.offsetWidth });
-    }
-  }, [activeIndex]);
-
-  const visibleCards: { catIndex: number; rel: number }[] = [];
-  for (let i = 0; i < total; i++) {
-    visibleCards.push({ catIndex: i, rel: i - activeIndex });
-  }
-
-  const svc = SERVICES[activeIndex];
-
   return (
-    <section className="svc-alt-section" id="services">
+    <section id="services" style={{ background: '#ffffff', padding: '5.5rem 2.5vw' }}>
       <div style={{ maxWidth: 1440, margin: '0 auto' }}>
-        <div style={{ marginBottom: '1rem', textAlign: 'center' }} className="reveal">
+        <div style={{ marginBottom: '3.5rem' }} className="reveal">
           <span className="eyebrow">What we do</span>
           <h2 className="section-title">Our Services</h2>
-          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.3rem', lineHeight: 1.5, margin: '0 auto' }}>We partner with healthcare companies at every stage of their journey, delivering tailored strategic, transactional and capital advisory.</p>
+          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.15rem', lineHeight: 1.5 }}>We partner with healthcare companies at every stage of their journey, delivering tailored strategic, transactional and capital advisory.</p>
         </div>
-
-        {/* Tabs with nav arrows */}
-        <div className="dalt-nav reveal">
-          <button className="dalt-arrow" onClick={() => navigate(activeIndex - 1)} disabled={activeIndex === 0}>
-            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/></svg>
-          </button>
-          <div className="dalt-tabs" ref={tabsRef}>
-            {SERVICES.map((s, i) => (
-              <button key={s.main} className={`dalt-tab${i === activeIndex ? ' active' : ''}`} onClick={() => navigate(i)}>
-                {s.main}{s.sub ? ` ${s.sub}` : ''}
-              </button>
-            ))}
-            <div className="dalt-indicator" style={{ left: indicatorStyle.left, width: indicatorStyle.width }} />
-          </div>
-          <button className="dalt-arrow" onClick={() => navigate(activeIndex + 1)} disabled={activeIndex === total - 1}>
-            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
-          </button>
-        </div>
-
-        {/* Carousel */}
-        <div className="dalt-carousel">
-          {visibleCards.map(({ catIndex, rel }) => {
-            const slot = getSlotStyle(rel, dims.w, dims.h, cumX, dims.yF, dims.cW, dims.cH);
-            if (!slot) return null;
-            const isCenter = rel === 0;
-            const s = SERVICES[catIndex];
-            return (
-              <div
-                key={catIndex}
-                className={`dalt-card svc-text-card${isCenter ? ' svc-text-card-active' : ''}`}
-                onClick={() => !isCenter && navigate(catIndex)}
-                style={{
-                  width: slot.w,
-                  height: slot.h,
-                  transform: `translateX(${slot.x - slot.w / 2}px) translateY(${slot.y - slot.h / 2}px) rotate(${slot.rot}deg)`,
-                  zIndex: slot.z,
-                  opacity: slot.opacity,
-                  boxShadow: slot.shadow,
-                  cursor: isCenter ? 'default' : 'pointer',
-                }}
-              >
-                <div className="svc-text-inner">
-                  <h3 className="svc-text-title">{s.main}{s.sub ? ` ${s.sub}` : ''}</h3>
-                  {isCenter && <p className="svc-text-desc">{s.desc}</p>}
-                </div>
+        <div className="svc-flex reveal">
+          {SERVICES.map((svc, i) => (
+            <div key={i} className="svc-card">
+              <div className="svc-card-top">
+                <h3 className="svc-card-title">{svc.main}</h3>
+                {svc.sub && <span className="svc-card-sub">{svc.sub}</span>}
+                <p className="svc-card-desc">{svc.desc}</p>
               </div>
-            );
-          })}
-        </div>
-
-        {/* Active service name below carousel */}
-        <div className="dalt-active-label" style={{ opacity: labelVisible ? 1 : 0, transform: labelVisible ? 'translateY(0)' : 'translateY(8px)' }}>
-          <span>{svc.main}{svc.sub ? ` ${svc.sub}` : ''}</span>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -341,7 +250,7 @@ const DOMAINS_ALT = [
   { name:'Diagnostics',                image:'/images/diagnostics.jpg' },
   { name:'Digital Health',             image:'/images/digital.jpg' },
   { name:'Life Science Services',      image:'/images/meddevice2.jpg' },
-  { name:'Healthcare Services',        image:'/images/diagnostics2.jpg' },
+  { name:'HC Services',        image:'/images/diagnostics2.jpg' },
   { name:'Consumer Health & Wellness', image:'/images/pharma.jpg' },
 ];
 
@@ -533,8 +442,7 @@ export default function AmbroisePartnersModern() {
     if (!navOuter || !hero) return;
 
     const onScroll = () => {
-      const heroBottom = hero.getBoundingClientRect().bottom;
-      navOuter.classList.toggle('nav-scrolled', heroBottom <= 0);
+      navOuter.classList.toggle('nav-scrolled', window.scrollY > hero.offsetHeight + 1200);
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -784,7 +692,7 @@ export default function AmbroisePartnersModern() {
         .logo-ap{font-family:var(--serif);font-style:italic;font-weight:500;font-size:1.55rem;letter-spacing:-.01em;color:#fff;transition:color .35s;}
         .logo-sep{width:1px;height:16px;background:rgba(255,255,255,0.25);transition:background .35s;}
         .logo-name{font-size:1.05rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#fff;transition:color .35s;}
-        .nav-links{display:flex;gap:0;align-items:center;}
+        .nav-links{display:flex;gap:1.2rem;align-items:center;}
         .nav-links a{font-size:.88rem;font-weight:500;color:#fff;padding:.5rem 1rem;transition:color .18s;letter-spacing:.02em;}
         .nav-links a:hover{color:#fff;}
         .nav-cta{
@@ -797,7 +705,7 @@ export default function AmbroisePartnersModern() {
           transition:background .22s!important,color .22s!important,box-shadow .22s!important,border-color .18s var(--ease),border-radius .18s var(--ease);
         }
         .nav-cta:hover{background:#fff!important;color:var(--ink)!important;border-color:#fff;border-radius:9999px;}
-        .nav-scrolled nav{background:rgba(255,255,255,0.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line);box-shadow:0 1px 12px rgba(0,0,0,0.06);}
+        .nav-scrolled nav{background:#fff;border-bottom:1px solid var(--line);box-shadow:0 1px 12px rgba(0,0,0,0.06);}
         .nav-scrolled .logo-ap{color:var(--ink);}
         .nav-scrolled .logo-sep{background:var(--line);}
         .nav-scrolled .logo-name{color:var(--muted);}
@@ -890,7 +798,7 @@ export default function AmbroisePartnersModern() {
         .hero-footnote{margin-top:1.2rem;font-size:.78rem;color:rgba(255,255,255,.38);font-weight:300;opacity:0;animation:fadeUp .9s .9s var(--ease) forwards;}
 
         /* ── SECTIONS ── */
-        .section{max-width:1440px;margin:0 auto;padding:5.5rem 4vw;color:var(--ink);}
+        .section{max-width:1440px;margin:0 auto;padding:5.5rem 2.5vw;color:var(--ink);}
         .section-bg{background:var(--white);}
         .eyebrow{display:block;font-size:.72rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;}
         .section-title{font-family:var(--serif);font-weight:400;font-size:clamp(2.2rem,4vw,3.6rem);line-height:1.1;letter-spacing:-.02em;margin-bottom:1rem;}
@@ -900,11 +808,11 @@ export default function AmbroisePartnersModern() {
         /* ── APPROACH ── */
         .approach-panels{display:flex;flex-direction:column;gap:1px;background:var(--line);}
         .approach-panel{display:grid;grid-template-columns:1fr 1fr;background:#f8f7f4;}
-        .approach-text{padding:1.2rem 2rem 1.2rem 0;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--line);}
-        .approach-num{font-family:var(--serif);font-style:italic;font-size:.9rem;color:var(--blue);margin-bottom:1.2rem;display:block;}
-        .approach-title{font-family:var(--serif);font-weight:400;font-size:clamp(1.6rem,2.2vw,2.2rem);letter-spacing:-.02em;margin-bottom:.4rem;line-height:1.1;}
-        .approach-desc{color:var(--muted);font-size:.9rem;line-height:1.55;font-weight:300;}
-        .approach-canvas-wrap{background:#f8f7f4;min-height:100px;display:flex;align-items:center;justify-content:center;padding:.5rem;}
+        .approach-text{padding:1rem 2rem 1rem 0;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--line);}
+        .approach-num{font-family:var(--serif);font-style:italic;font-size:.9rem;color:var(--blue);margin-bottom:.8rem;display:block;}
+        .approach-title{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,1.8vw,1.8rem);letter-spacing:-.02em;margin-bottom:.3rem;line-height:1.1;}
+        .approach-desc{color:var(--muted);font-size:.85rem;line-height:1.5;font-weight:300;}
+        .approach-canvas-wrap{background:#f8f7f4;height:180px;display:flex;align-items:center;justify-content:center;padding:.5rem;overflow:hidden;}
 
         /* ── VALUES ── */
         .values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);}
@@ -934,7 +842,7 @@ export default function AmbroisePartnersModern() {
         .about-dark-label{font-family:var(--serif);font-weight:400;font-size:1.3rem;letter-spacing:-.01em;margin-bottom:1.5rem;position:relative;}
 
         /* ── CONTACT ── */
-        .contact-wrap{max-width:860px;margin:0 auto;padding:5.5rem 4vw;text-align:center;display:flex;flex-direction:column;align-items:center;}
+        .contact-wrap{max-width:860px;margin:0 auto;padding:5.5rem 2.5vw;text-align:center;display:flex;flex-direction:column;align-items:center;}
         .contact-form{margin-top:3.5rem;text-align:left;display:flex;flex-direction:column;gap:1.2rem;width:100%;max-width:600px;}
         .fl{display:block;font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.45rem;}
         .fi,.ft{width:100%;background:var(--white);border:1.5px solid #dddde8;border-radius:8px;padding:.9rem 1.15rem;font-family:var(--sans);font-size:.95rem;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;}
@@ -946,15 +854,27 @@ export default function AmbroisePartnersModern() {
         .submit-btn:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-2px);box-shadow:0 10px 28px rgba(42,92,184,.2);}
 
         /* ── SERVICES CAROUSEL ── */
-        .svc-alt-section{background:#fff;padding:5.5rem 4vw;overflow:hidden;}
-        .svc-text-card{background:#f8f7f4;display:flex;align-items:center;justify-content:center;}
-        .svc-text-card-active{background:#f0eff8;}
-        .svc-text-inner{padding:1.5rem 1.8rem;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;width:100%;height:100%;gap:.8rem;}
-        .svc-text-title{font-family:var(--serif);font-weight:500;font-size:clamp(1.3rem,1.8vw,1.8rem);line-height:1.15;letter-spacing:-.01em;color:var(--ink);margin:0;}
-        .svc-text-desc{color:var(--muted);font-size:.88rem;line-height:1.6;font-weight:300;margin:0;}
+        .svc-flex{display:flex;gap:0;}
+        .svc-card{display:flex;flex-direction:column;flex:1;cursor:pointer;background:#fff;border-right:1px solid var(--line);transition:flex .5s cubic-bezier(0.22,0.61,0.36,1);min-height:240px;}
+        .svc-card:last-child{border-right:none;}
+        .svc-flex:hover .svc-card{flex:0.85;}
+        .svc-flex:hover .svc-card:hover{flex:2;}
+        .svc-card-top{padding:1.6rem 1.4rem;}
+        .svc-card-title{font-family:var(--serif);font-weight:600;font-size:clamp(1.15rem,1.5vw,1.5rem);line-height:1.1;letter-spacing:-.01em;color:var(--ink);margin:0;white-space:nowrap;}
+        .svc-card-sub{font-family:var(--sans);font-weight:400;font-size:.72rem;line-height:1.3;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);display:block;margin-top:.4rem;}
+        .svc-card-desc{color:var(--muted);font-size:.92rem;line-height:1.65;font-weight:300;margin:0;max-height:0;opacity:0;overflow:hidden;padding-top:0;transition:max-height .45s var(--ease),opacity .35s ease,padding-top .45s var(--ease);}
+        .svc-card:hover .svc-card-desc{max-height:180px;opacity:1;padding-top:.9rem;}
+
+        /* ── SECTOR TICKER ── */
+        .sector-ticker{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:1.1rem 0;white-space:nowrap;}
+        .sector-ticker-track{display:flex;width:max-content;animation:tickerScroll 120s linear infinite;}
+        .sector-ticker-set{display:flex;gap:0;flex-shrink:0;}
+        .sector-ticker-item{font-size:.82rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 2.2rem;opacity:.55;display:flex;align-items:center;gap:.55rem;}
+        .sector-ticker-item::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--blue);flex-shrink:0;}
+        @keyframes tickerScroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
 
         /* ── FOOTER ── */
-        footer{background:#030a24;color:#fff;padding:3rem 4vw 2rem;}
+        footer{background:#030a24;color:#fff;padding:3rem 2.5vw 2rem;}
         .footer-inner{max-width:1440px;margin:0 auto;}
 
         .footer-top{display:grid;grid-template-columns:1fr auto;gap:4rem;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.08);align-items:start;}
@@ -989,7 +909,7 @@ export default function AmbroisePartnersModern() {
         .domain-name{font-family:var(--serif);font-weight:500;font-size:1rem;line-height:1.2;letter-spacing:-0.01em;color:#fff;margin:0;text-shadow:0 1px 10px rgba(0,0,0,0.4);}
 
         /* ── DOMAINS CAROUSEL (v2) ── */
-        .domains-alt-section{background:#fff;padding:5.5rem 4vw;overflow:hidden;}
+        .domains-alt-section{background:#fff;padding:5.5rem 2.5vw;overflow:hidden;}
         .dalt-nav{display:flex;align-items:center;gap:8px;margin-top:2.5rem;max-width:900px;margin-left:auto;margin-right:auto;}
         .dalt-arrow{width:42px;height:42px;border-radius:50%;border:1.5px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .2s,color .2s;}
         .dalt-arrow:hover:not(:disabled){border-color:var(--blue);color:var(--blue);}
@@ -1030,11 +950,13 @@ export default function AmbroisePartnersModern() {
           .about-split{grid-template-columns:1fr;gap:3rem;}
           .method-step{grid-template-columns:60px 1fr;}
           .step-arrow{display:none;}
-          .svc-alt-section{padding:5rem 4vw;}
+          .svc-flex{flex-wrap:wrap;gap:0;}
+          .svc-card{flex:1 1 calc(50% - 0px)!important;min-height:260px;height:auto;border-right:none;border-bottom:1px solid var(--line);}
+          .svc-card-title{font-size:1.2rem;}
           .domains-grid{flex-wrap:wrap;gap:10px;}
           .domain-card{flex:1 1 calc(25% - 10px)!important;aspect-ratio:3/4;height:auto;}
           .dalt-carousel{height:400px;}
-          .domains-alt-section{padding:5rem 4vw;}
+          .domains-alt-section{padding:5rem 2.5vw;}
         }
         @media(max-width:600px){
           /* Nav */
@@ -1053,13 +975,17 @@ export default function AmbroisePartnersModern() {
           .hero-tags span{font-size:.7rem;}
 
           /* Sections */
-          .section{padding:4.5rem 4vw;}
+          .section{padding:4.5rem 2.5vw;}
           .section-title{font-size:clamp(1.8rem,7vw,2.4rem);}
           .section-head{margin-bottom:3rem;}
           .eyebrow{font-size:.65rem;margin-bottom:.7rem;}
 
           /* Services */
-          .svc-alt-section{padding:4rem 4vw;}
+          .svc-flex{flex-direction:column;gap:0;}
+          .svc-card{flex:none!important;min-height:220px;height:auto;border-right:none;border-bottom:1px solid var(--line);}
+          .svc-card:last-child{border-bottom:none;}
+          .svc-card-title{font-size:1.2rem;}
+          .svc-card-desc{font-size:.8rem;}
 
           /* Approach */
           .approach-text{padding:1.5rem 1.5rem 1.5rem 0;}
@@ -1074,7 +1000,7 @@ export default function AmbroisePartnersModern() {
           .domain-name{font-size:.9rem;}
 
           /* Domains carousel */
-          .domains-alt-section{padding:4rem 4vw;}
+          .domains-alt-section{padding:4rem 2.5vw;}
           .dalt-carousel{height:380px;}
           .dalt-arrow{width:36px;height:36px;}
           .dalt-tab{font-size:.75rem;padding:6px 8px;}
@@ -1087,11 +1013,11 @@ export default function AmbroisePartnersModern() {
           .step-body p{font-size:.85rem;}
 
           /* Contact */
-          .contact-wrap{padding:4.5rem 4vw;}
+          .contact-wrap{padding:4.5rem 2.5vw;}
           .fi,.ft{padding:.8rem 1rem;font-size:.9rem;}
 
           /* Footer */
-          footer{padding:2.5rem 4vw 2rem;}
+          footer{padding:2.5rem 2.5vw 2rem;}
           .footer-top{grid-template-columns:1fr;gap:2rem;}
           .footer-links{gap:2rem 3rem;}
           .footer-bottom{flex-direction:column;align-items:flex-start;gap:.6rem;}
@@ -1114,7 +1040,7 @@ export default function AmbroisePartnersModern() {
           </div>
           <div className="nav-links">
             <a href="#services">Services</a>
-            <a href="#domains">Domains</a>
+            <a href="#approach">Approach</a>
             <a href="#method">Method</a>
             <a href="#contact" className="nav-cta">Contact us</a>
           </div>
@@ -1141,9 +1067,23 @@ export default function AmbroisePartnersModern() {
       {/* SERVICES */}
       <ServicesSection />
 
+      {/* SECTOR TICKER */}
+      <div className="sector-ticker">
+        <div className="sector-ticker-track">
+          {[...Array(2)].map((_, copy) => (
+            <div key={copy} className="sector-ticker-set" aria-hidden={copy > 0}>
+              {['Oncology','Rare Diseases','Gene Therapy','Cell Therapy','Neuroscience','Immunology','Cardiology','Respiratory','Metabolic Disorders','Infectious Diseases','Ophthalmology','Dermatology','Women\'s Health','Pediatrics','CNS','Microbiome','RNA Therapeutics','Radiopharmaceuticals'].map((s, i) => (
+                <span key={i} className="sector-ticker-item">{s}</span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* APPROACH */}
       <div style={{ background: '#f8f7f4', width: '100%' }}>
-      <section style={{ maxWidth: 1440, margin: '0 auto', padding: '5.5rem 4vw' }} id="approach">
+      <section style={{ padding: '5.5rem 2.5vw' }} id="approach">
+      <div style={{ maxWidth: 1440, margin: '0 auto' }}>
         <div style={{ marginBottom: '3.5rem', textAlign: 'left' }} className="reveal">
           <span className="eyebrow">What sets us apart</span>
           <h2 className="section-title">Our Approach</h2>
@@ -1172,6 +1112,7 @@ export default function AmbroisePartnersModern() {
             <div className="approach-canvas-wrap"><ApproachCanvas type="curve" /></div>
           </div>
         </div>
+      </div>
       </section>
       </div>
 
@@ -1182,7 +1123,8 @@ export default function AmbroisePartnersModern() {
 
       {/* METHOD */}
       <div style={{ background: '#f8f7f4', width: '100%' }}>
-      <section className="section" id="method">
+      <section style={{ padding: '5.5rem 2.5vw' }} id="method">
+      <div style={{ maxWidth: 1440, margin: '0 auto' }}>
         <div className="section-head reveal">
           <span className="eyebrow">Methodology</span>
           <h2 className="section-title">Proven Process</h2>
@@ -1202,6 +1144,7 @@ export default function AmbroisePartnersModern() {
             </div>
           ))}
         </div>
+      </div>
       </section>
       </div>
 
@@ -1258,7 +1201,7 @@ export default function AmbroisePartnersModern() {
               <div className="footer-col">
                 <div className="footer-col-title">Company</div>
                 <a href="#services">Services</a>
-                <a href="#domains">Domains</a>
+                <a href="#approach">Approach</a>
                 <a href="#method">Method</a>
                 <a href="#contact">Contact</a>
               </div>
