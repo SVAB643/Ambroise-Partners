@@ -218,24 +218,115 @@ const SERVICES = [
 
 
 function ServicesSection() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [labelVisible, setLabelVisible] = useState(true);
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const total = SERVICES.length;
+
+  const [dims, setDims] = useState({ w: 250, h: 350, gap: 20, yF: 8, cW: 400, cH: 400 });
+  useEffect(() => {
+    const update = () => {
+      const vw = window.innerWidth;
+      if (vw <= 480)      setDims({ w: 140, h: 196, gap: 10, yF: 4, cW: 220, cH: 220 });
+      else if (vw <= 600) setDims({ w: 170, h: 238, gap: 14, yF: 5, cW: 270, cH: 270 });
+      else if (vw <= 960) setDims({ w: 210, h: 294, gap: 16, yF: 6, cW: 340, cH: 340 });
+      else                setDims({ w: 250, h: 350, gap: 20, yF: 8, cW: 400, cH: 400 });
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  const cumX = useMemo(() => buildCumulativeX(dims.w, dims.gap, dims.cW), [dims.w, dims.gap, dims.cW]);
+
+  const navigate = useCallback((newIndex: number) => {
+    if (newIndex < 0 || newIndex >= total || newIndex === activeIndex) return;
+    setLabelVisible(false);
+    setActiveIndex(newIndex);
+    setTimeout(() => setLabelVisible(true), 280);
+  }, [activeIndex, total]);
+
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+
+  useEffect(() => {
+    if (!tabsRef.current) return;
+    const tabEl = tabsRef.current.children[activeIndex] as HTMLElement;
+    if (tabEl) {
+      const container = tabsRef.current;
+      const scrollLeft = tabEl.offsetLeft - container.offsetWidth / 2 + tabEl.offsetWidth / 2;
+      container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+      setIndicatorStyle({ left: tabEl.offsetLeft, width: tabEl.offsetWidth });
+    }
+  }, [activeIndex]);
+
+  const visibleCards: { catIndex: number; rel: number }[] = [];
+  for (let i = 0; i < total; i++) {
+    visibleCards.push({ catIndex: i, rel: i - activeIndex });
+  }
+
+  const svc = SERVICES[activeIndex];
+
   return (
-    <section id="services" style={{ background: '#ffffff', padding: '5.5rem 4vw' }}>
+    <section className="svc-alt-section" id="services">
       <div style={{ maxWidth: 1440, margin: '0 auto' }}>
-        <div style={{ marginBottom: '3.5rem' }} className="reveal">
+        <div style={{ marginBottom: '1rem', textAlign: 'center' }} className="reveal">
           <span className="eyebrow">What we do</span>
           <h2 className="section-title">Our Services</h2>
-          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.15rem', lineHeight: 1.5 }}>We partner with healthcare companies at every stage of their journey, delivering tailored strategic, transactional and capital advisory.</p>
+          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.3rem', lineHeight: 1.5, margin: '0 auto' }}>We partner with healthcare companies at every stage of their journey, delivering tailored strategic, transactional and capital advisory.</p>
         </div>
-        <div className="svc-flex reveal">
-          {SERVICES.map((svc, i) => (
-            <div key={i} className="svc-card">
-              <div className="svc-card-top">
-                <h3 className="svc-card-title">{svc.main}</h3>
-                {svc.sub && <span className="svc-card-sub">{svc.sub}</span>}
-                <p className="svc-card-desc">{svc.desc}</p>
+
+        {/* Tabs with nav arrows */}
+        <div className="dalt-nav reveal">
+          <button className="dalt-arrow" onClick={() => navigate(activeIndex - 1)} disabled={activeIndex === 0}>
+            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/></svg>
+          </button>
+          <div className="dalt-tabs" ref={tabsRef}>
+            {SERVICES.map((s, i) => (
+              <button key={s.main} className={`dalt-tab${i === activeIndex ? ' active' : ''}`} onClick={() => navigate(i)}>
+                {s.main}{s.sub ? ` ${s.sub}` : ''}
+              </button>
+            ))}
+            <div className="dalt-indicator" style={{ left: indicatorStyle.left, width: indicatorStyle.width }} />
+          </div>
+          <button className="dalt-arrow" onClick={() => navigate(activeIndex + 1)} disabled={activeIndex === total - 1}>
+            <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+          </button>
+        </div>
+
+        {/* Carousel */}
+        <div className="dalt-carousel">
+          {visibleCards.map(({ catIndex, rel }) => {
+            const slot = getSlotStyle(rel, dims.w, dims.h, cumX, dims.yF, dims.cW, dims.cH);
+            if (!slot) return null;
+            const isCenter = rel === 0;
+            const s = SERVICES[catIndex];
+            return (
+              <div
+                key={catIndex}
+                className={`dalt-card svc-text-card${isCenter ? ' svc-text-card-active' : ''}`}
+                onClick={() => !isCenter && navigate(catIndex)}
+                style={{
+                  width: slot.w,
+                  height: slot.h,
+                  transform: `translateX(${slot.x - slot.w / 2}px) translateY(${slot.y - slot.h / 2}px) rotate(${slot.rot}deg)`,
+                  zIndex: slot.z,
+                  opacity: slot.opacity,
+                  boxShadow: slot.shadow,
+                  cursor: isCenter ? 'default' : 'pointer',
+                }}
+              >
+                <div className="svc-text-inner">
+                  <h3 className="svc-text-title">{s.main}{s.sub ? ` ${s.sub}` : ''}</h3>
+                  {isCenter && <p className="svc-text-desc">{s.desc}</p>}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
+        </div>
+
+        {/* Active service name below carousel */}
+        <div className="dalt-active-label" style={{ opacity: labelVisible ? 1 : 0, transform: labelVisible ? 'translateY(0)' : 'translateY(8px)' }}>
+          <span>{svc.main}{svc.sub ? ` ${svc.sub}` : ''}</span>
         </div>
       </div>
     </section>
@@ -854,17 +945,13 @@ export default function AmbroisePartnersModern() {
         .submit-btn{align-self:center;background:var(--ink);color:#fff;border:1.5px solid var(--ink);padding:1rem 3rem;border-radius:9999px;font-family:var(--sans);font-size:.85rem;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:background .22s,transform .2s,box-shadow .22s,color .22s,border-color .22s;}
         .submit-btn:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-2px);box-shadow:0 10px 28px rgba(42,92,184,.2);}
 
-        /* ── SERVICES ── */
-        .svc-flex{display:flex;gap:0;}
-        .svc-card{display:flex;flex-direction:column;flex:1;cursor:pointer;background:#fff;border-right:1px solid var(--line);transition:flex .5s cubic-bezier(0.22,0.61,0.36,1);}
-        .svc-card:last-child{border-right:none;}
-        .svc-flex:hover .svc-card{flex:0.85;}
-        .svc-flex:hover .svc-card:hover{flex:2;}
-        .svc-card-top{padding:1.4rem 1.3rem;}
-        .svc-card-title{font-family:var(--serif);font-weight:600;font-size:clamp(1.3rem,1.8vw,1.8rem);line-height:1.1;letter-spacing:-.01em;color:var(--ink);margin:0;}
-        .svc-card-sub{font-family:var(--sans);font-weight:400;font-size:.65rem;line-height:1.3;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);display:block;margin-top:.3rem;}
-        .svc-card-desc{color:var(--muted);font-size:.85rem;line-height:1.65;font-weight:300;margin:0;max-height:0;opacity:0;overflow:hidden;padding-top:0;transition:max-height .45s var(--ease),opacity .35s ease,padding-top .45s var(--ease);}
-        .svc-card:hover .svc-card-desc{max-height:180px;opacity:1;padding-top:.9rem;}
+        /* ── SERVICES CAROUSEL ── */
+        .svc-alt-section{background:#fff;padding:5.5rem 4vw;overflow:hidden;}
+        .svc-text-card{background:#f8f7f4;display:flex;align-items:center;justify-content:center;}
+        .svc-text-card-active{background:#f0eff8;}
+        .svc-text-inner{padding:1.5rem 1.8rem;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;width:100%;height:100%;gap:.8rem;}
+        .svc-text-title{font-family:var(--serif);font-weight:500;font-size:clamp(1.3rem,1.8vw,1.8rem);line-height:1.15;letter-spacing:-.01em;color:var(--ink);margin:0;}
+        .svc-text-desc{color:var(--muted);font-size:.88rem;line-height:1.6;font-weight:300;margin:0;}
 
         /* ── FOOTER ── */
         footer{background:#030a24;color:#fff;padding:3rem 4vw 2rem;}
@@ -943,11 +1030,9 @@ export default function AmbroisePartnersModern() {
           .about-split{grid-template-columns:1fr;gap:3rem;}
           .method-step{grid-template-columns:60px 1fr;}
           .step-arrow{display:none;}
-          .svc-flex{flex-wrap:wrap;gap:0;}
-          .svc-card{flex:1 1 calc(50% - 0px)!important;height:240px;border-right:none;border-bottom:1px solid var(--line);}
-          .svc-card-title{font-size:1.2rem;}
+          .svc-alt-section{padding:5rem 4vw;}
           .domains-grid{flex-wrap:wrap;gap:10px;}
-          .domain-card{flex:1 1 calc(25% - 10px)!important;aspect-ratio:3/4;}
+          .domain-card{flex:1 1 calc(25% - 10px)!important;aspect-ratio:3/4;height:auto;}
           .dalt-carousel{height:400px;}
           .domains-alt-section{padding:5rem 4vw;}
         }
@@ -974,12 +1059,7 @@ export default function AmbroisePartnersModern() {
           .eyebrow{font-size:.65rem;margin-bottom:.7rem;}
 
           /* Services */
-          .svc-flex{flex-direction:column;gap:0;}
-          .svc-card{flex:none!important;height:200px;border-right:none;border-bottom:1px solid var(--line);}
-          .svc-card:last-child{border-bottom:none;}
-          .svc-card-content{padding:1.1rem 1rem;}
-          .svc-card-title{font-size:1.2rem;}
-          .svc-card-desc{font-size:.8rem;}
+          .svc-alt-section{padding:4rem 4vw;}
 
           /* Approach */
           .approach-text{padding:1.5rem 1.5rem 1.5rem 0;}
@@ -989,7 +1069,7 @@ export default function AmbroisePartnersModern() {
 
           /* Domains */
           .domains-grid{flex-wrap:wrap;gap:8px;}
-          .domain-card{flex:1 1 calc(50% - 8px)!important;aspect-ratio:3/4;border-radius:10px;}
+          .domain-card{flex:1 1 calc(50% - 8px)!important;aspect-ratio:3/4;height:auto;border-radius:10px;}
           .domain-label{padding:1rem .8rem;}
           .domain-name{font-size:.9rem;}
 
@@ -1019,7 +1099,6 @@ export default function AmbroisePartnersModern() {
         @media(max-width:380px){
           .logo-name{display:none;}
           .logo-sep{display:none;}
-          .svc-title{font-size:1rem;}
           .domain-name{font-size:1rem;}
           .domains-grid{gap:8px;}
         }
@@ -1035,7 +1114,6 @@ export default function AmbroisePartnersModern() {
           </div>
           <div className="nav-links">
             <a href="#services">Services</a>
-            <a href="#approach">Expertise</a>
             <a href="#domains">Domains</a>
             <a href="#method">Method</a>
             <a href="#contact" className="nav-cta">Contact us</a>
@@ -1054,10 +1132,6 @@ export default function AmbroisePartnersModern() {
           </h1>
         </div>
         <div className="hero-bottom">
-          <div className="hero-ctas">
-            <a href="#contact" className="btn-primary">Get in touch</a>
-            <a href="#services" className="btn-secondary">Our services</a>
-          </div>
           <div className="hero-tags">
             <span>M&amp;A</span><span>Fundraising</span><span>Licensing</span><span>Growth</span>
           </div>
@@ -1183,10 +1257,9 @@ export default function AmbroisePartnersModern() {
               </div>
               <div className="footer-col">
                 <div className="footer-col-title">Company</div>
-                <a href="#domains">Our Domains</a>
-                <a href="#approach">Expertise</a>
+                <a href="#services">Services</a>
+                <a href="#domains">Domains</a>
                 <a href="#method">Method</a>
-                <a href="#contact">About</a>
                 <a href="#contact">Contact</a>
               </div>
               <div className="footer-col">
