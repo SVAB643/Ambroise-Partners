@@ -177,9 +177,8 @@ const DOMAINS = [
   { id:3, name:'Medical Devices', image:'/images/meddevice.jpg',  color:'#e4f0e8' },
   { id:4, name:'Diagnostics',     image:'/images/diagnostics.jpg',color:'#f0e8e4' },
   { id:5, name:'Digital Health',  image:'/images/digital.jpg',    color:'#e4e8ff' },
-  { id:6, name:'Life Science Services', image:'/images/lifescience.jpg', color:'#e8f0e4' },
-  { id:7, name:'HC Services',   image:'/images/healthcare.jpg',  color:'#f0e4ea' },
-  { id:8, name:'Consumer Health & Wellness', image:'/images/wellness.jpg', color:'#f0ece4' },
+  { id:6, name:'Healthcare Services',   image:'/images/healthcare.jpg',  color:'#f0e4ea' },
+  { id:7, name:'Consumer Health & Wellness', image:'/images/wellness.jpg', color:'#f0ece4' },
 ];
 
 function ExpertiseSection() {
@@ -249,8 +248,7 @@ const DOMAINS_ALT = [
   { name:'Medical Devices',            image:'/images/meddevice.jpg' },
   { name:'Diagnostics',                image:'/images/diagnostics.jpg' },
   { name:'Digital Health',             image:'/images/digital.jpg' },
-  { name:'Life Science Services',      image:'/images/meddevice2.jpg' },
-  { name:'HC Services',        image:'/images/diagnostics2.jpg' },
+  { name:'Healthcare Services',        image:'/images/diagnostics2.jpg' },
   { name:'Consumer Health & Wellness', image:'/images/pharma.jpg' },
 ];
 
@@ -860,7 +858,7 @@ export default function AmbroisePartnersModern() {
         .svc-flex:hover .svc-card{flex:0.85;}
         .svc-flex:hover .svc-card:hover{flex:2;}
         .svc-card-top{padding:1.6rem 1.4rem;}
-        .svc-card-title{font-family:var(--serif);font-weight:600;font-size:clamp(1.15rem,1.5vw,1.5rem);line-height:1.1;letter-spacing:-.01em;color:var(--ink);margin:0;white-space:nowrap;}
+        .svc-card-title{font-family:var(--serif);font-weight:600;font-size:clamp(1.15rem,1.5vw,1.5rem);line-height:1.1;letter-spacing:-.01em;color:var(--ink);margin:0;}
         .svc-card-sub{font-family:var(--sans);font-weight:400;font-size:.72rem;line-height:1.3;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);display:block;margin-top:.4rem;}
         .svc-card-desc{color:var(--muted);font-size:.92rem;line-height:1.65;font-weight:300;margin:0;max-height:0;opacity:0;overflow:hidden;padding-top:0;transition:max-height .45s var(--ease),opacity .35s ease,padding-top .45s var(--ease);}
         .svc-card:hover .svc-card-desc{max-height:180px;opacity:1;padding-top:.9rem;}
@@ -1022,11 +1020,56 @@ export default function AmbroisePartnersModern() {
           .footer-links{gap:2rem 3rem;}
           .footer-bottom{flex-direction:column;align-items:flex-start;gap:.6rem;}
         }
+        @media(max-width:480px){
+          /* Services */
+          .svc-card{min-height:180px;}
+          .svc-card-top{padding:1.2rem 1rem;}
+          .svc-card-title{font-size:1.05rem;}
+          .svc-card-desc{font-size:.75rem;max-height:140px;}
+
+          /* Ticker */
+          .sector-ticker{padding:.8rem 0;}
+          .sector-ticker-item{font-size:.65rem;padding:0 1.4rem;}
+
+          /* Approach */
+          .approach-canvas-wrap{min-height:150px;height:150px;padding:1rem;}
+          .approach-title{font-size:1.15rem;}
+          .approach-desc{font-size:.8rem;}
+
+          /* Domains carousel */
+          .dalt-carousel{height:320px;}
+          .dalt-arrow{width:32px;height:32px;}
+          .dalt-tab{font-size:.68rem;padding:5px 6px;}
+          .dalt-active-label span{font-size:1rem;}
+
+          /* Method */
+          .method-step{grid-template-columns:40px 1fr;gap:1.2rem;}
+          .step-num{font-size:.85rem;}
+          .step-body h4{font-size:1.05rem;}
+          .step-body p{font-size:.8rem;}
+
+          /* Contact */
+          .contact-wrap{padding:3.5rem 2.5vw;}
+        }
         @media(max-width:380px){
           .logo-name{display:none;}
           .logo-sep{display:none;}
+
+          /* Services */
+          .svc-card{min-height:150px;}
+          .svc-card-top{padding:1rem .8rem;}
+          .svc-card-title{font-size:.95rem;}
+
+          /* Ticker */
+          .sector-ticker-item{font-size:.6rem;padding:0 1rem;}
+
+          /* Domains */
           .domain-name{font-size:1rem;}
           .domains-grid{gap:8px;}
+          .dalt-carousel{height:280px;}
+
+          /* Approach */
+          .approach-canvas-wrap{min-height:120px;height:120px;}
         }
       `}</style>
 
@@ -1041,7 +1084,7 @@ export default function AmbroisePartnersModern() {
           <div className="nav-links">
             <a href="#services">Services</a>
             <a href="#approach">Approach</a>
-            <a href="#domains-alt">Domains</a>
+            <a href="#domains">Domains</a>
             <a href="#method">Method</a>
             <a href="#contact" className="nav-cta">Contact us</a>
           </div>
@@ -1118,9 +1161,6 @@ export default function AmbroisePartnersModern() {
       </div>
 
       <ExpertiseSection />
-
-      {/* DOMAINS V2 — carousel alternative */}
-      <ExpertiseSectionAlt />
 
       {/* METHOD */}
       <div style={{ background: '#f8f7f4', width: '100%' }}>
@@ -1203,7 +1243,7 @@ export default function AmbroisePartnersModern() {
                 <div className="footer-col-title">Company</div>
                 <a href="#services">Services</a>
                 <a href="#approach">Approach</a>
-                <a href="#domains-alt">Domains</a>
+                <a href="#domains">Domains</a>
                 <a href="#method">Method</a>
                 <a href="#contact">Contact</a>
               </div>
