@@ -183,8 +183,8 @@ const DOMAINS = [
 
 function ExpertiseSection() {
   return (
-    <section id="domains" style={{ background: '#ffffff', padding: '5.5rem 2.5vw' }}>
-      <div style={{ maxWidth: 1440, margin: '0 auto' }}>
+    <section id="domains" style={{ background: '#ffffff', padding: '5.5rem 2.5vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }}>
+      <div style={{ maxWidth: 1440, margin: '0 auto', width: '100%' }}>
         <div style={{ marginBottom: '4.5rem' }} className="reveal">
           <span className="eyebrow">Areas of expertise</span>
           <h2 className="section-title">Our Domains</h2>
@@ -218,8 +218,8 @@ const SERVICES = [
 
 function ServicesSection() {
   return (
-    <section id="services" style={{ background: '#ffffff', padding: '5.5rem 2.5vw' }}>
-      <div style={{ maxWidth: 1440, margin: '0 auto' }}>
+    <section id="services" style={{ background: '#ffffff', padding: '5.5rem 2.5vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }}>
+      <div style={{ maxWidth: 1440, margin: '0 auto', width: '100%' }}>
         <div style={{ marginBottom: '3.5rem' }} className="reveal">
           <span className="eyebrow">What we do</span>
           <h2 className="section-title">Our Services</h2>
@@ -957,6 +957,9 @@ export default function AmbroisePartnersModern() {
           .domains-alt-section{padding:5rem 2.5vw;}
         }
         @media(max-width:600px){
+          /* Disable min-height on mobile */
+          #services,#domains,#approach,#method{min-height:auto!important;}
+
           /* Nav */
           nav{padding:0 3.5vw;height:56px;}
           .logo-ap{font-size:1.3rem;}
@@ -965,7 +968,7 @@ export default function AmbroisePartnersModern() {
           .nav-cta{padding:.48rem 1.1rem!important;font-size:.72rem!important;}
 
           /* Hero */
-          .hero{padding:0 4vw;}
+          .hero{padding:0!important;}
           .hero-h1{font-size:clamp(2.2rem,9vw,3.2rem);}
           .hero-inner{padding-top:3.5rem;padding-bottom:1.5rem;}
           .hero-ctas{gap:.6rem;}
@@ -982,8 +985,9 @@ export default function AmbroisePartnersModern() {
           .svc-flex{flex-direction:column;gap:0;}
           .svc-card{flex:none!important;min-height:220px;height:auto;border-right:none;border-bottom:1px solid var(--line);}
           .svc-card:last-child{border-bottom:none;}
+          .svc-card{min-height:auto;}
           .svc-card-title{font-size:1.2rem;}
-          .svc-card-desc{font-size:.8rem;}
+          .svc-card-desc{max-height:none;opacity:1;padding-top:.6rem;font-size:.8rem;}
 
           /* Approach */
           .approach-text{padding:1.5rem 1.5rem 1.5rem 0;}
@@ -993,7 +997,7 @@ export default function AmbroisePartnersModern() {
 
           /* Domains */
           .domains-grid{flex-wrap:wrap;gap:8px;}
-          .domain-card{flex:1 1 calc(50% - 8px)!important;aspect-ratio:3/4;height:auto;border-radius:10px;}
+          .domain-card{flex:1 1 calc(50% - 8px)!important;max-width:calc(50% - 4px);aspect-ratio:3/4;height:auto;border-radius:10px;}
           .domain-label{padding:1rem .8rem;}
           .domain-name{font-size:.9rem;}
 
@@ -1126,8 +1130,8 @@ export default function AmbroisePartnersModern() {
 
       {/* APPROACH */}
       <div style={{ background: '#f8f7f4', width: '100%' }}>
-      <section style={{ padding: '5.5rem 2.5vw' }} id="approach">
-      <div style={{ maxWidth: 1440, margin: '0 auto' }}>
+      <section style={{ padding: '5.5rem 2.5vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }} id="approach">
+      <div style={{ maxWidth: 1440, margin: '0 auto', width: '100%' }}>
         <div style={{ marginBottom: '3.5rem', textAlign: 'left' }} className="reveal">
           <span className="eyebrow">What sets us apart</span>
           <h2 className="section-title">Our Approach</h2>
@@ -1164,8 +1168,8 @@ export default function AmbroisePartnersModern() {
 
       {/* METHOD */}
       <div style={{ background: '#f8f7f4', width: '100%' }}>
-      <section style={{ padding: '5.5rem 2.5vw' }} id="method">
-      <div style={{ maxWidth: 1440, margin: '0 auto' }}>
+      <section style={{ padding: '5.5rem 2.5vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }} id="method">
+      <div style={{ maxWidth: 1440, margin: '0 auto', width: '100%' }}>
         <div className="section-head reveal">
           <span className="eyebrow">Methodology</span>
           <h2 className="section-title">Proven Process</h2>
