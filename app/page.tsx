@@ -96,9 +96,9 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
     let ct = 0;
     const drawCurve = () => {
       ctx.clearRect(0,0,W,H);
-      ct += 0.022;
+      ct += 0.015;
       const pts = 80;
-      const pad = { x: W*.1, y: H*.12 };
+      const pad = { x: W*.1, y: H*.15 };
       const iW = W-pad.x*2, iH = H-pad.y*2;
       for (let i=0;i<=4;i++) {
         const y = pad.y + iH*(1-i/4);
@@ -109,7 +109,7 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
       ctx.moveTo(pad.x, pad.y+iH);
       for (let i=0;i<=pts;i++) {
         const fx = i/pts;
-        const fy = Math.pow(fx,1.6) + Math.sin(fx*Math.PI*2+ct)*0.06*(1-fx*.5);
+        const fy = Math.pow(fx,1.6) + Math.sin(fx*Math.PI*2+ct)*0.15*(1-fx*.5);
         const x = pad.x + fx*iW;
         const y = pad.y + iH*(1-Math.min(fy,1));
         i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
@@ -123,14 +123,14 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
       ctx.beginPath();
       for (let i=0;i<=pts;i++) {
         const fx = i/pts;
-        const fy = Math.pow(fx,1.6) + Math.sin(fx*Math.PI*2+ct)*0.06*(1-fx*.5);
+        const fy = Math.pow(fx,1.6) + Math.sin(fx*Math.PI*2+ct)*0.15*(1-fx*.5);
         const x = pad.x + fx*iW;
         const y = pad.y + iH*(1-Math.min(fy,1));
         i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
       }
       ctx.strokeStyle='rgba(42,92,184,0.75)'; ctx.lineWidth=2.2;
       ctx.lineJoin='round'; ctx.stroke();
-      const lastFy = Math.pow(1,1.6)+Math.sin(Math.PI*2+ct)*0.06*.5;
+      const lastFy = Math.pow(1,1.6)+Math.sin(Math.PI*2+ct)*0.15*.5;
       const dotY = pad.y+iH*(1-Math.min(lastFy,1));
       ctx.beginPath(); ctx.arc(pad.x+iW, dotY, 4.5, 0, Math.PI*2);
       ctx.fillStyle='rgba(42,92,184,0.9)'; ctx.fill();
@@ -175,10 +175,9 @@ const DOMAINS = [
   { id:1, name:'Biotechnology',   image:'/images/biotech.jpg',    color:'#e8e4f0' },
   { id:2, name:'Pharmaceuticals', image:'/images/pharma.jpg',     color:'#e4e8f0' },
   { id:3, name:'Medical Devices', image:'/images/meddevice.jpg',  color:'#e4f0e8' },
-  { id:4, name:'Diagnostics',     image:'/images/diagnostics.jpg',color:'#f0e8e4' },
-  { id:5, name:'Digital Health',  image:'/images/digital.jpg',    color:'#e4e8ff' },
-  { id:6, name:'Healthcare Services',   image:'/images/healthcare.jpg',  color:'#f0e4ea' },
-  { id:7, name:'Consumer Health & Wellness', image:'/images/wellness.jpg', color:'#f0ece4' },
+  { id:4, name:'Digital Health',  image:'/images/digital.jpg',    color:'#e4e8ff' },
+  { id:5, name:'Healthcare Services',   image:'/images/healthcare.jpg',  color:'#f0e4ea' },
+  { id:6, name:'Consumer Health', image:'/images/wellness.jpg', color:'#f0ece4' },
 ];
 
 function ExpertiseSection() {
@@ -187,7 +186,7 @@ function ExpertiseSection() {
       <div style={{ maxWidth: 1440, margin: '0 auto', width: '100%' }}>
         <div style={{ marginBottom: '4.5rem' }} className="reveal">
           <span className="eyebrow">Areas of expertise</span>
-          <h2 className="section-title">Our Domains</h2>
+          <h2 className="section-title">Our Spheres of Competence</h2>
           <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.3rem', lineHeight: 1.5 }}>Our advisory spans the full spectrum of healthcare innovation.</p>
         </div>
         <div className="domains-grid reveal">
@@ -209,16 +208,16 @@ function ExpertiseSection() {
 /* ─── Services Section ─── */
 const SERVICES = [
   { main: 'M&A', sub: '', desc: 'Sell-side, buy-side and strategic transaction advisory across the global healthcare ecosystem.' },
-  { main: 'Fundraising', sub: '', desc: 'Targeted growth capital advisory from Pre-Seed to Series B, partnering with leading healthcare investors.' },
+  { main: 'Fundraising', sub: '', desc: 'Targeted growth capital advisory from Pre-Seed to Series B financing, partnering with leading healthcare investors.' },
   { main: 'Strategic Partnerships', sub: '', desc: 'Value-creating licensing and partnership advisory alongside global and regional healthcare leaders.' },
-  { main: 'Strategic Advisory', sub: '', desc: 'Independent strategic counsel on portfolio positioning, growth pathway and long-term value creation.' },
-  { main: 'Capital Raising', sub: '', desc: 'Capital markets and structured financing advisory, including IPOs, follow-ons, private placements and convertible debt.' },
+  { main: 'Advisory Services', sub: '', desc: 'Independent strategic counsel on portfolio positioning, growth path and long-term value creation.' },
+  { main: 'Capital Raising', sub: '', desc: 'Capital markets and structured financial advice, including IPOs, follow-ons, private placements and convertible debt.' },
 ];
 
 
 function ServicesSection() {
   return (
-    <section id="services" style={{ background: '#ffffff', padding: '5.5rem 2.5vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }}>
+    <section id="services" style={{ background: '#ffffff', padding: '3rem 2.5vw 5.5rem', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'flex-start' }}>
       <div style={{ maxWidth: 1440, margin: '0 auto', width: '100%' }}>
         <div style={{ marginBottom: '3.5rem' }} className="reveal">
           <span className="eyebrow">What we do</span>
@@ -335,7 +334,7 @@ function ExpertiseSectionAlt() {
       <div style={{ maxWidth: 1440, margin: '0 auto' }}>
         <div style={{ marginBottom: '1rem', textAlign: 'center' }} className="reveal">
           <span className="eyebrow">Areas of expertise</span>
-          <h2 className="section-title">Our Domains</h2>
+          <h2 className="section-title">Our Spheres of Competence</h2>
           <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.3rem', lineHeight: 1.5, margin: '0 auto' }}>Our advisory spans the full spectrum of healthcare innovation.</p>
         </div>
 
@@ -757,16 +756,16 @@ export default function AmbroisePartnersModern() {
         }
         .hero-inner{
           position:relative;z-index:2;
-          max-width:1100px;
+          max-width:1500px;
           padding-top:5rem;
           padding-bottom:2.5rem;
           text-align:center;
         }
         .hero-h1{
           font-family:var(--serif);font-weight:500;
-          font-size:clamp(3.2rem,5.5vw,5.2rem);
-          line-height:1.04;letter-spacing:-.015em;margin-bottom:1.4rem;
-          max-width:1200px;margin-left:auto;margin-right:auto;
+          font-size:clamp(2.8rem,4.8vw,4.6rem);
+          line-height:1.06;letter-spacing:-.015em;margin-bottom:1.4rem;
+          max-width:100%;margin-left:auto;margin-right:auto;
           opacity:0;animation:fadeUp .9s .3s var(--ease) forwards;
         }
         .hero-h1 strong{
@@ -805,16 +804,16 @@ export default function AmbroisePartnersModern() {
 
         /* ── APPROACH ── */
         .approach-panels{display:flex;flex-direction:column;gap:1px;background:var(--line);}
-        .approach-panel{display:grid;grid-template-columns:1fr 1fr;background:#f8f7f4;}
-        .approach-text{padding:1rem 2rem 1rem 0;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--line);}
-        .approach-num{font-family:var(--serif);font-style:italic;font-size:.9rem;color:var(--blue);margin-bottom:.8rem;display:block;}
-        .approach-title{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,1.8vw,1.8rem);letter-spacing:-.02em;margin-bottom:.3rem;line-height:1.1;}
-        .approach-desc{color:var(--muted);font-size:.85rem;line-height:1.5;font-weight:300;}
-        .approach-canvas-wrap{background:#f8f7f4;height:180px;display:flex;align-items:center;justify-content:center;padding:.5rem;overflow:hidden;}
+        .approach-panel{display:grid;grid-template-columns:1fr 1fr;background:#f0f4fa;}
+        .approach-text{padding:1.5rem 2rem 1.5rem 0;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--line);}
+        .approach-num{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--blue);margin-bottom:1rem;display:block;}
+        .approach-title{font-family:var(--serif);font-weight:500;font-size:clamp(1.5rem,2vw,1.6rem);letter-spacing:-.01em;margin-bottom:.4rem;line-height:1.1;}
+        .approach-desc{color:var(--muted);font-size:1.05rem;line-height:1.65;font-weight:300;}
+        .approach-canvas-wrap{background:#f0f4fa;height:260px;display:flex;align-items:center;justify-content:center;padding:1rem;overflow:hidden;}
 
         /* ── VALUES ── */
         .values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);}
-        .value-card{background:#f8f7f4;padding:3.5rem 2.8rem;transition:background .25s;}
+        .value-card{background:#f0f4fa;padding:3.5rem 2.8rem;transition:background .25s;}
         .value-card:hover{background:#f8f8fc;}
         .value-tag{display:inline-block;font-size:.7rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);border:1px solid var(--blue);padding:.28rem .8rem;border-radius:100px;margin-bottom:1.4rem;}
         .value-title{font-family:var(--serif);font-weight:400;font-size:1.6rem;letter-spacing:-.01em;margin-bottom:.9rem;line-height:1.2;}
@@ -895,7 +894,7 @@ export default function AmbroisePartnersModern() {
 
         /* ── DOMAINS GRID ── */
         .domains-grid{display:flex;gap:10px;}
-        .domain-card{position:relative;border-radius:14px;overflow:hidden;flex:1;height:420px;cursor:pointer;transition:flex .5s cubic-bezier(0.22,0.61,0.36,1);}
+        .domain-card{position:relative;border-radius:14px;overflow:hidden;flex:1;aspect-ratio:1/1;cursor:pointer;transition:flex .5s cubic-bezier(0.22,0.61,0.36,1);}
         .domains-grid:hover .domain-card{flex:0.85;}
         .domains-grid:hover .domain-card:hover{flex:2;}
         .domain-img{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .55s cubic-bezier(0.16,1,0.3,1);}
@@ -943,7 +942,7 @@ export default function AmbroisePartnersModern() {
           .nav-links a:not(.nav-cta){display:none;}
           .nav-cta{padding:.55rem 1.3rem!important;font-size:.78rem!important;white-space:nowrap;}
           .approach-panel{grid-template-columns:1fr;}
-          .approach-canvas-wrap{min-height:220px;}
+          .approach-canvas-wrap{min-height:220px;height:220px;}
           .values-grid{grid-template-columns:1fr;}
           .about-split{grid-template-columns:1fr;gap:3rem;}
           .method-step{grid-template-columns:60px 1fr;}
@@ -952,7 +951,7 @@ export default function AmbroisePartnersModern() {
           .svc-card{flex:1 1 calc(50% - 0px)!important;min-height:260px;height:auto;border-right:none;border-bottom:1px solid var(--line);}
           .svc-card-title{font-size:1.2rem;}
           .domains-grid{flex-wrap:wrap;gap:10px;}
-          .domain-card{flex:1 1 calc(25% - 10px)!important;aspect-ratio:3/4;height:auto;}
+          .domain-card{flex:1;aspect-ratio:1/1;height:auto;}
           .dalt-carousel{height:400px;}
           .domains-alt-section{padding:5rem 2.5vw;}
         }
@@ -997,7 +996,7 @@ export default function AmbroisePartnersModern() {
 
           /* Domains */
           .domains-grid{flex-wrap:wrap;gap:8px;}
-          .domain-card{flex:1 1 calc(50% - 8px)!important;max-width:calc(50% - 4px);aspect-ratio:3/4;height:auto;border-radius:10px;}
+          .domain-card{flex:1 1 calc(50% - 8px)!important;max-width:calc(50% - 4px);aspect-ratio:1/1;height:auto;border-radius:10px;}
           .domain-label{padding:1rem .8rem;}
           .domain-name{font-size:.9rem;}
 
@@ -1100,9 +1099,9 @@ export default function AmbroisePartnersModern() {
         <canvas id="hero-canvas" ref={canvasRef} />
         <div className="hero-inner">
           <h1 className="hero-h1">
-            <span className="hero-line hero-line-1">Independent strategic </span>
-            <span className="hero-line hero-line-2">and financial advisory</span>
-            <span className="hero-line hero-line-3"> dedicated <em>to healthcare innovation</em></span>
+            <span className="hero-line hero-line-1" style={{display:'block'}}>Independent strategic and</span>
+            <span className="hero-line hero-line-2" style={{display:'block'}}>financial advisory services dedicated</span>
+            <span className="hero-line hero-line-3" style={{display:'block'}}><em>to healthcare innovation</em></span>
           </h1>
         </div>
         <div className="hero-bottom">
@@ -1129,13 +1128,13 @@ export default function AmbroisePartnersModern() {
       </div>
 
       {/* APPROACH */}
-      <div style={{ background: '#f8f7f4', width: '100%' }}>
+      <div style={{ background: '#f0f4fa', width: '100%' }}>
       <section style={{ padding: '5.5rem 2.5vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }} id="approach">
       <div style={{ maxWidth: 1440, margin: '0 auto', width: '100%' }}>
         <div style={{ marginBottom: '3.5rem', textAlign: 'left' }} className="reveal">
           <span className="eyebrow">What sets us apart</span>
           <h2 className="section-title">Our Approach</h2>
-          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.15rem', lineHeight: 1.5 }}>A unique combination of scientific depth, strategic networks and institutional-grade execution; purpose-built for healthcare companies.</p>
+          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.15rem', lineHeight: 1.5 }}>A unique combination of scientific expertise, strategic networks and institutional-grade execution; purpose-built for healthcare companies.</p>
         </div>
         <div className="approach-panels">
           <div className="approach-panel reveal">
@@ -1155,7 +1154,7 @@ export default function AmbroisePartnersModern() {
           <div className="approach-panel reveal reveal-d2">
             <div className="approach-text">
               <div className="approach-title">Execution excellence</div>
-              <p className="approach-desc">The rigour and standards of top-tier investment banks, with decades of institutional experience, combined with the agility and hands-on dedication that high-growth companies demand.</p>
+              <p className="approach-desc">The rigour and standards of top-tier investment banks, with decades of institutional experience, combined with the flexibility and hands-on dedication that high-growth companies demand.</p>
             </div>
             <div className="approach-canvas-wrap"><ApproachCanvas type="curve" /></div>
           </div>
@@ -1167,7 +1166,7 @@ export default function AmbroisePartnersModern() {
       <ExpertiseSection />
 
       {/* METHOD */}
-      <div style={{ background: '#f8f7f4', width: '100%' }}>
+      <div style={{ background: '#f0f4fa', width: '100%' }}>
       <section style={{ padding: '5.5rem 2.5vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }} id="method">
       <div style={{ maxWidth: 1440, margin: '0 auto', width: '100%' }}>
         <div className="section-head reveal">
@@ -1177,10 +1176,10 @@ export default function AmbroisePartnersModern() {
         </div>
         <div className="method-list">
           {[
-            ['01','Strategic Audit',  'In-depth assessment of positioning, science, pipeline, competitive landscape and transaction objectives.'],
-            ['02','Structuring',      'Development of a compelling investment narrative, robust financial modelling, preparation of investor-ready materials and data room build-out.'],
+            ['01','Strategic Audit',  'In-depth assessment of positioning, technology, pipeline, competitive landscape and transaction objectives.'],
+            ['02','Structuring',      'Development of a compelling investment narrative, robust financial modelling, preparation of investor-ready materials and data room build-up.'],
             ['03','Targeted Outreach','Identification and confidential engagement of the most relevant counterparties — strategic partners, investors or partners.'],
-            ['04','Process Management','End-to-end coordination of workflows, Q&A, due diligence and advisor management.'],
+            ['04','Process Management','End-to-end coordination of workflows, Q&A, due diligence and advisory management.'],
             ['05','Closing & Execution','Negotiation of final terms, resolution of closing conditions and securing of the signature.'],
           ].map(([num,title,copy])=>(
             <div className="method-step reveal" key={num}>
