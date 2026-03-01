@@ -216,24 +216,96 @@ const SERVICES = [
 
 
 function ServicesSection() {
+  const ITEM_H = 72;
+  const CYCLE = 2800;
+  const TRANS = 600;
+  const total = SERVICES.length;
+
+  const [position, setPosition] = useState(total);
+  const [noTransition, setNoTransition] = useState(false);
+  const [descVisible, setDescVisible] = useState(true);
+
+  const activeDataIndex = position % total;
+  const items = useMemo(() => [...SERVICES, ...SERVICES, ...SERVICES], []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDescVisible(false);
+      setPosition(prev => prev + 1);
+      setTimeout(() => setDescVisible(true), TRANS / 2 + 80);
+    }, CYCLE);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (position >= total * 2) {
+      const timeout = setTimeout(() => {
+        setNoTransition(true);
+        setPosition(prev => prev - total);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setNoTransition(false);
+          });
+        });
+      }, TRANS + 50);
+      return () => clearTimeout(timeout);
+    }
+  }, [position, total]);
+
+  const getItemStyle = (globalIndex: number) => {
+    const dist = Math.abs(globalIndex - position);
+    const isActive = globalIndex === position;
+    return {
+      opacity: isActive ? 1 : Math.max(0.08, 0.3 - dist * 0.07),
+      transform: `scale(${isActive ? 1 : 0.92})`,
+      fontWeight: isActive ? 600 : 400,
+      color: isActive ? 'var(--ink)' : 'var(--muted)',
+      fontStyle: isActive ? 'normal' as const : 'italic' as const,
+      transition: noTransition ? 'none' : `all ${TRANS}ms cubic-bezier(0.4,0,0.2,1)`,
+    };
+  };
+
+  const svc = SERVICES[activeDataIndex];
+
   return (
     <section id="services" style={{ background: '#ffffff', padding: '3rem 2.5vw 5.5rem', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'flex-start' }}>
       <div style={{ maxWidth: 1440, margin: '0 auto', width: '100%' }}>
-        <div style={{ marginBottom: '3.5rem' }} className="reveal">
+        <div style={{ marginBottom: '2.5rem' }} className="reveal">
           <span className="eyebrow">What we do</span>
           <h2 className="section-title">Our Services</h2>
-          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.15rem', lineHeight: 1.5 }}>We partner with healthcare companies at every stage of their journey, delivering tailored strategic, transactional and capital advisory.</p>
         </div>
-        <div className="svc-flex reveal">
-          {SERVICES.map((svc, i) => (
-            <div key={i} className="svc-card">
-              <div className="svc-card-top">
-                <h3 className="svc-card-title">{svc.main}</h3>
-                {svc.sub && <span className="svc-card-sub">{svc.sub}</span>}
-                <p className="svc-card-desc">{svc.desc}</p>
-              </div>
+
+        <div className="svc-roll-layout reveal">
+          {/* Left text */}
+          <div className="svc-roll-left">
+            <p className="svc-roll-text">We partner with healthcare companies at every stage of their journey, delivering tailored strategic, transactional and capital advisory.</p>
+          </div>
+
+          {/* Center rolling list */}
+          <div className="svc-roll-center">
+            <div
+              className="svc-roll-track"
+              style={{
+                transform: `translateY(${-position * ITEM_H}px)`,
+                transition: noTransition ? 'none' : `transform ${TRANS}ms cubic-bezier(0.4,0,0.2,1)`,
+              }}
+            >
+              {items.map((s, i) => (
+                <div
+                  key={`${s.main}-${i}`}
+                  className="svc-roll-item"
+                  style={getItemStyle(i)}
+                >
+                  {s.main}
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* Right description */}
+          <div className="svc-roll-right" style={{ opacity: descVisible ? 1 : 0, transform: descVisible ? 'translateY(0)' : 'translateY(6px)' }}>
+            <p className="svc-roll-desc">{svc.desc}</p>
+          </div>
         </div>
       </div>
     </section>
@@ -850,17 +922,17 @@ export default function AmbroisePartnersModern() {
         .submit-btn{align-self:center;background:var(--ink);color:#fff;border:1.5px solid var(--ink);padding:1rem 3rem;border-radius:9999px;font-family:var(--sans);font-size:.85rem;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:background .22s,transform .2s,box-shadow .22s,color .22s,border-color .22s;}
         .submit-btn:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-2px);box-shadow:0 10px 28px rgba(42,92,184,.2);}
 
-        /* ── SERVICES CAROUSEL ── */
-        .svc-flex{display:flex;gap:0;}
-        .svc-card{display:flex;flex-direction:column;flex:1;cursor:pointer;background:#fff;border-right:1px solid var(--line);transition:flex .5s cubic-bezier(0.22,0.61,0.36,1);min-height:240px;}
-        .svc-card:last-child{border-right:none;}
-        .svc-flex:hover .svc-card{flex:0.85;}
-        .svc-flex:hover .svc-card:hover{flex:2;}
-        .svc-card-top{padding:1.6rem 1.4rem;}
-        .svc-card-title{font-family:var(--serif);font-weight:600;font-size:clamp(1.15rem,1.5vw,1.5rem);line-height:1.1;letter-spacing:-.01em;color:var(--ink);margin:0;}
-        .svc-card-sub{font-family:var(--sans);font-weight:400;font-size:.72rem;line-height:1.3;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);display:block;margin-top:.4rem;}
-        .svc-card-desc{color:var(--muted);font-size:.92rem;line-height:1.65;font-weight:300;margin:0;max-height:0;opacity:0;overflow:hidden;padding-top:0;transition:max-height .45s var(--ease),opacity .35s ease,padding-top .45s var(--ease);}
-        .svc-card:hover .svc-card-desc{max-height:180px;opacity:1;padding-top:.9rem;}
+        /* ── SERVICES ROLLING LIST ── */
+        .svc-roll-layout{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:3rem;align-items:center;}
+        .svc-roll-left{}
+        .svc-roll-text{font-family:var(--sans);font-size:1.05rem;line-height:1.7;color:var(--muted);font-weight:300;max-width:340px;}
+        .svc-roll-center{position:relative;height:360px;overflow:hidden;
+          mask-image:linear-gradient(to bottom,transparent 0%,black 18%,black 82%,transparent 100%);
+          -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 18%,black 82%,transparent 100%);}
+        .svc-roll-track{display:flex;flex-direction:column;align-items:center;padding-top:144px;}
+        .svc-roll-item{height:72px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:clamp(1.6rem,2.8vw,2.6rem);letter-spacing:-.02em;cursor:pointer;white-space:nowrap;transform-origin:center;user-select:none;}
+        .svc-roll-right{display:flex;align-items:center;transition:opacity .4s ease,transform .4s ease;}
+        .svc-roll-desc{font-family:var(--sans);font-size:1rem;line-height:1.7;color:var(--muted);font-weight:300;margin:0;max-width:360px;}
 
         /* ── SECTOR TICKER ── */
         .sector-ticker{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:1.1rem 0;white-space:nowrap;}
@@ -947,9 +1019,10 @@ export default function AmbroisePartnersModern() {
           .about-split{grid-template-columns:1fr;gap:3rem;}
           .method-step{grid-template-columns:60px 1fr;}
           .step-arrow{display:none;}
-          .svc-flex{flex-wrap:wrap;gap:0;}
-          .svc-card{flex:1 1 calc(50% - 0px)!important;min-height:260px;height:auto;border-right:none;border-bottom:1px solid var(--line);}
-          .svc-card-title{font-size:1.2rem;}
+          .svc-roll-layout{grid-template-columns:1fr 1.2fr 1fr;gap:2rem;}
+          .svc-roll-text{font-size:.95rem;}
+          .svc-roll-item{font-size:clamp(1.4rem,2.4vw,2.2rem);}
+          .svc-roll-desc{font-size:.92rem;}
           .domains-grid{flex-wrap:wrap;gap:10px;}
           .domain-card{flex:1;aspect-ratio:1/1;height:auto;}
           .dalt-carousel{height:400px;}
@@ -981,12 +1054,13 @@ export default function AmbroisePartnersModern() {
           .eyebrow{font-size:.65rem;margin-bottom:.7rem;}
 
           /* Services */
-          .svc-flex{flex-direction:column;gap:0;}
-          .svc-card{flex:none!important;min-height:220px;height:auto;border-right:none;border-bottom:1px solid var(--line);}
-          .svc-card:last-child{border-bottom:none;}
-          .svc-card{min-height:auto;}
-          .svc-card-title{font-size:1.2rem;}
-          .svc-card-desc{max-height:none;opacity:1;padding-top:.6rem;font-size:.8rem;}
+          .svc-roll-layout{grid-template-columns:1fr!important;gap:1.5rem;text-align:center;}
+          .svc-roll-left{display:none;}
+          .svc-roll-right{justify-content:center;}
+          .svc-roll-center{height:280px;}
+          .svc-roll-track{padding-top:104px;}
+          .svc-roll-item{font-size:clamp(1.2rem,5vw,1.8rem);}
+          .svc-roll-desc{max-width:100%;font-size:.9rem;text-align:center;}
 
           /* Approach */
           .approach-text{padding:1.5rem 1.5rem 1.5rem 0;}
@@ -1025,10 +1099,10 @@ export default function AmbroisePartnersModern() {
         }
         @media(max-width:480px){
           /* Services */
-          .svc-card{min-height:180px;}
-          .svc-card-top{padding:1.2rem 1rem;}
-          .svc-card-title{font-size:1.05rem;}
-          .svc-card-desc{font-size:.75rem;max-height:140px;}
+          .svc-roll-center{height:240px;}
+          .svc-roll-track{padding-top:84px;}
+          .svc-roll-item{font-size:clamp(1.1rem,4.5vw,1.5rem);height:60px;}
+          .svc-roll-desc{font-size:.82rem;}
 
           /* Ticker */
           .sector-ticker{padding:.8rem 0;}
@@ -1059,9 +1133,9 @@ export default function AmbroisePartnersModern() {
           .logo-sep{display:none;}
 
           /* Services */
-          .svc-card{min-height:150px;}
-          .svc-card-top{padding:1rem .8rem;}
-          .svc-card-title{font-size:.95rem;}
+          .svc-roll-center{height:200px;}
+          .svc-roll-track{padding-top:70px;}
+          .svc-roll-item{font-size:1rem;height:52px;}
 
           /* Ticker */
           .sector-ticker-item{font-size:.6rem;padding:0 1rem;}
