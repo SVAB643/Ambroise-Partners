@@ -172,22 +172,22 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
 
 /* ─── Expertise Section ─── */
 const DOMAINS = [
-  { id:1, name:'Biotechnology',   image:'/images/biotech.jpg',    color:'#e8e4f0' },
-  { id:2, name:'Pharmaceuticals', image:'/images/pharma.jpg',     color:'#e4e8f0' },
-  { id:3, name:'Medical Devices', image:'/images/meddevice.jpg',  color:'#e4f0e8' },
-  { id:4, name:'Digital Health',  image:'/images/digital.jpg',    color:'#e4e8ff' },
-  { id:5, name:'Healthcare Services',   image:'/images/healthcare.jpg',  color:'#f0e4ea' },
-  { id:6, name:'Consumer Health', image:'/images/wellness.jpg', color:'#f0ece4' },
+  { id:1, name:'Biotechnology',   image:'/images/biotech.jpg',    color:'#e8e4f0', desc:'Novel therapeutic modalities, including biologics, gene and cell therapies, RNA-based treatments and advanced scientific platforms.' },
+  { id:2, name:'Pharmaceuticals', image:'/images/pharma.jpg',     color:'#e4e8f0', desc:'Branded, specialty and generic medicines across development and commercial portfolios.' },
+  { id:3, name:'Medical Devices', image:'/images/meddevice.jpg',  color:'#e4f0e8', desc:'Medical technologies, including robotic systems, clinical equipment, diagnostic devices and implantable solutions.' },
+  { id:4, name:'Digital Health',  image:'/images/digital.jpg',    color:'#e4e8ff', desc:'Software, artificial intelligence and data-driven healthcare platforms.' },
+  { id:5, name:'Healthcare Services',   image:'/images/healthcare.jpg',  color:'#f0e4ea', desc:'Provider networks, CROs, CDMOs and integrated healthcare service platforms.' },
+  { id:6, name:'Consumer Health', image:'/images/wellness.jpg', color:'#f0ece4', desc:'Over-the-counter medicines, dietary supplements and other consumer health products.' },
 ];
 
 function ExpertiseSection() {
   return (
     <section id="domains" style={{ background: '#ffffff', padding: '5.5rem 2.5vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }}>
       <div style={{ maxWidth: 1440, margin: '0 auto', width: '100%' }}>
-        <div style={{ marginBottom: '4.5rem' }} className="reveal">
+        <div className="section-head reveal">
           <span className="eyebrow">Areas of expertise</span>
-          <h2 className="section-title">Our Spheres of Competence</h2>
-          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.3rem', lineHeight: 1.5 }}>Our advisory spans the full spectrum of healthcare innovation.</p>
+          <h2 className="section-title">Our Areas of Expertise</h2>
+          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.2rem', lineHeight: 1.5 }}>Dedicated expertise across the healthcare ecosystem, from early-stage scientific platforms to scaled commercial organisations.</p>
         </div>
         <div className="domains-grid reveal">
           {DOMAINS.map((dom) => (
@@ -196,6 +196,7 @@ function ExpertiseSection() {
               <div className="domain-overlay" />
               <div className="domain-label">
                 <h3 className="domain-name">{dom.name}</h3>
+                <p className="domain-desc">{dom.desc}</p>
               </div>
             </div>
           ))}
@@ -207,104 +208,58 @@ function ExpertiseSection() {
 
 /* ─── Services Section ─── */
 const SERVICES = [
-  { main: 'M&A', sub: '', desc: 'Sell-side, buy-side and strategic transaction advisory across the global healthcare ecosystem.' },
-  { main: 'Fundraising', sub: '', desc: 'Targeted growth capital advisory from Pre-Seed to Series B financing, partnering with leading healthcare investors.' },
-  { main: 'Strategic Partnerships', sub: '', desc: 'Value-creating licensing and partnership advisory alongside global and regional healthcare leaders.' },
-  { main: 'Advisory Services', sub: '', desc: 'Independent strategic counsel on portfolio positioning, growth path and long-term value creation.' },
-  { main: 'Capital Raising', sub: '', desc: 'Capital markets and structured financial advice, including IPOs, follow-ons, private placements and convertible debt.' },
+  { main: 'M&A', desc: 'Sell-side, buy-side and transaction advisory across the global healthcare ecosystem.\nWe design and manage disciplined processes focused on value maximisation and execution certainty.' },
+  { main: 'Private Capital Raising', desc: 'Growth capital advisory from Pre-Seed to Series B.\nWe connect founders with leading healthcare-focused investors aligned with their stage, strategy and ambition.' },
+  { main: 'Partnerships & Licensing', desc: 'Advisory services designed to unlock long-term value alongside global and regional healthcare leaders.\nWe structure and negotiate agreements ranging from co-development partnerships to commercial out-licensing.' },
+  { main: 'Corporate Advisory', desc: 'Independent counsel on portfolio positioning, corporate direction and long-term value creation.\nWe support management teams and boards navigating critical inflection points.' },
+  { main: 'Public Capital Markets', desc: 'Advisory services across IPOs, follow-on offerings, private placements and convertible instruments.\nWe support companies in accessing public markets with clarity, preparation and confidence.' },
 ];
 
 
 function ServicesSection() {
-  const ITEM_H = 72;
-  const CYCLE = 2800;
-  const TRANS = 600;
-  const total = SERVICES.length;
-
-  const [position, setPosition] = useState(total);
-  const [noTransition, setNoTransition] = useState(false);
-  const [descVisible, setDescVisible] = useState(true);
-
-  const activeDataIndex = position % total;
-  const items = useMemo(() => [...SERVICES, ...SERVICES, ...SERVICES], []);
+  const CYCLE = 3200;
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
+    if (paused) return;
     const interval = setInterval(() => {
-      setDescVisible(false);
-      setPosition(prev => prev + 1);
-      setTimeout(() => setDescVisible(true), TRANS / 2 + 80);
+      setActiveIndex(prev => (prev + 1) % SERVICES.length);
     }, CYCLE);
     return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    if (position >= total * 2) {
-      const timeout = setTimeout(() => {
-        setNoTransition(true);
-        setPosition(prev => prev - total);
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            setNoTransition(false);
-          });
-        });
-      }, TRANS + 50);
-      return () => clearTimeout(timeout);
-    }
-  }, [position, total]);
-
-  const getItemStyle = (globalIndex: number) => {
-    const dist = Math.abs(globalIndex - position);
-    const isActive = globalIndex === position;
-    return {
-      opacity: isActive ? 1 : Math.max(0.08, 0.3 - dist * 0.07),
-      transform: `scale(${isActive ? 1 : 0.92})`,
-      fontWeight: isActive ? 600 : 400,
-      color: isActive ? 'var(--ink)' : 'var(--muted)',
-      fontStyle: isActive ? 'normal' as const : 'italic' as const,
-      transition: noTransition ? 'none' : `all ${TRANS}ms cubic-bezier(0.4,0,0.2,1)`,
-    };
-  };
-
-  const svc = SERVICES[activeDataIndex];
+  }, [paused]);
 
   return (
-    <section id="services" style={{ background: '#ffffff', padding: '3rem 2.5vw 5.5rem', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'flex-start' }}>
+    <section id="services" style={{ background: '#ffffff', padding: '5.5rem 2.5vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }}>
       <div style={{ maxWidth: 1440, margin: '0 auto', width: '100%' }}>
-        <div style={{ marginBottom: '2.5rem' }} className="reveal">
+        <div className="section-head reveal">
           <span className="eyebrow">What we do</span>
           <h2 className="section-title">Our Services</h2>
+          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.2rem', lineHeight: 1.5 }}>We partner with healthcare companies at every stage of their journey, delivering tailored strategic, transactional and capital advisory.</p>
         </div>
 
-        <div className="svc-roll-layout reveal">
-          {/* Left text */}
-          <div className="svc-roll-left">
-            <p className="svc-roll-text">We partner with healthcare companies at every stage of their journey, delivering tailored strategic, transactional and capital advisory.</p>
-          </div>
-
-          {/* Center rolling list */}
-          <div className="svc-roll-center">
-            <div
-              className="svc-roll-track"
-              style={{
-                transform: `translateY(${-position * ITEM_H}px)`,
-                transition: noTransition ? 'none' : `transform ${TRANS}ms cubic-bezier(0.4,0,0.2,1)`,
-              }}
-            >
-              {items.map((s, i) => (
+        <div className="svc-layout reveal"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+        >
+          <div className="svc-list">
+            {SERVICES.map((s, i) => {
+              const isActive = i === activeIndex;
+              return (
                 <div
-                  key={`${s.main}-${i}`}
-                  className="svc-roll-item"
-                  style={getItemStyle(i)}
+                  key={s.main}
+                  className={`svc-list-row${isActive ? ' svc-list-row--active' : ''}`}
+                  onMouseEnter={() => { setPaused(true); setActiveIndex(i); }}
                 >
-                  {s.main}
+                  <span className="svc-list-name">{s.main}</span>
                 </div>
-              ))}
-            </div>
+              );
+            })}
           </div>
-
-          {/* Right description */}
-          <div className="svc-roll-right" style={{ opacity: descVisible ? 1 : 0, transform: descVisible ? 'translateY(0)' : 'translateY(6px)' }}>
-            <p className="svc-roll-desc">{svc.desc}</p>
+          <div className="svc-detail">
+            {SERVICES[activeIndex].desc.split('\n').map((line, j) => (
+              <p key={j} className="svc-detail-text">{line}</p>
+            ))}
           </div>
         </div>
       </div>
@@ -758,7 +713,7 @@ export default function AmbroisePartnersModern() {
           transition:background .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
         }
         .logo-wrap{display:flex;align-items:center;gap:.7rem;}
-        .logo-ap{font-family:var(--serif);font-style:italic;font-weight:500;font-size:1.55rem;letter-spacing:-.01em;color:#fff;transition:color .35s;}
+        .logo-ap{font-family:var(--serif);font-weight:500;font-size:1.55rem;letter-spacing:-.01em;color:#fff;transition:color .35s;}
         .logo-sep{width:1px;height:16px;background:rgba(255,255,255,0.25);transition:background .35s;}
         .logo-name{font-size:1.05rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#fff;transition:color .35s;}
         .nav-links{display:flex;gap:1.2rem;align-items:center;}
@@ -876,16 +831,16 @@ export default function AmbroisePartnersModern() {
 
         /* ── APPROACH ── */
         .approach-panels{display:flex;flex-direction:column;gap:1px;background:var(--line);}
-        .approach-panel{display:grid;grid-template-columns:1fr 1fr;background:#f0f4fa;}
+        .approach-panel{display:grid;grid-template-columns:1fr 1fr;background:#f3f5fb;}
         .approach-text{padding:1.5rem 2rem 1.5rem 0;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--line);}
         .approach-num{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--blue);margin-bottom:1rem;display:block;}
         .approach-title{font-family:var(--serif);font-weight:500;font-size:clamp(1.5rem,2vw,1.6rem);letter-spacing:-.01em;margin-bottom:.4rem;line-height:1.1;}
         .approach-desc{color:var(--muted);font-size:1.05rem;line-height:1.65;font-weight:300;}
-        .approach-canvas-wrap{background:#f0f4fa;height:260px;display:flex;align-items:center;justify-content:center;padding:1rem;overflow:hidden;}
+        .approach-canvas-wrap{background:#f3f5fb;height:260px;display:flex;align-items:center;justify-content:center;padding:1rem;overflow:hidden;}
 
         /* ── VALUES ── */
         .values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);}
-        .value-card{background:#f0f4fa;padding:3.5rem 2.8rem;transition:background .25s;}
+        .value-card{background:#f3f5fb;padding:3.5rem 2.8rem;transition:background .25s;}
         .value-card:hover{background:#f8f8fc;}
         .value-tag{display:inline-block;font-size:.7rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);border:1px solid var(--blue);padding:.28rem .8rem;border-radius:100px;margin-bottom:1.4rem;}
         .value-title{font-family:var(--serif);font-weight:400;font-size:1.6rem;letter-spacing:-.01em;margin-bottom:.9rem;line-height:1.2;}
@@ -922,17 +877,16 @@ export default function AmbroisePartnersModern() {
         .submit-btn{align-self:center;background:var(--ink);color:#fff;border:1.5px solid var(--ink);padding:1rem 3rem;border-radius:9999px;font-family:var(--sans);font-size:.85rem;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:background .22s,transform .2s,box-shadow .22s,color .22s,border-color .22s;}
         .submit-btn:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-2px);box-shadow:0 10px 28px rgba(42,92,184,.2);}
 
-        /* ── SERVICES ROLLING LIST ── */
-        .svc-roll-layout{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:3rem;align-items:center;}
-        .svc-roll-left{}
-        .svc-roll-text{font-family:var(--sans);font-size:1.05rem;line-height:1.7;color:var(--muted);font-weight:300;max-width:340px;}
-        .svc-roll-center{position:relative;height:360px;overflow:hidden;
-          mask-image:linear-gradient(to bottom,transparent 0%,black 18%,black 82%,transparent 100%);
-          -webkit-mask-image:linear-gradient(to bottom,transparent 0%,black 18%,black 82%,transparent 100%);}
-        .svc-roll-track{display:flex;flex-direction:column;align-items:center;padding-top:144px;}
-        .svc-roll-item{height:72px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:clamp(1.6rem,2.8vw,2.6rem);letter-spacing:-.02em;cursor:pointer;white-space:nowrap;transform-origin:center;user-select:none;}
-        .svc-roll-right{display:flex;align-items:center;transition:opacity .4s ease,transform .4s ease;}
-        .svc-roll-desc{font-family:var(--sans);font-size:1rem;line-height:1.7;color:var(--muted);font-weight:300;margin:0;max-width:360px;}
+        /* ── SERVICES LIST ── */
+        .svc-layout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+        .svc-list{border-top:1px solid var(--line);}
+        .svc-list-row{padding:1.2rem 0;border-bottom:1px solid var(--line);cursor:pointer;transition:padding .4s var(--ease);}
+        .svc-list-name{font-family:var(--serif);letter-spacing:-.02em;transition:font-size .4s var(--ease),color .3s,opacity .3s;display:block;}
+        .svc-list-row .svc-list-name{font-size:clamp(1rem,1.4vw,1.15rem);font-weight:400;color:var(--muted);opacity:.55;}
+        .svc-list-row--active .svc-list-name{font-size:clamp(1.6rem,2.8vw,2.6rem);font-weight:500;color:var(--ink);opacity:1;}
+        .svc-list-row--active{padding:1.8rem 0;}
+        .svc-detail{display:flex;flex-direction:column;justify-content:center;gap:.6rem;}
+        .svc-detail-text{font-family:var(--sans);font-size:1.1rem;line-height:1.75;color:var(--muted);font-weight:300;margin:0;}
 
         /* ── SECTOR TICKER ── */
         .sector-ticker{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:1.1rem 0;white-space:nowrap;}
@@ -948,7 +902,7 @@ export default function AmbroisePartnersModern() {
 
         .footer-top{display:grid;grid-template-columns:1fr auto;gap:4rem;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.08);align-items:start;}
         .footer-logo-wrap{display:flex;align-items:center;gap:.7rem;margin-bottom:.8rem;}
-        .footer-logo{font-family:var(--serif);font-style:italic;font-weight:500;font-size:1.4rem;color:#fff;letter-spacing:-.01em;}
+        .footer-logo{font-family:var(--serif);font-weight:500;font-size:1.4rem;color:#fff;letter-spacing:-.01em;}
         .footer-logo-sep{width:1px;height:14px;background:rgba(255,255,255,.25);}
         .footer-brand-name{font-size:1.05rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#fff;}
         .footer-brand-desc{font-size:.82rem;line-height:1.7;color:rgba(255,255,255,.35);font-weight:300;max-width:28ch;margin-bottom:1rem;}
@@ -976,6 +930,8 @@ export default function AmbroisePartnersModern() {
         .domain-label{position:absolute;bottom:0;left:0;right:0;padding:1.2rem 1rem;}
         .domain-num{display:none;}
         .domain-name{font-family:var(--serif);font-weight:500;font-size:1rem;line-height:1.2;letter-spacing:-0.01em;color:#fff;margin:0;text-shadow:0 1px 10px rgba(0,0,0,0.4);}
+        .domain-desc{font-family:var(--sans);font-size:.78rem;line-height:1.55;color:rgba(255,255,255,.9);font-weight:300;margin:0;max-height:0;opacity:0;overflow:hidden;transition:max-height .4s var(--ease),opacity .3s ease,margin .3s var(--ease);}
+        .domain-card:hover .domain-desc{max-height:120px;opacity:1;margin-top:.5rem;}
 
         /* ── DOMAINS CAROUSEL (v2) ── */
         .domains-alt-section{background:#fff;padding:5.5rem 2.5vw;overflow:hidden;}
@@ -1019,10 +975,10 @@ export default function AmbroisePartnersModern() {
           .about-split{grid-template-columns:1fr;gap:3rem;}
           .method-step{grid-template-columns:60px 1fr;}
           .step-arrow{display:none;}
-          .svc-roll-layout{grid-template-columns:1fr 1.2fr 1fr;gap:2rem;}
-          .svc-roll-text{font-size:.95rem;}
-          .svc-roll-item{font-size:clamp(1.4rem,2.4vw,2.2rem);}
-          .svc-roll-desc{font-size:.92rem;}
+          .svc-layout{gap:2.5rem;}
+          .svc-list-row .svc-list-name{font-size:clamp(.9rem,1.2vw,1rem);}
+          .svc-list-row--active .svc-list-name{font-size:clamp(1.3rem,2.2vw,2rem);}
+          .svc-detail-text{font-size:1rem;}
           .domains-grid{flex-wrap:wrap;gap:10px;}
           .domain-card{flex:1;aspect-ratio:1/1;height:auto;}
           .dalt-carousel{height:400px;}
@@ -1054,13 +1010,12 @@ export default function AmbroisePartnersModern() {
           .eyebrow{font-size:.65rem;margin-bottom:.7rem;}
 
           /* Services */
-          .svc-roll-layout{grid-template-columns:1fr!important;gap:1.5rem;text-align:center;}
-          .svc-roll-left{display:none;}
-          .svc-roll-right{justify-content:center;}
-          .svc-roll-center{height:280px;}
-          .svc-roll-track{padding-top:104px;}
-          .svc-roll-item{font-size:clamp(1.2rem,5vw,1.8rem);}
-          .svc-roll-desc{max-width:100%;font-size:.9rem;text-align:center;}
+          .svc-layout{grid-template-columns:1fr!important;gap:1.5rem;}
+          .svc-list-row .svc-list-name{font-size:.9rem;}
+          .svc-list-row--active .svc-list-name{font-size:clamp(1.2rem,5vw,1.6rem);}
+          .svc-list-row{padding:1rem 0;}
+          .svc-list-row--active{padding:1.3rem 0;}
+          .svc-detail-text{font-size:.9rem;}
 
           /* Approach */
           .approach-text{padding:1.5rem 1.5rem 1.5rem 0;}
@@ -1099,10 +1054,11 @@ export default function AmbroisePartnersModern() {
         }
         @media(max-width:480px){
           /* Services */
-          .svc-roll-center{height:240px;}
-          .svc-roll-track{padding-top:84px;}
-          .svc-roll-item{font-size:clamp(1.1rem,4.5vw,1.5rem);height:60px;}
-          .svc-roll-desc{font-size:.82rem;}
+          .svc-list-row .svc-list-name{font-size:.85rem;}
+          .svc-list-row--active .svc-list-name{font-size:1.2rem;}
+          .svc-list-row{padding:.8rem 0;}
+          .svc-list-row--active{padding:1rem 0;}
+          .svc-detail-text{font-size:.82rem;}
 
           /* Ticker */
           .sector-ticker{padding:.8rem 0;}
@@ -1133,9 +1089,11 @@ export default function AmbroisePartnersModern() {
           .logo-sep{display:none;}
 
           /* Services */
-          .svc-roll-center{height:200px;}
-          .svc-roll-track{padding-top:70px;}
-          .svc-roll-item{font-size:1rem;height:52px;}
+          .svc-list-row .svc-list-name{font-size:.78rem;}
+          .svc-list-row--active .svc-list-name{font-size:1.05rem;}
+          .svc-list-row{padding:.7rem 0;}
+          .svc-list-row--active{padding:.9rem 0;}
+          .svc-detail-text{font-size:.78rem;}
 
           /* Ticker */
           .sector-ticker-item{font-size:.6rem;padding:0 1rem;}
@@ -1161,8 +1119,8 @@ export default function AmbroisePartnersModern() {
           <div className="nav-links">
             <a href="#services">Services</a>
             <a href="#approach">Approach</a>
-            <a href="#domains">Domains</a>
-            <a href="#method">Method</a>
+            <a href="#domains">Expertise</a>
+            <a href="#method">Process</a>
             <a href="#contact" className="nav-cta">Contact us</a>
           </div>
         </nav>
@@ -1174,7 +1132,7 @@ export default function AmbroisePartnersModern() {
         <div className="hero-inner">
           <h1 className="hero-h1">
             <span className="hero-line hero-line-1" style={{display:'block'}}>Independent strategic and</span>
-            <span className="hero-line hero-line-2" style={{display:'block'}}>financial advisory services dedicated</span>
+            <span className="hero-line hero-line-2" style={{display:'block'}}>financial advisory dedicated</span>
             <span className="hero-line hero-line-3" style={{display:'block'}}><em>to healthcare innovation</em></span>
           </h1>
         </div>
@@ -1188,47 +1146,34 @@ export default function AmbroisePartnersModern() {
       {/* SERVICES */}
       <ServicesSection />
 
-      {/* SECTOR TICKER */}
-      <div className="sector-ticker">
-        <div className="sector-ticker-track">
-          {[...Array(2)].map((_, copy) => (
-            <div key={copy} className="sector-ticker-set" aria-hidden={copy > 0}>
-              {['Oncology','Rare Diseases','Gene Therapy','Cell Therapy','Neuroscience','Immunology','Cardiology','Respiratory','Metabolic Disorders','Infectious Diseases','Ophthalmology','Dermatology','Women\'s Health','Pediatrics','CNS','Microbiome','RNA Therapeutics','Radiopharmaceuticals'].map((s, i) => (
-                <span key={i} className="sector-ticker-item">{s}</span>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* APPROACH */}
-      <div style={{ background: '#f0f4fa', width: '100%' }}>
+      <div style={{ background: '#f3f5fb', width: '100%' }}>
       <section style={{ padding: '5.5rem 2.5vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }} id="approach">
       <div style={{ maxWidth: 1440, margin: '0 auto', width: '100%' }}>
-        <div style={{ marginBottom: '3.5rem', textAlign: 'left' }} className="reveal">
+        <div className="section-head reveal">
           <span className="eyebrow">What sets us apart</span>
           <h2 className="section-title">Our Approach</h2>
-          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.15rem', lineHeight: 1.5 }}>A unique combination of scientific expertise, strategic networks and institutional-grade execution; purpose-built for healthcare companies.</p>
+          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.2rem', lineHeight: 1.5 }}>A unique combination of scientific depth, strategic networks and institutional-grade execution; purpose-built for healthcare companies.</p>
         </div>
         <div className="approach-panels">
           <div className="approach-panel reveal">
             <div className="approach-text">
-              <div className="approach-title">Scientific &amp; technical expertise</div>
-              <p className="approach-desc">Firsthand knowledge of science and technology, backed by advanced medical and scientific academic training. We speak the language of innovation, and the language of markets.</p>
+              <div className="approach-title">Scientific &amp; Technical Expertise</div>
+              <p className="approach-desc">Advanced medical and scientific training enables the rigorous assessment of complex technologies and the crafting of clear, differentiated equity stories that resonate with specialist investors and strategic partners.</p>
             </div>
             <div className="approach-canvas-wrap"><ApproachCanvas type="brain" /></div>
           </div>
           <div className="approach-panel reveal reveal-d1">
             <div className="approach-text">
-              <div className="approach-title">Targeted global network</div>
-              <p className="approach-desc">A curated ecosystem of leading healthcare VCs, global and regional strategic partners, forged through years of active involvement in the sector.</p>
+              <div className="approach-title">Targeted Global Network</div>
+              <p className="approach-desc">A curated global network of leading healthcare-focused investors, pharma and medtech corporates, and strategic acquirers worldwide. Developed through years of active involvement in the sector, it provides direct access to the right counterparties and ensures focused, relevant engagement.</p>
             </div>
             <div className="approach-canvas-wrap"><ApproachCanvas type="network" /></div>
           </div>
           <div className="approach-panel reveal reveal-d2">
             <div className="approach-text">
-              <div className="approach-title">Execution excellence</div>
-              <p className="approach-desc">The rigour and standards of top-tier investment banks, with decades of institutional experience, combined with the flexibility and hands-on dedication that high-growth companies demand.</p>
+              <div className="approach-title">Execution Excellence</div>
+              <p className="approach-desc">The rigour and standards developed over decades within top-tier investment banks, combined with the flexibility and hands-on dedication. Every process is conducted with discipline, discretion and a strong focus on outcomes.</p>
             </div>
             <div className="approach-canvas-wrap"><ApproachCanvas type="curve" /></div>
           </div>
@@ -1239,22 +1184,35 @@ export default function AmbroisePartnersModern() {
 
       <ExpertiseSection />
 
+      {/* SECTOR TICKER */}
+      <div className="sector-ticker">
+        <div className="sector-ticker-track">
+          {[...Array(2)].map((_, copy) => (
+            <div key={copy} className="sector-ticker-set" aria-hidden={copy > 0}>
+              {['Oncology','Rare Diseases','Immunology','Neuroscience','Gene Therapy','Cell Therapy','Biologics','Biosimilars','Specialty Pharma','Generics','Vaccines','Radiopharma','Robotics','Diagnostics','AI Health','Digital Therapeutics','CRO','CDMO','OTC'].map((s, i) => (
+                <span key={i} className="sector-ticker-item">{s}</span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* METHOD */}
-      <div style={{ background: '#f0f4fa', width: '100%' }}>
+      <div style={{ background: '#f3f5fb', width: '100%' }}>
       <section style={{ padding: '5.5rem 2.5vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }} id="method">
       <div style={{ maxWidth: 1440, margin: '0 auto', width: '100%' }}>
         <div className="section-head reveal">
           <span className="eyebrow">Methodology</span>
           <h2 className="section-title">Proven Process</h2>
-          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.3rem', lineHeight: 1.5 }}>A structured, disciplined approach to every engagement, designed to maximise outcomes.</p>
+          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.2rem', lineHeight: 1.5 }}>A structured and disciplined approach applied to every mandate to maximise outcomes while ensuring clarity, efficiency at each stage.</p>
         </div>
         <div className="method-list">
           {[
-            ['01','Strategic Audit',  'In-depth assessment of positioning, technology, pipeline, competitive landscape and transaction objectives.'],
-            ['02','Structuring',      'Development of a compelling investment narrative, robust financial modelling, preparation of investor-ready materials and data room build-up.'],
-            ['03','Targeted Outreach','Identification and confidential engagement of the most relevant counterparties — strategic partners, investors or partners.'],
-            ['04','Process Management','End-to-end coordination of workflows, Q&A, due diligence and advisory management.'],
-            ['05','Closing & Execution','Negotiation of final terms, resolution of closing conditions and securing of the signature.'],
+            ['01','Strategic Assessment',  'In-depth analysis of positioning, technology, pipeline, competitive landscape and transaction objectives to identify key value drivers and determine the optimal transaction approach.'],
+            ['02','Deal Preparation',      'Development of a compelling equity story, detailed business plan and comprehensive financial analyses, together with the preparation of high-quality marketing materials and a fully organised data room.'],
+            ['03','Targeted Outreach','Identification and confidential engagement of the most relevant strategic acquirers, financial investors or strategic partners.'],
+            ['04','Process Management','End-to-end coordination of due diligence, Q&A sessions and advisor interactions to maintain alignment and execution momentum.'],
+            ['05','Closing','Negotiation of final terms and coordination of closing mechanisms through to signature and completion.'],
           ].map(([num,title,copy])=>(
             <div className="method-step reveal" key={num}>
               <div className="step-num">{num}</div>
@@ -1272,7 +1230,7 @@ export default function AmbroisePartnersModern() {
           <div className="reveal">
             <span className="eyebrow">Get in touch</span>
             <h2 className="section-title">Let&apos;s discuss your project</h2>
-            <p className="section-lede" style={{margin:'1rem auto 0',textAlign:'center',maxWidth:'100%',fontSize:'1.35rem'}}>
+            <p className="section-lede" style={{margin:'1rem auto 0',textAlign:'center',maxWidth:'100%',fontSize:'1.2rem',lineHeight:1.5}}>
               Reach out to explore how we can help you achieve your strategic objectives.
             </p>
           </div>
@@ -1311,17 +1269,17 @@ export default function AmbroisePartnersModern() {
               <div className="footer-col">
                 <div className="footer-col-title">Services</div>
                 <a href="#services">M&amp;A</a>
-                <a href="#services">Fundraising</a>
-                <a href="#services">Licensing</a>
-                <a href="#services">Strategic Advisory</a>
-                <a href="#services">Capital Raising</a>
+                <a href="#services">Private Capital Raising</a>
+                <a href="#services">Partnerships &amp; Licensing</a>
+                <a href="#services">Corporate Advisory</a>
+                <a href="#services">Public Capital Markets</a>
               </div>
               <div className="footer-col">
                 <div className="footer-col-title">Company</div>
                 <a href="#services">Services</a>
                 <a href="#approach">Approach</a>
-                <a href="#domains">Domains</a>
-                <a href="#method">Method</a>
+                <a href="#domains">Expertise</a>
+                <a href="#method">Process</a>
                 <a href="#contact">Contact</a>
               </div>
               <div className="footer-col">
