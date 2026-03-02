@@ -175,9 +175,9 @@ const DOMAINS = [
   { id:1, name:'Biotechnology',   image:'/images/biotech.jpg',    color:'#e8e4f0', desc:'Novel therapeutic modalities, including biologics, gene and cell therapies, RNA-based treatments and advanced scientific platforms.' },
   { id:2, name:'Pharmaceuticals', image:'/images/pharma.jpg',     color:'#e4e8f0', desc:'Branded, specialty and generic medicines across development and commercial portfolios.' },
   { id:3, name:'Medical Devices', image:'/images/meddevice.jpg',  color:'#e4f0e8', desc:'Medical technologies, including robotic systems, clinical equipment, diagnostic devices and implantable solutions.' },
-  { id:4, name:'Digital Health',  image:'/images/digital.jpg',    color:'#e4e8ff', desc:'Software, artificial intelligence and data-driven healthcare platforms.' },
+  { id:4, name:'Digital Health',  image:'/images/meddevice2.jpg',    color:'#e4e8ff', desc:'Software, artificial intelligence and data-driven healthcare platforms.' },
   { id:5, name:'Healthcare Services',   image:'/images/healthcare.jpg',  color:'#f0e4ea', desc:'Provider networks, CROs, CDMOs and integrated healthcare service platforms.' },
-  { id:6, name:'Consumer Health', image:'/images/wellness.jpg', color:'#f0ece4', desc:'Over-the-counter medicines, dietary supplements and other consumer health products.' },
+  { id:6, name:'Consumer Health', image:'/images/minimalistic-science-banner-with-sample.jpg', color:'#f0ece4', desc:'Over-the-counter medicines, dietary supplements and other consumer health products.' },
 ];
 
 function ExpertiseSection() {
@@ -185,7 +185,7 @@ function ExpertiseSection() {
     <section id="domains" style={{ background: '#ffffff', padding: '5.5rem 2.5vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }}>
       <div style={{ maxWidth: 1440, margin: '0 auto', width: '100%' }}>
         <div className="section-head reveal">
-          <span className="eyebrow">Areas of expertise</span>
+          <span className="eyebrow">What we cover</span>
           <h2 className="section-title">Our Areas of Expertise</h2>
           <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.2rem', lineHeight: 1.5 }}>Dedicated expertise across the healthcare ecosystem, from early-stage scientific platforms to scaled commercial organisations.</p>
         </div>
@@ -360,7 +360,7 @@ function ExpertiseSectionAlt() {
     <section className="domains-alt-section" id="domains-alt">
       <div style={{ maxWidth: 1440, margin: '0 auto' }}>
         <div style={{ marginBottom: '1rem', textAlign: 'center' }} className="reveal">
-          <span className="eyebrow">Areas of expertise</span>
+          <span className="eyebrow">What we cover</span>
           <h2 className="section-title">Our Spheres of Competence</h2>
           <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.3rem', lineHeight: 1.5, margin: '0 auto' }}>Our advisory spans the full spectrum of healthcare innovation.</p>
         </div>
@@ -834,7 +834,7 @@ export default function AmbroisePartnersModern() {
         .approach-panel{display:grid;grid-template-columns:1fr 1fr;background:#f3f5fb;}
         .approach-text{padding:1.5rem 2rem 1.5rem 0;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--line);}
         .approach-num{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--blue);margin-bottom:1rem;display:block;}
-        .approach-title{font-family:var(--serif);font-weight:500;font-size:clamp(1.5rem,2vw,1.6rem);letter-spacing:-.01em;margin-bottom:.4rem;line-height:1.1;}
+        .approach-title{font-family:var(--serif);font-weight:500;font-size:clamp(1.5rem,2vw,1.6rem);letter-spacing:-.01em;margin-bottom:1rem;line-height:1.1;}
         .approach-desc{color:var(--muted);font-size:1.05rem;line-height:1.65;font-weight:300;}
         .approach-canvas-wrap{background:#f3f5fb;height:260px;display:flex;align-items:center;justify-content:center;padding:1rem;overflow:hidden;}
 
@@ -919,19 +919,18 @@ export default function AmbroisePartnersModern() {
         .footer-copy{font-size:.65rem;color:rgba(255,255,255,.22);letter-spacing:.04em;}
 
         /* ── DOMAINS GRID ── */
-        .domains-grid{display:flex;gap:10px;}
-        .domain-card{position:relative;border-radius:14px;overflow:hidden;flex:1;aspect-ratio:1/1;cursor:pointer;transition:flex .5s cubic-bezier(0.22,0.61,0.36,1);}
-        .domains-grid:hover .domain-card{flex:0.85;}
-        .domains-grid:hover .domain-card:hover{flex:2;}
+        .domains-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+        .domain-card{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:1/1;cursor:pointer;transition:transform .4s var(--ease),box-shadow .4s ease;}
+        .domain-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.15);}
         .domain-img{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .55s cubic-bezier(0.16,1,0.3,1);}
         .domain-card:hover .domain-img{transform:none;}
         .domain-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.05) 50%,transparent 100%);transition:background .35s ease;}
         .domain-card:hover .domain-overlay{background:linear-gradient(to top,rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.1) 60%,transparent 100%);}
-        .domain-label{position:absolute;bottom:0;left:0;right:0;padding:1.2rem 1rem;}
+        .domain-label{position:absolute;bottom:0;left:0;right:0;padding:1.8rem 1.5rem;}
         .domain-num{display:none;}
-        .domain-name{font-family:var(--serif);font-weight:500;font-size:1rem;line-height:1.2;letter-spacing:-0.01em;color:#fff;margin:0;text-shadow:0 1px 10px rgba(0,0,0,0.4);}
-        .domain-desc{font-family:var(--sans);font-size:.78rem;line-height:1.55;color:rgba(255,255,255,.9);font-weight:300;margin:0;max-height:0;opacity:0;overflow:hidden;transition:max-height .4s var(--ease),opacity .3s ease,margin .3s var(--ease);}
-        .domain-card:hover .domain-desc{max-height:120px;opacity:1;margin-top:.5rem;}
+        .domain-name{font-family:var(--serif);font-weight:500;font-size:1.5rem;line-height:1.2;letter-spacing:-0.01em;color:#fff;margin:0;text-shadow:0 1px 10px rgba(0,0,0,0.4);}
+        .domain-desc{font-family:var(--sans);font-size:.95rem;line-height:1.6;color:rgba(255,255,255,.92);font-weight:300;margin:0;max-height:0;opacity:0;overflow:hidden;transition:max-height .4s var(--ease),opacity .3s ease,margin .3s var(--ease);}
+        .domain-card:hover .domain-desc{max-height:150px;opacity:1;margin-top:.6rem;}
 
         /* ── DOMAINS CAROUSEL (v2) ── */
         .domains-alt-section{background:#fff;padding:5.5rem 2.5vw;overflow:hidden;}
@@ -979,8 +978,8 @@ export default function AmbroisePartnersModern() {
           .svc-list-row .svc-list-name{font-size:clamp(.9rem,1.2vw,1rem);}
           .svc-list-row--active .svc-list-name{font-size:clamp(1.3rem,2.2vw,2rem);}
           .svc-detail-text{font-size:1rem;}
-          .domains-grid{flex-wrap:wrap;gap:10px;}
-          .domain-card{flex:1;aspect-ratio:1/1;height:auto;}
+          .domains-grid{grid-template-columns:repeat(3,1fr);gap:10px;}
+          .domain-card{aspect-ratio:1/1;}
           .dalt-carousel{height:400px;}
           .domains-alt-section{padding:5rem 2.5vw;}
         }
@@ -1024,10 +1023,11 @@ export default function AmbroisePartnersModern() {
           .approach-canvas-wrap{min-height:180px;padding:1.5rem;}
 
           /* Domains */
-          .domains-grid{flex-wrap:wrap;gap:8px;}
-          .domain-card{flex:1 1 calc(50% - 8px)!important;max-width:calc(50% - 4px);aspect-ratio:1/1;height:auto;border-radius:10px;}
-          .domain-label{padding:1rem .8rem;}
-          .domain-name{font-size:.9rem;}
+          .domains-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
+          .domain-card{aspect-ratio:1/1;border-radius:14px;}
+          .domain-label{padding:1.2rem 1rem;}
+          .domain-name{font-size:1.15rem;}
+          .domain-desc{font-size:.82rem;}
 
           /* Domains carousel */
           .domains-alt-section{padding:4rem 2.5vw;}
@@ -1202,9 +1202,9 @@ export default function AmbroisePartnersModern() {
       <section style={{ padding: '5.5rem 2.5vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }} id="method">
       <div style={{ maxWidth: 1440, margin: '0 auto', width: '100%' }}>
         <div className="section-head reveal">
-          <span className="eyebrow">Methodology</span>
-          <h2 className="section-title">Proven Process</h2>
-          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.2rem', lineHeight: 1.5 }}>A structured and disciplined approach applied to every mandate to maximise outcomes while ensuring clarity, efficiency at each stage.</p>
+          <span className="eyebrow">What drives results</span>
+          <h2 className="section-title">Our Proven Process</h2>
+          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1.2rem', lineHeight: 1.5 }}>A structured and disciplined approach applied to every mandate, designed to maximise outcomes while ensuring clarity, alignment, and efficiency at every stage.</p>
         </div>
         <div className="method-list">
           {[
