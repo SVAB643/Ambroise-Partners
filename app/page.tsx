@@ -952,9 +952,9 @@ export default function AmbroisePartnersModern() {
         .domain-label{position:absolute;bottom:0;left:0;right:0;padding:.9rem 1rem;transition:padding .5s var(--ease);}
         .domain-card--active .domain-label{padding:1.4rem 1.6rem;}
         .domain-num{display:none;}
-        .domain-name{font-family:var(--serif);font-weight:500;font-size:1.4rem;line-height:1.2;letter-spacing:-0.01em;color:#fff;margin:0;text-shadow:0 1px 10px rgba(0,0,0,0.4);white-space:nowrap;transition:font-size .5s var(--ease);}
-        .domain-card--shrunk .domain-name{font-size:.85rem;}
-        .domain-card--active .domain-name{font-size:1.8rem;}
+        .domain-name{font-family:var(--serif);font-weight:500;font-size:1.15rem;line-height:1.2;letter-spacing:-0.01em;color:#fff;margin:0;text-shadow:0 1px 10px rgba(0,0,0,0.4);white-space:nowrap;transition:font-size .5s var(--ease);}
+        .domain-card--shrunk .domain-name{font-size:.8rem;}
+        .domain-card--active .domain-name{font-size:1.5rem;}
         .domain-desc{font-family:var(--sans);font-size:0rem;line-height:1.5;color:rgba(255,255,255,.92);font-weight:300;margin:0;max-height:0;opacity:0;overflow:hidden;transition:max-height .5s var(--ease),opacity .4s ease,margin .4s var(--ease),font-size .5s var(--ease);}
         .domain-card--active .domain-desc{max-height:200px;opacity:1;margin-top:.6rem;font-size:.95rem;}
 
