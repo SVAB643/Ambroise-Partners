@@ -238,7 +238,7 @@ function ServicesSection() {
   }, []);
 
   return (
-    <section id="services" style={{ background: 'var(--white)', padding: '5rem 2.5vw' }}>
+    <section id="services" style={{ background: 'var(--white)', padding: '2rem 2.5vw 2rem', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto', width: '100%' }}>
         {/* Header */}
         <div className="section-head reveal">
@@ -267,19 +267,16 @@ function ServicesSection() {
         <div
           key={SERVICES[active].id}
           className="svc-panel-anim"
-          style={{ padding: '48px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 80, flexWrap: 'wrap' as const }}
+          style={{ padding: '64px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 80, flexWrap: 'wrap' as const }}
           onMouseEnter={() => pausedRef.current = true}
           onMouseLeave={() => pausedRef.current = false}
         >
-          <div style={{ flex: 1, maxWidth: 560, minWidth: 280 }}>
-            <span style={{ fontFamily: 'var(--serif)', fontSize: 56, fontWeight: 400, color: 'rgba(42,92,184,0.08)', lineHeight: 1, display: 'block', marginBottom: 16 }}>
-              {String(active + 1).padStart(2, '0')}
-            </span>
-            <p style={{ fontSize: 16, lineHeight: 1.7, color: 'var(--muted)', margin: 0 }}>
+          <div style={{ flex: 1, maxWidth: 640, minWidth: 280 }}>
+            <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--muted)', margin: 0 }}>
               {SERVICES[active].description}
             </p>
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 8, justifyContent: 'flex-end', maxWidth: 280, paddingTop: 48 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 10, justifyContent: 'flex-end', maxWidth: 320, paddingTop: 8 }}>
             {SERVICES[active].tags.map((tag, i) => (
               <span key={tag} className="svc-tag" style={{ animationDelay: `${0.06 * i}s` }}>{tag}</span>
             ))}
@@ -847,9 +844,9 @@ export default function AmbroisePartnersModern() {
         /* ── SECTIONS ── */
         .section{max-width:1200px;margin:0 auto;padding:7rem 2.5vw;color:var(--ink);}
         .section-bg{background:var(--white);}
-        .eyebrow{display:block;font-family:var(--sans);font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem;}
-        .section-title{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,3.5vw,3.2rem);line-height:1.1;letter-spacing:-.02em;margin-bottom:.5rem;}
-        .section-lede{font-family:var(--sans);color:var(--muted);font-size:1rem;max-width:65ch;font-weight:300;line-height:1.65;letter-spacing:-.01em;}
+        .eyebrow{display:block;font-family:var(--sans);font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem;}
+        .section-title{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,3.5vw,3.2rem);line-height:1.1;letter-spacing:-.02em;margin-bottom:.3rem;}
+        .section-lede{font-family:var(--sans);color:var(--muted);font-size:1rem;max-width:100%;font-weight:300;line-height:1.65;letter-spacing:-.01em;}
         .section-head{margin-bottom:2.5rem;}
 
         /* ── APPROACH ── */
@@ -872,7 +869,7 @@ export default function AmbroisePartnersModern() {
         /* ── METHOD ── */
         .method-list{border-top:1px solid var(--line);}
         .method-step{display:grid;grid-template-columns:80px 1fr;align-items:center;gap:1.2rem;padding:1rem 0;border-bottom:1px solid var(--line);}
-        .step-num{font-family:var(--serif);font-style:normal;font-size:2.8rem;color:var(--line);font-weight:400;letter-spacing:-.02em;}
+        .step-num{font-family:var(--serif);font-style:normal;font-size:2.8rem;color:rgba(0,0,0,.15);font-weight:400;letter-spacing:-.02em;}
         .step-body h4{font-family:var(--serif);font-weight:400;font-size:1.4rem;letter-spacing:-.01em;margin-bottom:.3rem;}
         .step-body p{color:var(--muted);font-size:.95rem;line-height:1.65;font-weight:300;}
 
@@ -901,15 +898,15 @@ export default function AmbroisePartnersModern() {
         .submit-btn:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-2px);box-shadow:0 10px 28px rgba(42,92,184,.2);}
 
         /* ── SERVICES TABS ── */
-        .svc-tabs{display:flex;gap:40px;border-bottom:1px solid var(--line);justify-content:center;overflow-x:auto;-webkit-overflow-scrolling:touch;}
-        .svc-tab{cursor:pointer;position:relative;padding:0 0 20px 0;background:none;border:none;outline:none;white-space:nowrap;font-family:var(--serif);font-size:1.4rem;font-weight:400;color:var(--muted);letter-spacing:-.01em;transition:color .35s ease;}
-        .svc-tab::after{content:'';position:absolute;bottom:-1.5px;left:0;width:100%;height:2px;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(0.25,0.1,0.25,1);}
+        .svc-tabs{display:flex;border-bottom:1px solid var(--line);justify-content:space-between;overflow:hidden;}
+        .svc-tab{cursor:pointer;position:relative;padding:0 0 20px 0;background:none;border:none;outline:none;-webkit-appearance:none;appearance:none;white-space:nowrap;font-family:var(--serif);font-size:1.4rem;font-weight:400;color:var(--muted);letter-spacing:-.01em;transition:color .35s ease;}
+        .svc-tab::after{content:'';position:absolute;bottom:-1.5px;left:0;width:100%;height:2px;background:var(--ink);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(0.25,0.1,0.25,1);}
         .svc-tab:hover{color:var(--ink);}
         .svc-tab:hover::after{transform:scaleX(1);}
-        .svc-tab--active{color:var(--blue);}
+        .svc-tab--active{color:var(--ink);}
         .svc-tab--active::after{transform:scaleX(1);}
-        .svc-tag{padding:6px 15px;border-radius:100px;font-size:.75rem;font-weight:500;letter-spacing:.02em;border:1px solid var(--line);color:var(--muted);background:transparent;transition:all .3s ease;font-family:var(--sans);animation:svcFadeUp .35s cubic-bezier(0.25,0.1,0.25,1) both;}
-        .svc-tag:hover{border-color:var(--blue);color:var(--blue);}
+        .svc-tag{padding:8px 18px;border-radius:100px;font-size:.85rem;font-weight:500;letter-spacing:.02em;border:none;color:#fff;background:var(--ink);transition:all .3s ease;font-family:var(--sans);animation:svcFadeUp .35s cubic-bezier(0.25,0.1,0.25,1) both;}
+        .svc-tag:hover{background:var(--blue);}
         .svc-panel-anim{animation:svcFadeUp .4s cubic-bezier(0.25,0.1,0.25,1) forwards;}
         @keyframes svcFadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 
@@ -1244,7 +1241,7 @@ export default function AmbroisePartnersModern() {
       </div>
 
       {/* CONTACT */}
-      <div style={{background:'var(--white)',borderTop:'1px solid var(--line)'}} id="contact">
+      <div style={{background:'var(--white)'}} id="contact">
         <div className="contact-wrap">
           <div className="reveal">
             <span className="eyebrow">Get in touch</span>
