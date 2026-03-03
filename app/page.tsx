@@ -26,12 +26,12 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
 
     /* ── brain ── */
     const nodes: { x: number; y: number; vx: number; vy: number; r: number }[] = [];
-    const N = 55;
+    const N = 35;
     const initBrain = () => {
       nodes.length = 0;
       for (let i = 0; i < N; i++)
         nodes.push({ x: Math.random()*W, y: Math.random()*H,
-          vx:(Math.random()-.5)*.6, vy:(Math.random()-.5)*.6, r:Math.random()*2+1.2 });
+          vx:(Math.random()-.5)*.6, vy:(Math.random()-.5)*.6, r:Math.random()*2.2+1.2 });
     };
     const drawBrain = () => {
       ctx.clearRect(0,0,W,H);
@@ -47,25 +47,25 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
           ctx.beginPath();
           ctx.moveTo(nodes[i].x,nodes[i].y);
           ctx.lineTo(nodes[j].x,nodes[j].y);
-          ctx.strokeStyle=`rgba(27,67,50,${0.18*(1-d/110)})`;
+          ctx.strokeStyle=`rgba(42,92,184,${0.18*(1-d/110)})`;
           ctx.lineWidth=0.8;
           ctx.stroke();
         }
       }
       nodes.forEach(n => {
         ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
-        ctx.fillStyle='rgba(27,67,50,0.55)'; ctx.fill();
+        ctx.fillStyle='rgba(42,92,184,0.55)'; ctx.fill();
       });
       raf = requestAnimationFrame(drawBrain);
     };
 
     /* ── network ── */
     const hubs = [
-      { x:.5, y:.5, r:6 },
-      { x:.18, y:.28, r:3.5 }, { x:.82, y:.28, r:3.5 },
-      { x:.18, y:.72, r:3.5 }, { x:.82, y:.72, r:3.5 },
-      { x:.5,  y:.12, r:2.8 }, { x:.5,  y:.88, r:2.8 },
-      { x:.12, y:.5,  r:2.8 }, { x:.88, y:.5,  r:2.8 },
+      { x:.5, y:.5, r:5 },
+      { x:.2, y:.25, r:2.8 }, { x:.8, y:.25, r:2.8 },
+      { x:.2, y:.75, r:2.8 }, { x:.8, y:.75, r:2.8 },
+      { x:.5,  y:.15, r:2.2 }, { x:.5,  y:.85, r:2.2 },
+      { x:.15, y:.5,  r:2.2 }, { x:.85, y:.5,  r:2.2 },
     ];
     let nt = 0;
     const drawNetwork = () => {
@@ -73,22 +73,22 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
       nt += 0.018;
       const cx = hubs[0].x*W, cy = hubs[0].y*H;
       const grad = ctx.createRadialGradient(cx,cy,0,cx,cy,W*.28);
-      grad.addColorStop(0,'rgba(27,67,50,0.12)');
-      grad.addColorStop(1,'rgba(27,67,50,0)');
+      grad.addColorStop(0,'rgba(42,92,184,0.12)');
+      grad.addColorStop(1,'rgba(42,92,184,0)');
       ctx.fillStyle=grad; ctx.beginPath(); ctx.arc(cx,cy,W*.28,0,Math.PI*2); ctx.fill();
       hubs.slice(1).forEach((h,i) => {
         const hx=h.x*W, hy=h.y*H;
         ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(hx,hy);
-        ctx.strokeStyle=`rgba(27,67,50,${0.18+0.08*Math.sin(nt+i)})`; ctx.lineWidth=1; ctx.stroke();
+        ctx.strokeStyle=`rgba(42,92,184,${0.18+0.08*Math.sin(nt+i)})`; ctx.lineWidth=1; ctx.stroke();
         const p = (Math.sin(nt*0.8+i*1.1)+1)/2;
         const px2 = cx+(hx-cx)*p, py2 = cy+(hy-cy)*p;
-        ctx.beginPath(); ctx.arc(px2,py2,2,0,Math.PI*2);
-        ctx.fillStyle='rgba(27,67,50,0.7)'; ctx.fill();
+        ctx.beginPath(); ctx.arc(px2,py2,2.2,0,Math.PI*2);
+        ctx.fillStyle='rgba(42,92,184,0.7)'; ctx.fill();
         ctx.beginPath(); ctx.arc(hx,hy,h.r,0,Math.PI*2);
-        ctx.fillStyle=`rgba(27,67,50,${0.45+0.15*Math.sin(nt+i)})`; ctx.fill();
+        ctx.fillStyle=`rgba(42,92,184,${0.45+0.15*Math.sin(nt+i)})`; ctx.fill();
       });
       ctx.beginPath(); ctx.arc(cx,cy,hubs[0].r*(1+.12*Math.sin(nt)),0,Math.PI*2);
-      ctx.fillStyle='rgba(27,67,50,0.8)'; ctx.fill();
+      ctx.fillStyle='rgba(42,92,184,0.8)'; ctx.fill();
       raf = requestAnimationFrame(drawNetwork);
     };
 
@@ -98,12 +98,12 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
       ctx.clearRect(0,0,W,H);
       ct += 0.015;
       const pts = 80;
-      const pad = { x: W*.1, y: H*.15 };
+      const pad = { x: W*.08, y: H*.1 };
       const iW = W-pad.x*2, iH = H-pad.y*2;
       for (let i=0;i<=4;i++) {
         const y = pad.y + iH*(1-i/4);
         ctx.beginPath(); ctx.moveTo(pad.x,y); ctx.lineTo(pad.x+iW,y);
-        ctx.strokeStyle='rgba(27,67,50,0.07)'; ctx.lineWidth=1; ctx.stroke();
+        ctx.strokeStyle='rgba(42,92,184,0.07)'; ctx.lineWidth=1; ctx.stroke();
       }
       ctx.beginPath();
       ctx.moveTo(pad.x, pad.y+iH);
@@ -117,8 +117,8 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
       ctx.lineTo(pad.x+iW, pad.y+iH);
       ctx.closePath();
       const fill = ctx.createLinearGradient(0,pad.y,0,pad.y+iH);
-      fill.addColorStop(0,'rgba(27,67,50,0.14)');
-      fill.addColorStop(1,'rgba(27,67,50,0.01)');
+      fill.addColorStop(0,'rgba(42,92,184,0.14)');
+      fill.addColorStop(1,'rgba(42,92,184,0.01)');
       ctx.fillStyle=fill; ctx.fill();
       ctx.beginPath();
       for (let i=0;i<=pts;i++) {
@@ -128,12 +128,12 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
         const y = pad.y + iH*(1-Math.min(fy,1));
         i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
       }
-      ctx.strokeStyle='rgba(27,67,50,0.75)'; ctx.lineWidth=2.2;
+      ctx.strokeStyle='rgba(42,92,184,0.75)'; ctx.lineWidth=2.2;
       ctx.lineJoin='round'; ctx.stroke();
       const lastFy = Math.pow(1,1.6)+Math.sin(Math.PI*2+ct)*0.15*.5;
       const dotY = pad.y+iH*(1-Math.min(lastFy,1));
       ctx.beginPath(); ctx.arc(pad.x+iW, dotY, 4.5, 0, Math.PI*2);
-      ctx.fillStyle='rgba(27,67,50,0.9)'; ctx.fill();
+      ctx.fillStyle='rgba(42,92,184,0.9)'; ctx.fill();
       raf = requestAnimationFrame(drawCurve);
     };
 
@@ -166,7 +166,7 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
     };
   }, [type]);
 
-  return <canvas ref={ref} style={{ width:'100%', height:'100%', display:'block' }} />;
+  return <canvas ref={ref} style={{ position:'absolute', inset:0, width:'100%', height:'100%', display:'block' }} />;
 }
 
 
@@ -208,64 +208,76 @@ function ExpertiseSection() {
 
 /* ─── Services Section ─── */
 const SERVICES = [
-  { main: 'M&A', desc: 'Sell-side, buy-side and transaction advisory across the global healthcare ecosystem.\nWe design and manage disciplined processes focused on value maximisation and execution certainty.' },
-  { main: 'Private Capital Raising', desc: 'Growth capital advisory from Pre-Seed to Series B.\nWe connect founders with leading healthcare-focused investors aligned with their stage, strategy and ambition.' },
-  { main: 'Partnerships & Licensing', desc: 'Advisory services designed to unlock long-term value alongside global and regional healthcare leaders.\nWe structure and negotiate agreements ranging from co-development partnerships to commercial out-licensing.' },
-  { main: 'Corporate Advisory', desc: 'Independent counsel on portfolio positioning, corporate direction and long-term value creation.\nWe support management teams and boards navigating critical inflection points.' },
-  { main: 'Public Capital Markets', desc: 'Advisory services across IPOs, follow-on offerings, private placements and convertible instruments.\nWe support companies in accessing public markets with clarity, preparation and confidence.' },
+  { id: 'ma', title: 'M&A', description: 'Sell-side, buy-side and transaction advisory across the global healthcare ecosystem. We design and manage disciplined processes focused on value maximisation and execution certainty.', tags: ['Sell-side', 'Buy-side', 'Carve-outs', 'Cross-border'] },
+  { id: 'capital', title: 'Private Capital Raising', description: 'Access to a curated network of specialist healthcare investors — venture capital, growth equity and private equity — to secure the right capital at the right valuation.', tags: ['Series A–D', 'Growth Equity', 'Private Equity', 'Venture'] },
+  { id: 'licensing', title: 'Partnerships & Licensing', description: 'Identification, negotiation and structuring of licensing agreements, co-development partnerships and commercial collaborations with pharma and medtech corporates.', tags: ['Licensing', 'Co-development', 'Commercialisation', 'JVs'] },
+  { id: 'advisory', title: 'Corporate Advisory', description: 'Independent strategic advice on corporate positioning, portfolio strategy, capital structure and value creation, tailored to each stage of a company\'s lifecycle.', tags: ['Strategy', 'Valuation', 'Governance', 'Restructuring'] },
+  { id: 'public', title: 'Public Capital Markets', description: 'Advisory support for IPO readiness, secondary offerings, investor relations strategy and public market positioning for healthcare companies seeking or maintaining a listing.', tags: ['IPO', 'Follow-on', 'IR Strategy', 'Dual-track'] },
 ];
 
-
 function ServicesSection() {
-  const CYCLE = 3200;
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const [active, setActive] = useState<number>(0);
+  const pausedRef = useRef(false);
 
   useEffect(() => {
-    if (paused) return;
     const interval = setInterval(() => {
-      setActiveIndex(prev => (prev + 1) % SERVICES.length);
-    }, CYCLE);
+      if (!pausedRef.current) {
+        setActive(prev => (prev + 1) % SERVICES.length);
+      }
+    }, 4000);
     return () => clearInterval(interval);
-  }, [paused]);
+  }, []);
 
   return (
-    <section id="services" style={{ background: 'var(--white)', padding: '5rem 2.5vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }}>
+    <section id="services" style={{ background: 'var(--white)', padding: '5rem 2.5vw' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto', width: '100%' }}>
-        <div className="section-head reveal">
-          <span className="eyebrow">What we do</span>
-          <h2 className="section-title">Our Services</h2>
-          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1rem', lineHeight: 1.65 }}>We partner with healthcare companies at every stage of their journey, delivering tailored strategic, transactional and capital advisory.</p>
+        {/* Header */}
+        <div className="reveal" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 64, flexWrap: 'wrap' as const, gap: '1.5rem' }}>
+          <div>
+            <span className="eyebrow">What we do</span>
+            <h2 className="section-title" style={{ margin: 0 }}>Our Services</h2>
+          </div>
+          <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.6, maxWidth: 340, margin: 0, textAlign: 'right' as const }}>
+            We partner with healthcare companies at every stage, delivering tailored strategic and transactional advisory.
+          </p>
         </div>
 
-        <div className="svc-layout reveal"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
+        {/* Tab line */}
+        <div className="reveal" style={{ display: 'flex', gap: 40, borderBottom: '1px solid var(--line)', justifyContent: 'center' }}
+          onMouseEnter={() => pausedRef.current = true}
+          onMouseLeave={() => pausedRef.current = false}
         >
-          <div className="svc-list">
-            {SERVICES.map((s, i) => {
-              const isActive = i === activeIndex;
-              return (
-                <div
-                  key={s.main}
-                  className={`svc-list-row${isActive ? ' svc-list-row--active' : ''}`}
-                  onMouseEnter={() => { setPaused(true); setActiveIndex(i); }}
-                >
-                  <span className="svc-list-name">{s.main}</span>
-                </div>
-              );
-            })}
+          {SERVICES.map((s, i) => (
+            <button
+              key={s.id}
+              className={`svc-tab${active === i ? ' svc-tab--active' : ''}`}
+              onClick={() => { pausedRef.current = true; setActive(i); }}
+            >
+              {s.title}
+            </button>
+          ))}
+        </div>
+
+        {/* Panel */}
+        <div
+          key={SERVICES[active].id}
+          className="svc-panel-anim"
+          style={{ padding: '48px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 80, flexWrap: 'wrap' as const }}
+          onMouseEnter={() => pausedRef.current = true}
+          onMouseLeave={() => pausedRef.current = false}
+        >
+          <div style={{ flex: 1, maxWidth: 560, minWidth: 280 }}>
+            <span style={{ fontFamily: 'var(--serif)', fontSize: 56, fontWeight: 400, color: 'rgba(42,92,184,0.08)', lineHeight: 1, display: 'block', marginBottom: 16 }}>
+              {String(active + 1).padStart(2, '0')}
+            </span>
+            <p style={{ fontSize: 16, lineHeight: 1.7, color: 'var(--muted)', margin: 0 }}>
+              {SERVICES[active].description}
+            </p>
           </div>
-          <div className="svc-detail">
-            <div className="svc-detail-card">
-              <span className="svc-detail-number">{String(activeIndex + 1).padStart(2, '0')}<span className="svc-detail-number-total"> / {String(SERVICES.length).padStart(2, '0')}</span></span>
-              {SERVICES[activeIndex].desc.split('\n').map((line, j, arr) => (
-                <div key={j}>
-                  <p className="svc-detail-text">{line}</p>
-                  {j < arr.length - 1 && <div className="svc-detail-divider" />}
-                </div>
-              ))}
-            </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 8, justifyContent: 'flex-end', maxWidth: 280, paddingTop: 48 }}>
+            {SERVICES[active].tags.map((tag, i) => (
+              <span key={tag} className="svc-tag" style={{ animationDelay: `${0.06 * i}s` }}>{tag}</span>
+            ))}
           </div>
         </div>
       </div>
@@ -689,18 +701,18 @@ export default function AmbroisePartnersModern() {
   return (
     <>
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
 
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 
         :root {
-          --white:  #FAFAF8;
+          --white:  #ffffff;
           --ink:    #1A1A1A;
-          --blue:   #1B4332;
+          --blue:   #2a5cb8;
           --muted:  #6B6B6B;
           --line:   #E5E5E3;
           --dark:   #0D0D0D;
-          --accent-bg: #EFF6F2;
+          --accent-bg: #F6FBFF;
           --sans:   'DM Sans',-apple-system,sans-serif;
           --serif:  'EB Garamond',Georgia,serif;
           --ease:   cubic-bezier(0.22,0.61,0.36,1);
@@ -719,7 +731,7 @@ export default function AmbroisePartnersModern() {
           transition:background .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
         }
         .logo-wrap{display:flex;align-items:center;gap:.7rem;}
-        .logo-ap{font-family:var(--serif);font-weight:500;font-size:1.55rem;letter-spacing:-.01em;color:#fff;transition:color .35s;}
+        .logo-ap{font-family:'Lora',Georgia,serif;font-weight:500;font-size:1.55rem;letter-spacing:-.01em;color:#fff;transition:color .35s;}
         .logo-sep{width:1px;height:16px;background:rgba(255,255,255,0.25);transition:background .35s;}
         .logo-name{font-size:1.05rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#fff;transition:color .35s;}
         .nav-links{display:flex;gap:1.2rem;align-items:center;}
@@ -728,20 +740,20 @@ export default function AmbroisePartnersModern() {
         .nav-cta{
           margin-left:.5rem;
           background:#fff!important;color:var(--ink)!important;
-          padding:.65rem 1.7rem!important;border-radius:4px;
+          padding:.65rem 1.7rem!important;border-radius:9999px;
           display:inline-flex;align-items:center;justify-content:center;
           font-size:.85rem!important;font-weight:600!important;
-          border:1px solid #fff;
-          transition:all .3s ease!important;
+          border:1.5px solid #fff;
+          transition:background .22s!important,color .22s!important,box-shadow .22s!important,border-color .18s var(--ease),border-radius .18s var(--ease);
         }
-        .nav-cta:hover{background:#fff!important;color:var(--ink)!important;border-color:#fff;border-radius:4px;}
+        .nav-cta:hover{background:#fff!important;color:var(--ink)!important;border-color:#fff;border-radius:9999px;}
         .nav-scrolled nav{background:#fff;border-bottom:1px solid var(--line);box-shadow:0 1px 12px rgba(0,0,0,0.06);}
         .nav-scrolled .logo-ap{color:var(--ink);}
         .nav-scrolled .logo-sep{background:var(--line);}
         .nav-scrolled .logo-name{color:var(--muted);}
         .nav-scrolled .nav-links a{color:var(--muted);}
         .nav-scrolled .nav-links a:hover{color:var(--ink);}
-        .nav-scrolled .nav-cta{background:var(--ink)!important;color:#fff!important;border-radius:4px;border-color:var(--ink);}
+        .nav-scrolled .nav-cta{background:var(--ink)!important;color:#fff!important;border-radius:9999px;border-color:var(--ink);}
         .nav-scrolled .nav-cta:hover{background:var(--blue)!important;border-color:var(--blue);}
 
         /* ── HERO ── */
@@ -795,14 +807,14 @@ export default function AmbroisePartnersModern() {
           text-align:center;
         }
         .hero-h1{
-          font-family:var(--serif);font-weight:500;
+          font-family:'Lora',Georgia,serif;font-weight:500;
           font-size:clamp(2.8rem,4.8vw,4.6rem);
           line-height:1.06;letter-spacing:-.015em;margin-bottom:1.4rem;
           max-width:100%;margin-left:auto;margin-right:auto;
           opacity:0;animation:fadeUp .9s .3s var(--ease) forwards;
         }
         .hero-h1 strong{
-          display:block;font-family:var(--serif);font-weight:500;font-style:italic;
+          display:block;font-family:'Lora',Georgia,serif;font-weight:500;font-style:italic;
           font-size:clamp(3.2rem,5.5vw,5.2rem);line-height:1.08;letter-spacing:-.02em;
         }
         .hero-tags{
@@ -821,9 +833,9 @@ export default function AmbroisePartnersModern() {
         }
         .hero-sub{font-size:1rem;color:rgba(255,255,255,.58);max-width:42ch;margin:0 0 1.8rem;font-weight:300;line-height:1.72;opacity:0;animation:fadeUp .9s .6s var(--ease) forwards;}
         .hero-ctas{display:flex;gap:.8rem;flex-wrap:wrap;justify-content:center;opacity:0;animation:fadeUp .9s .75s var(--ease) forwards;}
-        .btn-primary{background:#fff;color:var(--ink);padding:.85rem 2rem;border-radius:4px;font-size:.85rem;font-weight:500;letter-spacing:.01em;transition:all .3s ease;}
-        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.2);}
-        .btn-secondary{background:transparent;color:rgba(255,255,255,.88);padding:.85rem 2rem;border-radius:4px;font-size:.85rem;font-weight:400;letter-spacing:.01em;border:1px solid rgba(255,255,255,.28);transition:all .3s ease;}
+        .btn-primary{background:#fff;color:var(--ink);padding:.85rem 2rem;border-radius:100px;font-size:.85rem;font-weight:500;letter-spacing:.01em;transition:transform .22s var(--ease),box-shadow .22s;}
+        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.25);}
+        .btn-secondary{background:transparent;color:rgba(255,255,255,.88);padding:.85rem 2rem;border-radius:100px;font-size:.85rem;font-weight:400;letter-spacing:.01em;border:1px solid rgba(255,255,255,.28);transition:border-color .2s,background .2s;}
         .btn-secondary:hover{border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.07);}
         .hero-footnote{margin-top:1.2rem;font-size:.78rem;color:rgba(255,255,255,.38);font-weight:300;opacity:0;animation:fadeUp .9s .9s var(--ease) forwards;}
 
@@ -831,30 +843,30 @@ export default function AmbroisePartnersModern() {
         .section{max-width:1200px;margin:0 auto;padding:7rem 2.5vw;color:var(--ink);}
         .section-bg{background:var(--white);}
         .eyebrow{display:block;font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem;}
-        .section-title{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,3.5vw,3.2rem);line-height:1.1;letter-spacing:-.02em;margin-bottom:.7rem;}
+        .section-title{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,3.5vw,3.2rem);line-height:1.1;letter-spacing:-.02em;margin-bottom:.4rem;}
         .section-lede{color:var(--muted);font-size:.95rem;max-width:65ch;font-weight:300;line-height:1.7;letter-spacing:-.01em;}
-        .section-head{margin-bottom:3rem;}
+        .section-head{margin-bottom:2rem;}
 
         /* ── APPROACH ── */
         .approach-panels{display:flex;flex-direction:column;gap:1px;background:var(--line);}
         .approach-panel{display:grid;grid-template-columns:1fr 1fr;background:var(--accent-bg);}
-        .approach-text{padding:1.2rem 1.8rem 1.2rem 0;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--line);}
+        .approach-text{padding:1.6rem 2rem 1.6rem 0;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--line);}
         .approach-num{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--blue);margin-bottom:.8rem;display:block;}
         .approach-title{font-family:var(--serif);font-weight:400;font-size:1.4rem;letter-spacing:-.01em;margin-bottom:.7rem;line-height:1.15;}
         .approach-desc{color:var(--muted);font-size:.95rem;line-height:1.65;font-weight:300;}
-        .approach-canvas-wrap{background:var(--accent-bg);height:180px;display:flex;align-items:center;justify-content:center;padding:.8rem;overflow:hidden;}
+        .approach-canvas-wrap{background:var(--accent-bg);overflow:hidden;position:relative;min-height:160px;}
 
         /* ── VALUES ── */
         .values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);}
         .value-card{background:var(--accent-bg);padding:1.8rem 1.6rem;transition:background .25s;}
-        .value-card:hover{background:#e8f0ea;}
+        .value-card:hover{background:#e8ecf2;}
         .value-tag{display:inline-block;font-size:.65rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);border:1px solid var(--blue);padding:.2rem .6rem;border-radius:100px;margin-bottom:.8rem;}
         .value-title{font-family:var(--serif);font-weight:400;font-size:1.3rem;letter-spacing:-.01em;margin-bottom:.6rem;line-height:1.2;}
         .value-desc{color:var(--muted);font-size:.9rem;line-height:1.65;font-weight:300;}
 
         /* ── METHOD ── */
         .method-list{border-top:1px solid var(--line);}
-        .method-step{display:grid;grid-template-columns:80px 1fr;align-items:center;gap:2rem;padding:1.6rem 0;border-bottom:1px solid var(--line);}
+        .method-step{display:grid;grid-template-columns:80px 1fr;align-items:center;gap:1.2rem;padding:1rem 0;border-bottom:1px solid var(--line);}
         .step-num{font-family:var(--serif);font-style:normal;font-size:2.8rem;color:var(--line);font-weight:400;letter-spacing:-.02em;}
         .step-body h4{font-family:var(--serif);font-weight:400;font-size:1.4rem;letter-spacing:-.01em;margin-bottom:.3rem;}
         .step-body p{color:var(--muted);font-size:.95rem;line-height:1.65;font-weight:300;}
@@ -863,40 +875,37 @@ export default function AmbroisePartnersModern() {
         .about-split{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;}
         .about-lede{color:var(--muted);font-size:1rem;line-height:1.7;margin-top:1.2rem;font-weight:300;letter-spacing:-.01em;}
         .about-links{display:flex;gap:1rem;margin-top:2.5rem;flex-wrap:wrap;}
-        .btn-dark{background:var(--ink);color:#fff;padding:.9rem 2rem;border-radius:4px;font-size:.8rem;font-weight:500;letter-spacing:.04em;transition:all .3s ease;}
-        .btn-dark:hover{background:var(--blue);transform:translateY(-2px);box-shadow:0 8px 24px rgba(27,67,50,.18);}
-        .btn-outline{border:1px solid var(--line);color:var(--ink);padding:.9rem 2rem;border-radius:4px;font-size:.8rem;font-weight:500;letter-spacing:.04em;transition:all .3s ease;}
+        .btn-dark{background:var(--ink);color:#fff;padding:.9rem 2rem;border-radius:100px;font-size:.75rem;font-weight:500;letter-spacing:.04em;transition:background .22s,transform .2s,box-shadow .22s;}
+        .btn-dark:hover{background:var(--blue);transform:translateY(-2px);box-shadow:0 10px 26px rgba(42,92,184,.2);}
+        .btn-outline{border:1.5px solid var(--line);color:var(--ink);padding:.9rem 2rem;border-radius:100px;font-size:.75rem;font-weight:500;letter-spacing:.04em;transition:border-color .22s,color .22s;}
         .btn-outline:hover{border-color:var(--blue);color:var(--blue);}
         .about-dark{background:var(--dark);border-radius:4px;padding:3.5rem 3rem;color:#fff;position:relative;overflow:hidden;}
         .about-dark-label{font-family:var(--serif);font-weight:400;font-size:1.2rem;letter-spacing:-.01em;margin-bottom:1.5rem;position:relative;}
-        .about-dark::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(27,67,50,.22) 0%,transparent 70%);border-radius:50%;}
+        .about-dark::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(42,92,184,.22) 0%,transparent 70%);border-radius:50%;}
 
         /* ── CONTACT ── */
         .contact-wrap{max-width:700px;margin:0 auto;padding:7rem 2.5vw;text-align:center;display:flex;flex-direction:column;align-items:center;}
         .contact-form{margin-top:3.5rem;text-align:left;display:flex;flex-direction:column;gap:1.2rem;width:100%;max-width:600px;}
         .fl{display:block;font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.45rem;}
         .fi,.ft{width:100%;background:#fff;border:1px solid var(--line);border-radius:4px;padding:.9rem 1.15rem;font-family:var(--sans);font-size:.95rem;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;}
-        .fi:focus,.ft:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(27,67,50,.1);}
+        .fi:focus,.ft:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(42,92,184,.1);}
         .ft{min-height:130px;resize:vertical;}
         .fc{display:flex;gap:.7rem;align-items:flex-start;font-size:.75rem;color:var(--muted);cursor:pointer;line-height:1.55;font-weight:300;}
         .fc input{margin-top:3px;flex-shrink:0;accent-color:var(--blue);}
-        .submit-btn{align-self:center;background:var(--ink);color:#fff;border:1px solid var(--ink);padding:1rem 3rem;border-radius:4px;font-family:var(--sans);font-size:.85rem;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:all .3s ease;}
-        .submit-btn:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-2px);box-shadow:0 8px 24px rgba(27,67,50,.18);}
+        .submit-btn{align-self:center;background:var(--ink);color:#fff;border:1.5px solid var(--ink);padding:1rem 3rem;border-radius:9999px;font-family:var(--sans);font-size:.85rem;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:background .22s,transform .2s,box-shadow .22s,color .22s,border-color .22s;}
+        .submit-btn:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-2px);box-shadow:0 10px 28px rgba(42,92,184,.2);}
 
-        /* ── SERVICES LIST ── */
-        .svc-layout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
-        .svc-list{border-top:1px solid var(--line);}
-        .svc-list-row{padding:1.2rem 0;border-bottom:1px solid var(--line);cursor:pointer;transition:padding .4s var(--ease);}
-        .svc-list-name{font-family:var(--serif);letter-spacing:-.02em;transition:font-size .4s var(--ease),color .3s,opacity .3s;display:block;}
-        .svc-list-row .svc-list-name{font-size:clamp(1rem,1.4vw,1.15rem);font-weight:400;color:var(--muted);opacity:.55;}
-        .svc-list-row--active .svc-list-name{font-size:clamp(1.6rem,2.8vw,2.6rem);font-weight:500;color:var(--ink);opacity:1;}
-        .svc-list-row--active{padding:1.8rem 0;}
-        .svc-detail{display:flex;flex-direction:column;justify-content:center;}
-        .svc-detail-card{display:flex;flex-direction:column;gap:.6rem;}
-        .svc-detail-number{font-family:var(--sans);font-size:.72rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding-bottom:.8rem;border-bottom:1px solid var(--line);margin-bottom:.4rem;}
-        .svc-detail-number-total{font-weight:400;color:var(--muted);opacity:.5;}
-        .svc-detail-divider{display:none;}
-        .svc-detail-text{font-family:var(--sans);font-size:.95rem;line-height:1.7;color:var(--muted);font-weight:300;margin:0;letter-spacing:-.01em;}
+        /* ── SERVICES TABS ── */
+        .svc-tab{cursor:pointer;position:relative;padding:0 0 20px 0;background:none;border:none;outline:none;white-space:nowrap;font-family:var(--serif);font-size:1.1rem;font-weight:400;color:var(--muted);letter-spacing:-.01em;transition:color .35s ease;}
+        .svc-tab::after{content:'';position:absolute;bottom:-1.5px;left:0;width:100%;height:2px;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(0.25,0.1,0.25,1);}
+        .svc-tab:hover{color:var(--ink);}
+        .svc-tab:hover::after{transform:scaleX(1);}
+        .svc-tab--active{color:var(--blue);}
+        .svc-tab--active::after{transform:scaleX(1);}
+        .svc-tag{padding:6px 15px;border-radius:100px;font-size:.75rem;font-weight:500;letter-spacing:.02em;border:1px solid var(--line);color:var(--muted);background:transparent;transition:all .3s ease;font-family:var(--sans);animation:svcFadeUp .35s cubic-bezier(0.25,0.1,0.25,1) both;}
+        .svc-tag:hover{border-color:var(--blue);color:var(--blue);}
+        .svc-panel-anim{animation:svcFadeUp .4s cubic-bezier(0.25,0.1,0.25,1) forwards;}
+        @keyframes svcFadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 
         /* ── SECTOR TICKER ── */
         .sector-ticker{background:var(--white);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:1.2rem 0;white-space:nowrap;}
@@ -929,16 +938,17 @@ export default function AmbroisePartnersModern() {
         .footer-copy{font-size:.65rem;color:rgba(255,255,255,.22);letter-spacing:.04em;}
 
         /* ── DOMAINS GRID ── */
-        .domains-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-        .domain-card{position:relative;border-radius:4px;overflow:hidden;aspect-ratio:2/1;cursor:pointer;transition:transform .4s var(--ease),box-shadow .4s ease;}
-        .domain-card:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.12);}
+        .domains-grid{display:flex;gap:8px;height:420px;}
+        .domain-card{position:relative;border-radius:4px;overflow:hidden;flex:1;min-width:0;cursor:pointer;transition:flex .5s var(--ease),box-shadow .4s ease;}
+        .domains-grid:has(.domain-card:hover) .domain-card{flex:.7;}
+        .domain-card:hover{flex:2.2;box-shadow:0 12px 30px rgba(0,0,0,.18);}
         .domain-img{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .55s cubic-bezier(0.16,1,0.3,1);}
         .domain-card:hover .domain-img{transform:none;}
         .domain-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.05) 50%,transparent 100%);transition:background .35s ease;}
         .domain-card:hover .domain-overlay{background:linear-gradient(to top,rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.1) 60%,transparent 100%);}
         .domain-label{position:absolute;bottom:0;left:0;right:0;padding:.9rem 1rem;}
         .domain-num{display:none;}
-        .domain-name{font-family:var(--serif);font-weight:500;font-size:1.4rem;line-height:1.2;letter-spacing:-0.01em;color:#fff;margin:0;text-shadow:0 1px 10px rgba(0,0,0,0.4);}
+        .domain-name{font-family:var(--serif);font-weight:500;font-size:1.15rem;line-height:1.2;letter-spacing:-0.01em;color:#fff;margin:0;text-shadow:0 1px 10px rgba(0,0,0,0.4);}
         .domain-desc{font-family:var(--sans);font-size:.72rem;line-height:1.5;color:rgba(255,255,255,.92);font-weight:300;margin:0;max-height:0;opacity:0;overflow:hidden;transition:max-height .4s var(--ease),opacity .3s ease,margin .3s var(--ease);}
         .domain-card:hover .domain-desc{max-height:150px;opacity:1;margin-top:.4rem;}
 
@@ -979,17 +989,14 @@ export default function AmbroisePartnersModern() {
           .nav-links a:not(.nav-cta){display:none;}
           .nav-cta{padding:.55rem 1.3rem!important;font-size:.78rem!important;white-space:nowrap;}
           .approach-panel{grid-template-columns:1fr;}
-          .approach-canvas-wrap{min-height:160px;height:160px;}
+          .approach-canvas-wrap{min-height:80px;}
           .values-grid{grid-template-columns:1fr;}
           .about-split{grid-template-columns:1fr;gap:3rem;}
           .method-step{grid-template-columns:60px 1fr;}
           .step-arrow{display:none;}
-          .svc-layout{gap:2.5rem;}
-          .svc-list-row .svc-list-name{font-size:clamp(.9rem,1.2vw,1rem);}
-          .svc-list-row--active .svc-list-name{font-size:clamp(1.3rem,2.2vw,2rem);}
-          .svc-detail-text{font-size:1rem;}
-          .domains-grid{grid-template-columns:repeat(3,1fr);gap:10px;}
-          .domain-card{aspect-ratio:1/1;}
+          .svc-tab{font-size:1rem;padding:0 0 14px 0;}
+          .domains-grid{height:360px;gap:6px;}
+          .domain-card:hover{flex:2;}
           .dalt-carousel{height:400px;}
           .domains-alt-section{padding:5rem 2.5vw;}
         }
@@ -1019,22 +1026,19 @@ export default function AmbroisePartnersModern() {
           .eyebrow{font-size:.65rem;margin-bottom:.7rem;}
 
           /* Services */
-          .svc-layout{grid-template-columns:1fr!important;gap:1.5rem;}
-          .svc-list-row .svc-list-name{font-size:.9rem;}
-          .svc-list-row--active .svc-list-name{font-size:clamp(1.2rem,5vw,1.6rem);}
-          .svc-list-row{padding:1rem 0;}
-          .svc-list-row--active{padding:1.3rem 0;}
-          .svc-detail-text{font-size:.9rem;}
+          .svc-tab{font-size:.88rem;padding:0 0 12px 0;}
 
           /* Approach */
           .approach-text{padding:1rem 1rem 1rem 0;}
           .approach-title{font-size:1.2rem;}
           .approach-desc{font-size:.85rem;}
-          .approach-canvas-wrap{min-height:140px;height:140px;padding:1rem;}
+          .approach-canvas-wrap{min-height:60px;}
 
           /* Domains */
-          .domains-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
-          .domain-card{aspect-ratio:1/1;border-radius:4px;}
+          .domains-grid{height:280px;gap:6px;flex-wrap:wrap;}
+          .domain-card{flex:1 1 30%!important;}
+          .domains-grid:has(.domain-card:hover) .domain-card{flex:1 1 30%!important;}
+          .domain-card:hover{flex:1 1 30%!important;}
           .domain-label{padding:1rem .9rem;}
           .domain-name{font-size:1rem;}
           .domain-desc{font-size:.78rem;}
@@ -1064,18 +1068,14 @@ export default function AmbroisePartnersModern() {
         }
         @media(max-width:480px){
           /* Services */
-          .svc-list-row .svc-list-name{font-size:.85rem;}
-          .svc-list-row--active .svc-list-name{font-size:1.2rem;}
-          .svc-list-row{padding:.8rem 0;}
-          .svc-list-row--active{padding:1rem 0;}
-          .svc-detail-text{font-size:.82rem;}
+          .svc-tab{font-size:.8rem;padding:0 0 10px 0;}
 
           /* Ticker */
           .sector-ticker{padding:.8rem 0;}
           .sector-ticker-item{font-size:.65rem;padding:0 1.4rem;}
 
           /* Approach */
-          .approach-canvas-wrap{min-height:120px;height:120px;padding:.8rem;}
+          .approach-canvas-wrap{min-height:50px;}
           .approach-title{font-size:1.1rem;}
           .approach-desc{font-size:.78rem;}
 
@@ -1098,13 +1098,6 @@ export default function AmbroisePartnersModern() {
           .logo-name{display:none;}
           .logo-sep{display:none;}
 
-          /* Services */
-          .svc-list-row .svc-list-name{font-size:.78rem;}
-          .svc-list-row--active .svc-list-name{font-size:1.05rem;}
-          .svc-list-row{padding:.7rem 0;}
-          .svc-list-row--active{padding:.9rem 0;}
-          .svc-detail-text{font-size:.78rem;}
-
           /* Ticker */
           .sector-ticker-item{font-size:.6rem;padding:0 1rem;}
 
@@ -1114,7 +1107,7 @@ export default function AmbroisePartnersModern() {
           .dalt-carousel{height:280px;}
 
           /* Approach */
-          .approach-canvas-wrap{min-height:120px;height:120px;}
+          .approach-canvas-wrap{min-height:50px;}
         }
       `}</style>
 
