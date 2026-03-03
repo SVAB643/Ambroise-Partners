@@ -47,14 +47,14 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
           ctx.beginPath();
           ctx.moveTo(nodes[i].x,nodes[i].y);
           ctx.lineTo(nodes[j].x,nodes[j].y);
-          ctx.strokeStyle=`rgba(42,92,184,${0.18*(1-d/110)})`;
+          ctx.strokeStyle=`rgba(20,50,120,${0.18*(1-d/110)})`;
           ctx.lineWidth=0.8;
           ctx.stroke();
         }
       }
       nodes.forEach(n => {
         ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
-        ctx.fillStyle='rgba(42,92,184,0.55)'; ctx.fill();
+        ctx.fillStyle='rgba(20,50,120,0.55)'; ctx.fill();
       });
       raf = requestAnimationFrame(drawBrain);
     };
@@ -73,22 +73,22 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
       nt += 0.018;
       const cx = hubs[0].x*W, cy = hubs[0].y*H;
       const grad = ctx.createRadialGradient(cx,cy,0,cx,cy,W*.28);
-      grad.addColorStop(0,'rgba(42,92,184,0.12)');
-      grad.addColorStop(1,'rgba(42,92,184,0)');
+      grad.addColorStop(0,'rgba(20,50,120,0.12)');
+      grad.addColorStop(1,'rgba(20,50,120,0)');
       ctx.fillStyle=grad; ctx.beginPath(); ctx.arc(cx,cy,W*.28,0,Math.PI*2); ctx.fill();
       hubs.slice(1).forEach((h,i) => {
         const hx=h.x*W, hy=h.y*H;
         ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(hx,hy);
-        ctx.strokeStyle=`rgba(42,92,184,${0.18+0.08*Math.sin(nt+i)})`; ctx.lineWidth=1; ctx.stroke();
+        ctx.strokeStyle=`rgba(20,50,120,${0.18+0.08*Math.sin(nt+i)})`; ctx.lineWidth=1; ctx.stroke();
         const p = (Math.sin(nt*0.8+i*1.1)+1)/2;
         const px2 = cx+(hx-cx)*p, py2 = cy+(hy-cy)*p;
         ctx.beginPath(); ctx.arc(px2,py2,2.2,0,Math.PI*2);
-        ctx.fillStyle='rgba(42,92,184,0.7)'; ctx.fill();
+        ctx.fillStyle='rgba(20,50,120,0.7)'; ctx.fill();
         ctx.beginPath(); ctx.arc(hx,hy,h.r,0,Math.PI*2);
-        ctx.fillStyle=`rgba(42,92,184,${0.45+0.15*Math.sin(nt+i)})`; ctx.fill();
+        ctx.fillStyle=`rgba(20,50,120,${0.45+0.15*Math.sin(nt+i)})`; ctx.fill();
       });
       ctx.beginPath(); ctx.arc(cx,cy,hubs[0].r*(1+.12*Math.sin(nt)),0,Math.PI*2);
-      ctx.fillStyle='rgba(42,92,184,0.8)'; ctx.fill();
+      ctx.fillStyle='rgba(20,50,120,0.8)'; ctx.fill();
       raf = requestAnimationFrame(drawNetwork);
     };
 
@@ -103,7 +103,7 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
       for (let i=0;i<=4;i++) {
         const y = pad.y + iH*(1-i/4);
         ctx.beginPath(); ctx.moveTo(pad.x,y); ctx.lineTo(pad.x+iW,y);
-        ctx.strokeStyle='rgba(42,92,184,0.07)'; ctx.lineWidth=1; ctx.stroke();
+        ctx.strokeStyle='rgba(20,50,120,0.07)'; ctx.lineWidth=1; ctx.stroke();
       }
       ctx.beginPath();
       ctx.moveTo(pad.x, pad.y+iH);
@@ -117,8 +117,8 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
       ctx.lineTo(pad.x+iW, pad.y+iH);
       ctx.closePath();
       const fill = ctx.createLinearGradient(0,pad.y,0,pad.y+iH);
-      fill.addColorStop(0,'rgba(42,92,184,0.14)');
-      fill.addColorStop(1,'rgba(42,92,184,0.01)');
+      fill.addColorStop(0,'rgba(20,50,120,0.14)');
+      fill.addColorStop(1,'rgba(20,50,120,0.01)');
       ctx.fillStyle=fill; ctx.fill();
       ctx.beginPath();
       for (let i=0;i<=pts;i++) {
@@ -128,12 +128,12 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
         const y = pad.y + iH*(1-Math.min(fy,1));
         i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
       }
-      ctx.strokeStyle='rgba(42,92,184,0.75)'; ctx.lineWidth=2.2;
+      ctx.strokeStyle='rgba(20,50,120,0.75)'; ctx.lineWidth=2.2;
       ctx.lineJoin='round'; ctx.stroke();
       const lastFy = Math.pow(1,1.6)+Math.sin(Math.PI*2+ct)*0.15*.5;
       const dotY = pad.y+iH*(1-Math.min(lastFy,1));
       ctx.beginPath(); ctx.arc(pad.x+iW, dotY, 4.5, 0, Math.PI*2);
-      ctx.fillStyle='rgba(42,92,184,0.9)'; ctx.fill();
+      ctx.fillStyle='rgba(20,50,120,0.9)'; ctx.fill();
       raf = requestAnimationFrame(drawCurve);
     };
 
@@ -219,7 +219,7 @@ function ExpertiseSection() {
 const SERVICES = [
   { id: 'ma', title: 'M&A', description: 'Sell-side, buy-side and transaction advisory across the global healthcare ecosystem. We design and manage disciplined processes focused on value maximisation and execution certainty.', tags: ['Sell-side', 'Buy-side', 'Carve-outs', 'Cross-border'] },
   { id: 'capital', title: 'Private Capital Raising', description: 'Access to a curated network of specialist healthcare investors — venture capital, growth equity and private equity — to secure the right capital at the right valuation.', tags: ['Series A–D', 'Growth Equity', 'Private Equity', 'Venture'] },
-  { id: 'licensing', title: 'Partnerships & Licensing', description: 'Identification, negotiation and structuring of licensing agreements, co-development partnerships and commercial collaborations with pharma and medtech corporates.', tags: ['Licensing', 'Co-development', 'Commercialisation', 'JVs'] },
+  { id: 'licensing', title: 'Partnerships & Licensing', description: 'Identification, negotiation and structuring of licensing agreements, codevelopment partnerships and commercial collaborations with pharma and medtech corporates.', tags: ['Licensing', 'Co\u2011development', 'Commercialisation', 'JVs'] },
   { id: 'advisory', title: 'Corporate Advisory', description: 'Independent strategic advice on corporate positioning, portfolio strategy, capital structure and value creation, tailored to each stage of a company\'s lifecycle.', tags: ['Strategy', 'Valuation', 'Governance', 'Restructuring'] },
   { id: 'public', title: 'Public Capital Markets', description: 'Advisory support for IPO readiness, secondary offerings, investor relations strategy and public market positioning for healthcare companies seeking or maintaining a listing.', tags: ['IPO', 'Follow-on', 'IR Strategy', 'Dual-track'] },
 ];
@@ -238,7 +238,7 @@ function ServicesSection() {
   }, []);
 
   return (
-    <section id="services" style={{ background: 'var(--white)', padding: '2rem 2.5vw 2rem', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }}>
+    <section id="services" style={{ background: 'var(--white)', padding: '0 2.5vw 2rem', marginTop: '-2rem', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto', width: '100%' }}>
         {/* Header */}
         <div className="section-head reveal">
@@ -716,7 +716,7 @@ export default function AmbroisePartnersModern() {
           --dark:   #0D0D0D;
           --accent-bg: #F6FBFF;
           --sans:   'DM Sans',-apple-system,sans-serif;
-          --serif:  'EB Garamond',Georgia,serif;
+          --serif:  'Lora',Georgia,serif;
           --ease:   cubic-bezier(0.22,0.61,0.36,1);
         }
 
@@ -805,7 +805,7 @@ export default function AmbroisePartnersModern() {
           position:relative;z-index:2;
           max-width:1500px;
           padding-top:5rem;
-          padding-bottom:2.5rem;
+          padding-bottom:0;
           text-align:center;
         }
         .hero-h1{
@@ -845,57 +845,57 @@ export default function AmbroisePartnersModern() {
         .section{max-width:1200px;margin:0 auto;padding:7rem 2.5vw;color:var(--ink);}
         .section-bg{background:var(--white);}
         .eyebrow{display:block;font-family:var(--sans);font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem;}
-        .section-title{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,3.5vw,3.2rem);line-height:1.1;letter-spacing:-.02em;margin-bottom:.3rem;}
-        .section-lede{font-family:var(--sans);color:var(--muted);font-size:1rem;max-width:100%;font-weight:300;line-height:1.65;letter-spacing:-.01em;}
+        .section-title{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,3.5vw,3.2rem);line-height:1.1;letter-spacing:-.02em;margin-bottom:.3rem;margin-left:-.05em;}
+        .section-lede{font-family:var(--sans);color:var(--muted);font-size:1.3rem;max-width:100%;font-weight:300;line-height:1.65;letter-spacing:-.01em;}
         .section-head{margin-bottom:2.5rem;}
 
         /* ── APPROACH ── */
-        .approach-panels{display:flex;flex-direction:column;gap:1px;background:var(--line);}
+        .approach-panels{display:flex;flex-direction:column;gap:0;}
         .approach-panel{display:grid;grid-template-columns:1fr 1fr;background:var(--accent-bg);}
-        .approach-text{padding:1.6rem 2rem 1.6rem 0;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--line);}
-        .approach-num{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--blue);margin-bottom:.8rem;display:block;}
-        .approach-title{font-family:var(--serif);font-weight:400;font-size:1.4rem;letter-spacing:-.01em;margin-bottom:.7rem;line-height:1.15;}
-        .approach-desc{color:var(--muted);font-size:.95rem;line-height:1.65;font-weight:300;}
+        .approach-text{padding:1.6rem 2rem 1.6rem 0;display:flex;flex-direction:column;justify-content:center;border-right:1px solid #fff;}
+        .approach-num{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:rgb(20,50,120);margin-bottom:.8rem;display:block;}
+        .approach-title{font-family:var(--serif);font-weight:400;font-size:1.7rem;letter-spacing:-.01em;margin-bottom:.7rem;line-height:1.15;}
+        .approach-desc{color:var(--muted);font-size:1.125rem;line-height:1.7;font-weight:300;}
         .approach-canvas-wrap{background:var(--accent-bg);overflow:hidden;position:relative;min-height:160px;}
 
         /* ── VALUES ── */
-        .values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);}
+        .values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#fff;}
         .value-card{background:var(--accent-bg);padding:1.8rem 1.6rem;transition:background .25s;}
         .value-card:hover{background:#e8ecf2;}
         .value-tag{display:inline-block;font-size:.65rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);border:1px solid var(--blue);padding:.2rem .6rem;border-radius:100px;margin-bottom:.8rem;}
-        .value-title{font-family:var(--serif);font-weight:400;font-size:1.3rem;letter-spacing:-.01em;margin-bottom:.6rem;line-height:1.2;}
-        .value-desc{color:var(--muted);font-size:.9rem;line-height:1.65;font-weight:300;}
+        .value-title{font-family:var(--serif);font-weight:400;font-size:1.7rem;letter-spacing:-.01em;margin-bottom:.6rem;line-height:1.2;}
+        .value-desc{color:var(--muted);font-size:1.125rem;line-height:1.7;font-weight:300;}
 
         /* ── METHOD ── */
         .method-list{border-top:1px solid var(--line);}
         .method-step{display:grid;grid-template-columns:80px 1fr;align-items:center;gap:1.2rem;padding:1rem 0;border-bottom:1px solid var(--line);}
-        .step-num{font-family:var(--serif);font-style:normal;font-size:2.8rem;color:rgba(0,0,0,.15);font-weight:400;letter-spacing:-.02em;}
-        .step-body h4{font-family:var(--serif);font-weight:400;font-size:1.4rem;letter-spacing:-.01em;margin-bottom:.3rem;}
-        .step-body p{color:var(--muted);font-size:.95rem;line-height:1.65;font-weight:300;}
+        .step-num{font-family:var(--serif);font-style:normal;font-size:2.8rem;color:rgb(20,50,120);font-weight:400;letter-spacing:-.02em;}
+        .step-body h4{font-family:var(--serif);font-weight:400;font-size:1.7rem;letter-spacing:-.01em;margin-bottom:.3rem;}
+        .step-body p{color:var(--muted);font-size:1.125rem;line-height:1.7;font-weight:300;}
 
         /* ── ABOUT ── */
         .about-split{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;}
         .about-lede{color:var(--muted);font-size:1rem;line-height:1.7;margin-top:1.2rem;font-weight:300;letter-spacing:-.01em;}
         .about-links{display:flex;gap:1rem;margin-top:2.5rem;flex-wrap:wrap;}
         .btn-dark{background:var(--ink);color:#fff;padding:.9rem 2rem;border-radius:100px;font-size:.75rem;font-weight:500;letter-spacing:.04em;transition:background .22s,transform .2s,box-shadow .22s;}
-        .btn-dark:hover{background:var(--blue);transform:translateY(-2px);box-shadow:0 10px 26px rgba(42,92,184,.2);}
+        .btn-dark:hover{background:var(--blue);transform:translateY(-2px);box-shadow:0 10px 26px rgba(20,50,120,.2);}
         .btn-outline{border:1.5px solid var(--line);color:var(--ink);padding:.9rem 2rem;border-radius:100px;font-size:.75rem;font-weight:500;letter-spacing:.04em;transition:border-color .22s,color .22s;}
         .btn-outline:hover{border-color:var(--blue);color:var(--blue);}
         .about-dark{background:var(--dark);border-radius:4px;padding:3.5rem 3rem;color:#fff;position:relative;overflow:hidden;}
         .about-dark-label{font-family:var(--serif);font-weight:400;font-size:1.2rem;letter-spacing:-.01em;margin-bottom:1.5rem;position:relative;}
-        .about-dark::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(42,92,184,.22) 0%,transparent 70%);border-radius:50%;}
+        .about-dark::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(20,50,120,.22) 0%,transparent 70%);border-radius:50%;}
 
         /* ── CONTACT ── */
         .contact-wrap{max-width:700px;margin:0 auto;padding:7rem 2.5vw;text-align:center;display:flex;flex-direction:column;align-items:center;}
         .contact-form{margin-top:3.5rem;text-align:left;display:flex;flex-direction:column;gap:1.2rem;width:100%;max-width:600px;}
         .fl{display:block;font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.45rem;}
         .fi,.ft{width:100%;background:#fff;border:1px solid var(--line);border-radius:4px;padding:.9rem 1.15rem;font-family:var(--sans);font-size:.95rem;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;}
-        .fi:focus,.ft:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(42,92,184,.1);}
+        .fi:focus,.ft:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(20,50,120,.1);}
         .ft{min-height:130px;resize:vertical;}
         .fc{display:flex;gap:.7rem;align-items:flex-start;font-size:.75rem;color:var(--muted);cursor:pointer;line-height:1.55;font-weight:300;}
         .fc input{margin-top:3px;flex-shrink:0;accent-color:var(--blue);}
         .submit-btn{align-self:center;background:var(--ink);color:#fff;border:1.5px solid var(--ink);padding:1rem 3rem;border-radius:9999px;font-family:var(--sans);font-size:.85rem;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:background .22s,transform .2s,box-shadow .22s,color .22s,border-color .22s;}
-        .submit-btn:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-2px);box-shadow:0 10px 28px rgba(42,92,184,.2);}
+        .submit-btn:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-2px);box-shadow:0 10px 28px rgba(20,50,120,.2);}
 
         /* ── SERVICES TABS ── */
         .svc-tabs{display:flex;border-bottom:1px solid var(--line);justify-content:space-between;overflow:hidden;}
@@ -905,7 +905,7 @@ export default function AmbroisePartnersModern() {
         .svc-tab:hover::after{transform:scaleX(1);}
         .svc-tab--active{color:var(--ink);}
         .svc-tab--active::after{transform:scaleX(1);}
-        .svc-tag{padding:8px 18px;border-radius:100px;font-size:.85rem;font-weight:500;letter-spacing:.02em;border:none;color:#fff;background:var(--ink);transition:all .3s ease;font-family:var(--sans);animation:svcFadeUp .35s cubic-bezier(0.25,0.1,0.25,1) both;}
+        .svc-tag{padding:8px 18px;border-radius:100px;font-size:.85rem;font-weight:500;letter-spacing:.02em;border:none;color:#fff;background:var(--ink);transition:all .3s ease;font-family:var(--sans);white-space:nowrap;animation:svcFadeUp .35s cubic-bezier(0.25,0.1,0.25,1) both;}
         .svc-tag:hover{background:var(--blue);}
         .svc-panel-anim{animation:svcFadeUp .4s cubic-bezier(0.25,0.1,0.25,1) forwards;}
         @keyframes svcFadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
