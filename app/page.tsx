@@ -998,7 +998,8 @@ export default function AmbroisePartnersModern() {
           .nav-links a:not(.nav-cta){display:none;}
           .nav-cta{padding:.55rem 1.3rem!important;font-size:.78rem!important;white-space:nowrap;}
           .approach-panel{grid-template-columns:1fr;}
-          .approach-canvas-wrap{min-height:80px;}
+          .approach-text{border-right:none;}
+          .approach-canvas-wrap{min-height:120px;}
           .values-grid{grid-template-columns:1fr;}
           .about-split{grid-template-columns:1fr;gap:3rem;}
           .method-step{grid-template-columns:60px 1fr;}
@@ -1039,21 +1040,23 @@ export default function AmbroisePartnersModern() {
           .svc-tab{font-size:.88rem;padding:0 0 12px 0;}
 
           /* Approach */
-          .approach-text{padding:1rem 1rem 1rem 0;}
+          .approach-panel{grid-template-columns:1fr;}
+          .approach-text{padding:1.2rem 0;border-right:none;}
           .approach-title{font-size:1.2rem;}
           .approach-desc{font-size:.85rem;}
-          .approach-canvas-wrap{min-height:60px;}
+          .approach-canvas-wrap{display:none;}
 
           /* Domains */
-          .domains-grid{height:auto;gap:6px;flex-wrap:wrap;}
-          .domain-card{flex:1 1 30%!important;aspect-ratio:2/3;}
-          .domain-card--shrunk{flex:1 1 30%!important;}
-          .domain-card--active{flex:1 1 30%!important;}
-          .domain-label{padding:.8rem .7rem;}
-          .domain-name{font-size:1rem;transition:none;}
-          .domain-card--shrunk .domain-name{font-size:1rem;}
-          .domain-card--active .domain-name{font-size:1rem;}
-          .domain-card--active .domain-desc{max-height:0;opacity:0;margin-top:0;font-size:.78rem;}
+          .domains-grid{height:auto;gap:8px;flex-wrap:wrap;}
+          .domain-card{flex:1 1 45%!important;aspect-ratio:3/4;}
+          .domain-card--shrunk{flex:1 1 45%!important;}
+          .domain-card--active{flex:1 1 45%!important;}
+          .domain-label{padding:1rem .8rem;}
+          .domain-name{font-size:1.05rem;transition:none;white-space:normal;}
+          .domain-card--shrunk .domain-name{font-size:1.05rem;}
+          .domain-card--active .domain-name{font-size:1.05rem;}
+          .domain-desc{max-height:100px!important;opacity:1!important;margin-top:.3rem!important;font-size:.75rem!important;}
+          .domain-card--active .domain-desc{max-height:100px;opacity:1;margin-top:.3rem;font-size:.75rem;}
 
           /* Domains carousel */
           .domains-alt-section{padding:4rem 2.5vw;}
@@ -1088,8 +1091,7 @@ export default function AmbroisePartnersModern() {
           .sector-ticker-item{font-size:.65rem;padding:0 1.4rem;}
 
           /* Approach */
-          .approach-canvas-wrap{min-height:50px;}
-          .approach-title{font-size:1.1rem;}
+          .approach-title{font-size:1.05rem;}
           .approach-desc{font-size:.78rem;}
 
           /* Domains carousel */
@@ -1122,8 +1124,6 @@ export default function AmbroisePartnersModern() {
           .domains-grid{gap:6px;}
           .dalt-carousel{height:280px;}
 
-          /* Approach */
-          .approach-canvas-wrap{min-height:50px;}
         }
       `}</style>
 
