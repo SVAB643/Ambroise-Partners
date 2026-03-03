@@ -181,25 +181,34 @@ const DOMAINS = [
 ];
 
 function ExpertiseSection() {
+  const [hovered, setHovered] = useState<number | null>(null);
   return (
-    <section id="domains" style={{ background: 'var(--white)', padding: '5rem 2.5vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }}>
+    <section id="domains" style={{ background: 'var(--white)', padding: '5rem 2.5vw 1.5rem' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto', width: '100%' }}>
         <div className="section-head reveal">
           <span className="eyebrow">What we cover</span>
           <h2 className="section-title">Our Areas of Expertise</h2>
-          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1rem', lineHeight: 1.65 }}>Dedicated expertise across the healthcare ecosystem, from early-stage scientific platforms to scaled commercial organisations.</p>
+          <p className="section-lede">Dedicated expertise across the healthcare ecosystem, from early-stage scientific platforms to scaled commercial organisations.</p>
         </div>
-        <div className="domains-grid reveal">
-          {DOMAINS.map((dom) => (
-            <div key={dom.id} className="domain-card">
-              <div className="domain-img" style={{ backgroundImage: `url(${dom.image})`, backgroundColor: dom.color }} />
-              <div className="domain-overlay" />
-              <div className="domain-label">
-                <h3 className="domain-name">{dom.name}</h3>
-                <p className="domain-desc">{dom.desc}</p>
+        <div className="domains-grid reveal" onMouseLeave={() => setHovered(null)}>
+          {DOMAINS.map((dom, i) => {
+            const isActive = hovered === i;
+            const isShrunk = hovered !== null && !isActive;
+            return (
+              <div
+                key={dom.id}
+                className={`domain-card${isActive ? ' domain-card--active' : ''}${isShrunk ? ' domain-card--shrunk' : ''}`}
+                onMouseEnter={() => setHovered(i)}
+              >
+                <div className="domain-img" style={{ backgroundImage: `url(${dom.image})`, backgroundColor: dom.color }} />
+                <div className="domain-overlay" />
+                <div className="domain-label">
+                  <h3 className="domain-name">{dom.name}</h3>
+                  <p className="domain-desc">{dom.desc}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
@@ -232,18 +241,14 @@ function ServicesSection() {
     <section id="services" style={{ background: 'var(--white)', padding: '5rem 2.5vw' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto', width: '100%' }}>
         {/* Header */}
-        <div className="reveal" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 64, flexWrap: 'wrap' as const, gap: '1.5rem' }}>
-          <div>
-            <span className="eyebrow">What we do</span>
-            <h2 className="section-title" style={{ margin: 0 }}>Our Services</h2>
-          </div>
-          <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.6, maxWidth: 340, margin: 0, textAlign: 'right' as const }}>
-            We partner with healthcare companies at every stage, delivering tailored strategic and transactional advisory.
-          </p>
+        <div className="section-head reveal">
+          <span className="eyebrow">What we do</span>
+          <h2 className="section-title">Our Services</h2>
+          <p className="section-lede">We partner with healthcare companies at every stage, delivering tailored strategic and transactional advisory.</p>
         </div>
 
         {/* Tab line */}
-        <div className="reveal" style={{ display: 'flex', gap: 40, borderBottom: '1px solid var(--line)', justifyContent: 'center' }}
+        <div className="svc-tabs reveal"
           onMouseEnter={() => pausedRef.current = true}
           onMouseLeave={() => pausedRef.current = false}
         >
@@ -379,7 +384,7 @@ function ExpertiseSectionAlt() {
         <div style={{ marginBottom: '1rem', textAlign: 'center' }} className="reveal">
           <span className="eyebrow">What we cover</span>
           <h2 className="section-title">Our Spheres of Competence</h2>
-          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1rem', lineHeight: 1.65 }}>Our advisory spans the full spectrum of healthcare innovation.</p>
+          <p className="section-lede">Our advisory spans the full spectrum of healthcare innovation.</p>
         </div>
 
         {/* Tabs with nav arrows */}
@@ -842,10 +847,10 @@ export default function AmbroisePartnersModern() {
         /* ── SECTIONS ── */
         .section{max-width:1200px;margin:0 auto;padding:7rem 2.5vw;color:var(--ink);}
         .section-bg{background:var(--white);}
-        .eyebrow{display:block;font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem;}
-        .section-title{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,3.5vw,3.2rem);line-height:1.1;letter-spacing:-.02em;margin-bottom:.4rem;}
-        .section-lede{color:var(--muted);font-size:.95rem;max-width:65ch;font-weight:300;line-height:1.7;letter-spacing:-.01em;}
-        .section-head{margin-bottom:2rem;}
+        .eyebrow{display:block;font-family:var(--sans);font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem;}
+        .section-title{font-family:var(--serif);font-weight:400;font-size:clamp(2rem,3.5vw,3.2rem);line-height:1.1;letter-spacing:-.02em;margin-bottom:.5rem;}
+        .section-lede{font-family:var(--sans);color:var(--muted);font-size:1rem;max-width:65ch;font-weight:300;line-height:1.65;letter-spacing:-.01em;}
+        .section-head{margin-bottom:2.5rem;}
 
         /* ── APPROACH ── */
         .approach-panels{display:flex;flex-direction:column;gap:1px;background:var(--line);}
@@ -896,7 +901,8 @@ export default function AmbroisePartnersModern() {
         .submit-btn:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-2px);box-shadow:0 10px 28px rgba(42,92,184,.2);}
 
         /* ── SERVICES TABS ── */
-        .svc-tab{cursor:pointer;position:relative;padding:0 0 20px 0;background:none;border:none;outline:none;white-space:nowrap;font-family:var(--serif);font-size:1.1rem;font-weight:400;color:var(--muted);letter-spacing:-.01em;transition:color .35s ease;}
+        .svc-tabs{display:flex;gap:40px;border-bottom:1px solid var(--line);justify-content:center;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+        .svc-tab{cursor:pointer;position:relative;padding:0 0 20px 0;background:none;border:none;outline:none;white-space:nowrap;font-family:var(--serif);font-size:1.4rem;font-weight:400;color:var(--muted);letter-spacing:-.01em;transition:color .35s ease;}
         .svc-tab::after{content:'';position:absolute;bottom:-1.5px;left:0;width:100%;height:2px;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(0.25,0.1,0.25,1);}
         .svc-tab:hover{color:var(--ink);}
         .svc-tab:hover::after{transform:scaleX(1);}
@@ -938,19 +944,22 @@ export default function AmbroisePartnersModern() {
         .footer-copy{font-size:.65rem;color:rgba(255,255,255,.22);letter-spacing:.04em;}
 
         /* ── DOMAINS GRID ── */
-        .domains-grid{display:flex;gap:8px;height:420px;}
-        .domain-card{position:relative;border-radius:4px;overflow:hidden;flex:1;min-width:0;cursor:pointer;transition:flex .5s var(--ease),box-shadow .4s ease;}
-        .domains-grid:has(.domain-card:hover) .domain-card{flex:.7;}
-        .domain-card:hover{flex:2.2;box-shadow:0 12px 30px rgba(0,0,0,.18);}
+        .domains-grid{display:flex;gap:6px;height:420px;}
+        .domain-card{position:relative;border-radius:4px;overflow:hidden;flex-grow:1;flex-shrink:1;flex-basis:0;min-width:0;cursor:pointer;transition:flex-grow .5s var(--ease),flex-shrink .5s var(--ease),box-shadow .4s ease;}
+        .domain-card--shrunk{flex-grow:.7;flex-shrink:1;}
+        .domain-card--active{flex-grow:2;flex-shrink:0;box-shadow:0 12px 30px rgba(0,0,0,.18);}
         .domain-img{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .55s cubic-bezier(0.16,1,0.3,1);}
-        .domain-card:hover .domain-img{transform:none;}
-        .domain-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.05) 50%,transparent 100%);transition:background .35s ease;}
-        .domain-card:hover .domain-overlay{background:linear-gradient(to top,rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.1) 60%,transparent 100%);}
-        .domain-label{position:absolute;bottom:0;left:0;right:0;padding:.9rem 1rem;}
+        .domain-card--active .domain-img{transform:scale(1.03);}
+        .domain-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.05) 50%,transparent 100%);transition:background .35s ease;}
+        .domain-card--active .domain-overlay{background:linear-gradient(to top,rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.08) 60%,transparent 100%);}
+        .domain-label{position:absolute;bottom:0;left:0;right:0;padding:.9rem 1rem;transition:padding .5s var(--ease);}
+        .domain-card--active .domain-label{padding:1.4rem 1.6rem;}
         .domain-num{display:none;}
-        .domain-name{font-family:var(--serif);font-weight:500;font-size:1.15rem;line-height:1.2;letter-spacing:-0.01em;color:#fff;margin:0;text-shadow:0 1px 10px rgba(0,0,0,0.4);}
-        .domain-desc{font-family:var(--sans);font-size:.72rem;line-height:1.5;color:rgba(255,255,255,.92);font-weight:300;margin:0;max-height:0;opacity:0;overflow:hidden;transition:max-height .4s var(--ease),opacity .3s ease,margin .3s var(--ease);}
-        .domain-card:hover .domain-desc{max-height:150px;opacity:1;margin-top:.4rem;}
+        .domain-name{font-family:var(--serif);font-weight:500;font-size:1.4rem;line-height:1.2;letter-spacing:-0.01em;color:#fff;margin:0;text-shadow:0 1px 10px rgba(0,0,0,0.4);white-space:nowrap;transition:font-size .5s var(--ease);}
+        .domain-card--shrunk .domain-name{font-size:.85rem;}
+        .domain-card--active .domain-name{font-size:1.8rem;}
+        .domain-desc{font-family:var(--sans);font-size:0rem;line-height:1.5;color:rgba(255,255,255,.92);font-weight:300;margin:0;max-height:0;opacity:0;overflow:hidden;transition:max-height .5s var(--ease),opacity .4s ease,margin .4s var(--ease),font-size .5s var(--ease);}
+        .domain-card--active .domain-desc{max-height:200px;opacity:1;margin-top:.6rem;font-size:.95rem;}
 
         /* ── DOMAINS CAROUSEL (v2) ── */
         .domains-alt-section{background:#fff;padding:5.5rem 2.5vw;overflow:hidden;}
@@ -996,7 +1005,7 @@ export default function AmbroisePartnersModern() {
           .step-arrow{display:none;}
           .svc-tab{font-size:1rem;padding:0 0 14px 0;}
           .domains-grid{height:360px;gap:6px;}
-          .domain-card:hover{flex:2;}
+          .domain-card--active{flex-grow:2;}
           .dalt-carousel{height:400px;}
           .domains-alt-section{padding:5rem 2.5vw;}
         }
@@ -1026,6 +1035,7 @@ export default function AmbroisePartnersModern() {
           .eyebrow{font-size:.65rem;margin-bottom:.7rem;}
 
           /* Services */
+          .svc-tabs{gap:20px;justify-content:flex-start;}
           .svc-tab{font-size:.88rem;padding:0 0 12px 0;}
 
           /* Approach */
@@ -1035,13 +1045,15 @@ export default function AmbroisePartnersModern() {
           .approach-canvas-wrap{min-height:60px;}
 
           /* Domains */
-          .domains-grid{height:280px;gap:6px;flex-wrap:wrap;}
-          .domain-card{flex:1 1 30%!important;}
-          .domains-grid:has(.domain-card:hover) .domain-card{flex:1 1 30%!important;}
-          .domain-card:hover{flex:1 1 30%!important;}
-          .domain-label{padding:1rem .9rem;}
-          .domain-name{font-size:1rem;}
-          .domain-desc{font-size:.78rem;}
+          .domains-grid{height:auto;gap:6px;flex-wrap:wrap;}
+          .domain-card{flex:1 1 30%!important;aspect-ratio:2/3;}
+          .domain-card--shrunk{flex:1 1 30%!important;}
+          .domain-card--active{flex:1 1 30%!important;}
+          .domain-label{padding:.8rem .7rem;}
+          .domain-name{font-size:1rem;transition:none;}
+          .domain-card--shrunk .domain-name{font-size:1rem;}
+          .domain-card--active .domain-name{font-size:1rem;}
+          .domain-card--active .domain-desc{max-height:0;opacity:0;margin-top:0;font-size:.78rem;}
 
           /* Domains carousel */
           .domains-alt-section{padding:4rem 2.5vw;}
@@ -1068,6 +1080,7 @@ export default function AmbroisePartnersModern() {
         }
         @media(max-width:480px){
           /* Services */
+          .svc-tabs{gap:14px;}
           .svc-tab{font-size:.8rem;padding:0 0 10px 0;}
 
           /* Ticker */
@@ -1102,8 +1115,11 @@ export default function AmbroisePartnersModern() {
           .sector-ticker-item{font-size:.6rem;padding:0 1rem;}
 
           /* Domains */
-          .domain-name{font-size:1rem;}
-          .domains-grid{gap:8px;}
+          .domain-card{flex:1 1 45%!important;}
+          .domain-card--shrunk{flex:1 1 45%!important;}
+          .domain-card--active{flex:1 1 45%!important;}
+          .domain-name{font-size:.9rem;}
+          .domains-grid{gap:6px;}
           .dalt-carousel{height:280px;}
 
           /* Approach */
@@ -1151,12 +1167,12 @@ export default function AmbroisePartnersModern() {
 
       {/* APPROACH */}
       <div style={{ background: 'var(--accent-bg)', width: '100%' }}>
-      <section style={{ padding: '5rem 2.5vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }} id="approach">
+      <section style={{ padding: '5rem 2.5vw' }} id="approach">
       <div style={{ maxWidth: 1200, margin: '0 auto', width: '100%' }}>
         <div className="section-head reveal">
           <span className="eyebrow">What sets us apart</span>
           <h2 className="section-title">Our Approach</h2>
-          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1rem', lineHeight: 1.65 }}>A unique combination of scientific depth, strategic networks and institutional-grade execution; purpose-built for healthcare companies.</p>
+          <p className="section-lede">A unique combination of scientific depth, strategic networks and institutional-grade execution; purpose-built for healthcare companies.</p>
         </div>
         <div className="approach-panels">
           <div className="approach-panel reveal">
@@ -1202,12 +1218,12 @@ export default function AmbroisePartnersModern() {
 
       {/* METHOD */}
       <div style={{ background: 'var(--accent-bg)', width: '100%' }}>
-      <section style={{ padding: '5rem 2.5vw', minHeight: '100vh', display: 'flex', flexDirection: 'column' as const, justifyContent: 'center' }} id="method">
+      <section style={{ padding: '5rem 2.5vw' }} id="method">
       <div style={{ maxWidth: 1200, margin: '0 auto', width: '100%' }}>
         <div className="section-head reveal">
           <span className="eyebrow">What drives results</span>
           <h2 className="section-title">Our Proven Process</h2>
-          <p className="section-lede" style={{ maxWidth: '100%', fontSize: '1rem', lineHeight: 1.65 }}>A structured and disciplined approach applied to every mandate, designed to maximise outcomes while ensuring clarity, alignment, and efficiency at every stage.</p>
+          <p className="section-lede">A structured and disciplined approach applied to every mandate, designed to maximise outcomes while ensuring clarity, alignment, and efficiency at every stage.</p>
         </div>
         <div className="method-list">
           {[
@@ -1233,7 +1249,7 @@ export default function AmbroisePartnersModern() {
           <div className="reveal">
             <span className="eyebrow">Get in touch</span>
             <h2 className="section-title">Let&apos;s discuss your project</h2>
-            <p className="section-lede" style={{margin:'1rem auto 0',textAlign:'center',maxWidth:'100%',fontSize:'1rem',lineHeight:1.65}}>
+            <p className="section-lede" style={{margin:'1rem auto 0',textAlign:'center'}}>
               Reach out to explore how we can help you achieve your strategic objectives.
             </p>
           </div>
