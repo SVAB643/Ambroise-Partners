@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
   <rect width="1200" height="630" fill="#ffffff"/>
   <!-- AP logo -->
-  <text x="500" y="340" text-anchor="end" font-family="Georgia, serif" font-weight="500" font-size="80" fill="#1A1A1A" letter-spacing="-1">AP</text>
+  <text x="310" y="345" text-anchor="end" font-family="Georgia, serif" font-weight="500" font-size="100" fill="#1A1A1A" letter-spacing="-1">AP</text>
   <!-- Separator -->
-  <line x1="520" y1="285" x2="520" y2="355" stroke="#E5E5E3" stroke-width="1.5"/>
+  <line x1="335" y1="275" x2="335" y2="360" stroke="#E5E5E3" stroke-width="2"/>
   <!-- Brand name -->
-  <text x="545" y="330" text-anchor="start" font-family="Arial, sans-serif" font-weight="600" font-size="36" fill="#1A1A1A" letter-spacing="4" text-transform="uppercase">AMBROISE PARTNERS</text>
+  <text x="365" y="335" text-anchor="start" font-family="Arial, sans-serif" font-weight="600" font-size="56" fill="#1A1A1A" letter-spacing="6">AMBROISE PARTNERS</text>
 </svg>
