@@ -272,7 +272,7 @@ function ServicesSection() {
           onMouseLeave={() => pausedRef.current = false}
         >
           <div style={{ width: '100%' }}>
-            <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--muted)', margin: 0 }}>
+            <p className="svc-desc" style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--muted)', margin: 0 }}>
               {SERVICES[active].description}
             </p>
           </div>
@@ -714,7 +714,7 @@ export default function AmbroisePartnersModern() {
           --muted:  #6B6B6B;
           --line:   #E5E5E3;
           --dark:   #0D0D0D;
-          --accent-bg: #F7F9FF;
+          --accent-bg: #F7FBFE;
           --sans:   'DM Sans',-apple-system,sans-serif;
           --serif:  'Lora',Georgia,serif;
           --ease:   cubic-bezier(0.22,0.61,0.36,1);
@@ -1009,10 +1009,10 @@ export default function AmbroisePartnersModern() {
         }
         @media(max-width:600px){
           /* Disable min-height on mobile */
-          #services,#domains,#approach,#method{min-height:auto!important;}
+          #services,#domains,#approach,#method{min-height:auto!important;margin-top:0!important;}
 
           /* Nav */
-          nav{padding:0 3.5vw;height:56px;}
+          nav{padding:0 4vw;height:56px;}
           .logo-ap{font-size:1.3rem;}
           .logo-name{font-size:.75rem;letter-spacing:.08em;}
           .logo-sep{height:13px;}
@@ -1020,107 +1020,126 @@ export default function AmbroisePartnersModern() {
 
           /* Hero */
           .hero{padding:0!important;}
-          .hero-h1{font-size:clamp(2.2rem,9vw,3.2rem);}
-          .hero-inner{padding-top:3.5rem;padding-bottom:1.5rem;}
+          .hero-h1{font-size:clamp(2rem,8vw,3rem);}
+          .hero-inner{padding-top:3rem;padding-bottom:1rem;}
           .hero-ctas{gap:.6rem;}
-          .btn-primary,.btn-secondary{padding:.72rem 1.5rem;font-size:.8rem;}
-          .hero-tags span{font-size:.7rem;}
+          .btn-primary,.btn-secondary{padding:.65rem 1.3rem;font-size:.78rem;}
+          .hero-tags span{font-size:.68rem;}
 
-          /* Sections */
-          .section{padding:3.5rem 2.5vw;}
-          .section-title{font-size:clamp(1.6rem,5.5vw,2.2rem);}
-          .section-head{margin-bottom:2rem;}
-          .eyebrow{font-size:.65rem;margin-bottom:.7rem;}
+          /* Sections global */
+          .section{padding:3rem 4vw;}
+          .section-title{font-size:clamp(1.5rem,5.5vw,2rem);margin-left:0;}
+          .section-lede{font-size:1rem;}
+          .section-head{margin-bottom:1.5rem;}
+          .eyebrow{font-size:.62rem;margin-bottom:.5rem;}
 
           /* Services */
-          .svc-tabs{gap:20px;justify-content:flex-start;}
-          .svc-tab{font-size:.88rem;padding:0 0 12px 0;}
+          .svc-tabs{gap:0;justify-content:space-between;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;}
+          .svc-tabs::-webkit-scrollbar{display:none;}
+          .svc-tab{font-size:.82rem;padding:0 0 10px 0;}
+          .svc-tag{font-size:.75rem;padding:6px 14px;}
+          .svc-desc{font-size:15px!important;line-height:1.7!important;}
+          .svc-panel-anim{padding:32px 0!important;gap:28px!important;}
+
+          /* Ticker */
+          .sector-ticker{margin-top:2rem!important;}
 
           /* Approach */
           .approach-panel{grid-template-columns:1fr;}
           .approach-text{padding:1.2rem 0;border-right:none;}
-          .approach-title{font-size:1.2rem;}
-          .approach-desc{font-size:.85rem;}
+          .approach-title{font-size:1.15rem;}
+          .approach-desc{font-size:.9rem;}
           .approach-canvas-wrap{display:none;}
+          .value-card{padding:1.4rem 1.2rem;}
+          .value-title{font-size:1.2rem;}
+          .value-desc{font-size:.9rem;}
+          .value-tag{font-size:.58rem;padding:.15rem .5rem;}
 
           /* Domains */
           .domains-grid{height:auto;gap:8px;flex-wrap:wrap;}
           .domain-card{flex:1 1 45%!important;aspect-ratio:3/4;}
           .domain-card--shrunk{flex:1 1 45%!important;}
           .domain-card--active{flex:1 1 45%!important;}
-          .domain-label{padding:1rem .8rem;}
-          .domain-name{font-size:1.05rem;transition:none;white-space:normal;}
-          .domain-card--shrunk .domain-name{font-size:1.05rem;}
-          .domain-card--active .domain-name{font-size:1.05rem;}
-          .domain-desc{max-height:100px!important;opacity:1!important;margin-top:.3rem!important;font-size:.75rem!important;}
-          .domain-card--active .domain-desc{max-height:100px;opacity:1;margin-top:.3rem;font-size:.75rem;}
+          .domain-label{padding:.8rem .7rem;}
+          .domain-name{font-size:.95rem;transition:none;white-space:normal;}
+          .domain-card--shrunk .domain-name{font-size:.95rem;}
+          .domain-card--active .domain-name{font-size:.95rem;}
+          .domain-desc{max-height:80px!important;opacity:1!important;margin-top:.25rem!important;font-size:.7rem!important;line-height:1.4!important;}
+          .domain-card--active .domain-desc{max-height:80px;opacity:1;margin-top:.25rem;font-size:.7rem;}
 
           /* Domains carousel */
-          .domains-alt-section{padding:4rem 2.5vw;}
-          .dalt-carousel{height:380px;}
+          .domains-alt-section{padding:3rem 4vw;}
+          .dalt-carousel{height:340px;}
           .dalt-arrow{width:36px;height:36px;}
-          .dalt-tab{font-size:.75rem;padding:6px 8px;}
-          .dalt-active-label span{font-size:1.2rem;}
+          .dalt-tab{font-size:.72rem;padding:5px 8px;}
+          .dalt-active-label span{font-size:1.1rem;}
 
           /* Method */
-          .method-step{grid-template-columns:48px 1fr;gap:1.5rem;padding:1.5rem 0;}
-          .step-num{font-size:.95rem;}
+          .method-step{grid-template-columns:48px 1fr;gap:1.2rem;padding:1.2rem 0;}
+          .step-num{font-size:1.8rem;}
           .step-body h4{font-size:1.15rem;}
-          .step-body p{font-size:.85rem;}
+          .step-body p{font-size:.88rem;}
 
           /* Contact */
-          .contact-wrap{padding:2.5rem 2.5vw;}
-          .fi,.ft{padding:.8rem 1rem;font-size:.9rem;}
+          .contact-wrap{padding:2.5rem 4vw;}
+          .fi,.ft{padding:.75rem 1rem;font-size:.88rem;}
+          .submit-btn{padding:.8rem 2rem;font-size:.8rem;}
 
           /* Footer */
-          footer{padding:2.5rem 2.5vw 2rem;}
+          footer{padding:2.5rem 4vw 2rem;}
           .footer-top{grid-template-columns:1fr;gap:2rem;}
-          .footer-links{gap:2rem 3rem;}
+          .footer-links{gap:1.5rem 2.5rem;}
           .footer-bottom{flex-direction:column;align-items:flex-start;gap:.6rem;}
         }
         @media(max-width:480px){
           /* Services */
-          .svc-tabs{gap:14px;}
-          .svc-tab{font-size:.8rem;padding:0 0 10px 0;}
+          .svc-tab{font-size:.72rem;padding:0 0 8px 0;}
+          .svc-tag{font-size:.7rem;padding:5px 12px;}
 
           /* Ticker */
-          .sector-ticker{padding:.8rem 0;}
-          .sector-ticker-item{font-size:.65rem;padding:0 1.4rem;}
+          .sector-ticker{padding:.7rem 0;}
+          .sector-ticker-item{font-size:.6rem;padding:0 1.2rem;}
 
           /* Approach */
           .approach-title{font-size:1.05rem;}
-          .approach-desc{font-size:.78rem;}
+          .approach-desc{font-size:.82rem;}
+          .value-title{font-size:1.1rem;}
+          .value-desc{font-size:.82rem;}
 
           /* Domains carousel */
-          .dalt-carousel{height:320px;}
-          .dalt-arrow{width:32px;height:32px;}
-          .dalt-tab{font-size:.68rem;padding:5px 6px;}
+          .dalt-carousel{height:300px;}
+          .dalt-arrow{width:30px;height:30px;}
+          .dalt-tab{font-size:.65rem;padding:4px 6px;}
           .dalt-active-label span{font-size:1rem;}
 
           /* Method */
-          .method-step{grid-template-columns:40px 1fr;gap:1.2rem;}
-          .step-num{font-size:.85rem;}
-          .step-body h4{font-size:1.05rem;}
-          .step-body p{font-size:.8rem;}
+          .method-step{grid-template-columns:36px 1fr;gap:1rem;}
+          .step-num{font-size:1.5rem;}
+          .step-body h4{font-size:1rem;}
+          .step-body p{font-size:.78rem;}
 
           /* Contact */
-          .contact-wrap{padding:2rem 2.5vw;}
+          .contact-wrap{padding:1.5rem 4vw;}
         }
         @media(max-width:380px){
           .logo-name{display:none;}
           .logo-sep{display:none;}
+          .hero-h1{font-size:clamp(1.8rem,7vw,2.4rem);}
 
           /* Ticker */
-          .sector-ticker-item{font-size:.6rem;padding:0 1rem;}
+          .sector-ticker-item{font-size:.55rem;padding:0 .8rem;}
 
           /* Domains */
           .domain-card{flex:1 1 45%!important;}
           .domain-card--shrunk{flex:1 1 45%!important;}
           .domain-card--active{flex:1 1 45%!important;}
-          .domain-name{font-size:.9rem;}
+          .domain-name{font-size:.82rem;}
+          .domain-desc{font-size:.65rem!important;}
           .domains-grid{gap:6px;}
-          .dalt-carousel{height:280px;}
+          .dalt-carousel{height:260px;}
 
+          /* Services */
+          .svc-tab{font-size:.65rem;}
         }
       `}</style>
 
