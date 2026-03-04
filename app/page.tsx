@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import Image from 'next/image';
 
 /* ─── Animated canvas for each approach pillar ─── */
 function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
@@ -200,7 +201,7 @@ function ExpertiseSection() {
                 className={`domain-card${isActive ? ' domain-card--active' : ''}${isShrunk ? ' domain-card--shrunk' : ''}`}
                 onMouseEnter={() => setHovered(i)}
               >
-                <div className="domain-img" style={{ backgroundImage: `url(${dom.image})`, backgroundColor: dom.color }} />
+                <Image src={dom.image} alt={dom.name} fill style={{ objectFit: 'cover' }} sizes="(max-width:600px) 50vw, 20vw" className="domain-img" />
                 <div className="domain-overlay" />
                 <div className="domain-label">
                   <h3 className="domain-name">{dom.name}</h3>
@@ -425,7 +426,7 @@ function ExpertiseSectionAlt() {
                   cursor: isCenter ? 'default' : 'pointer',
                 }}
               >
-                <img src={dom.image} alt={dom.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                <Image src={dom.image} alt={dom.name} fill style={{ objectFit: 'cover' }} sizes="(max-width:600px) 50vw, 20vw" />
                 <div className="dalt-card-overlay" />
                 {absRel <= 2 && (
                   <div className="dalt-card-label" style={{ opacity: isCenter ? 1 : 0.5 }}>
@@ -710,11 +711,22 @@ export default function AmbroisePartnersModern() {
     setSending(false);
   };
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    name: 'Ambroise Partners',
+    description: 'Strategic and transactional advisory for healthcare companies.',
+    url: 'https://ambroise-partners.vercel.app',
+    email: 'contact@ambroisepartners.com',
+    areaServed: 'Global',
+    serviceType: ['M&A Advisory', 'Capital Raising', 'Partnerships & Licensing', 'Corporate Advisory', 'Public Capital Markets'],
+    industry: 'Healthcare',
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
-
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 
         :root {
@@ -725,8 +737,8 @@ export default function AmbroisePartnersModern() {
           --line:   #E5E5E3;
           --dark:   #0D0D0D;
           --accent-bg: #F7FBFE;
-          --sans:   'DM Sans',-apple-system,sans-serif;
-          --serif:  'Lora',Georgia,serif;
+          --sans:   var(--font-sans),-apple-system,sans-serif;
+          --serif:  var(--font-serif),Georgia,serif;
           --ease:   cubic-bezier(0.22,0.61,0.36,1);
         }
 
@@ -960,7 +972,7 @@ export default function AmbroisePartnersModern() {
         .domain-card{position:relative;border-radius:4px;overflow:hidden;flex-grow:1;flex-shrink:1;flex-basis:0;min-width:0;cursor:pointer;transition:flex-grow .5s var(--ease),flex-shrink .5s var(--ease),box-shadow .4s ease;}
         .domain-card--shrunk{flex-grow:.7;flex-shrink:1;}
         .domain-card--active{flex-grow:2;flex-shrink:0;box-shadow:0 12px 30px rgba(0,0,0,.18);}
-        .domain-img{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .55s cubic-bezier(0.16,1,0.3,1);}
+        .domain-img{position:absolute;inset:0;transition:transform .55s cubic-bezier(0.16,1,0.3,1);}
         .domain-card--active .domain-img{transform:scale(1.03);}
         .domain-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.05) 50%,transparent 100%);transition:background .35s ease;}
         .domain-card--active .domain-overlay{background:linear-gradient(to top,rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.08) 60%,transparent 100%);}
