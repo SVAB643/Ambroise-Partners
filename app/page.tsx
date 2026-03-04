@@ -218,7 +218,7 @@ function ExpertiseSection() {
 /* ─── Services Section ─── */
 const SERVICES = [
   { id: 'ma', title: 'M&A', description: 'Sell-side, buy-side and transaction advisory across the global healthcare ecosystem. We design and manage disciplined processes focused on value maximisation and execution certainty.', tags: ['Sell-side', 'Buy-side', 'Carve-outs', 'Cross-border'] },
-  { id: 'capital', title: 'Private Capital Raising', description: 'Access to a curated network of specialist healthcare investors — venture capital, growth equity and private equity — to secure the right capital at the right valuation.', tags: ['Series A–D', 'Growth Equity', 'Private Equity', 'Venture'] },
+  { id: 'capital', title: 'Private Capital Raising', description: 'Access to a curated network of specialist healthcare investors, venture capital, growth equity and private equity, to secure the right capital at the right valuation.', tags: ['Series A–D', 'Growth Equity', 'Private Equity', 'Venture'] },
   { id: 'licensing', title: 'Partnerships & Licensing', description: 'Identification, negotiation and structuring of licensing agreements, codevelopment partnerships and commercial collaborations with pharma and medtech corporates.', tags: ['Licensing', 'Co\u2011development', 'Commercialisation', 'JVs'] },
   { id: 'advisory', title: 'Corporate Advisory', description: 'Independent strategic advice on corporate positioning, portfolio strategy, capital structure and value creation, tailored to each stage of a company\'s lifecycle.', tags: ['Strategy', 'Valuation', 'Governance', 'Restructuring'] },
   { id: 'public', title: 'Public Capital Markets', description: 'Advisory support for IPO readiness, secondary offerings, investor relations strategy and public market positioning for healthcare companies seeking or maintaining a listing.', tags: ['IPO', 'Follow-on', 'IR Strategy', 'Dual-track'] },
@@ -267,7 +267,7 @@ function ServicesSection() {
         <div
           key={SERVICES[active].id}
           className="svc-panel-anim"
-          style={{ padding: '64px 0', display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: 48 }}
+          style={{ padding: '64px 0', display: 'flex', flexDirection: 'column' as const, alignItems: 'flex-start', gap: 48 }}
           onMouseEnter={() => pausedRef.current = true}
           onMouseLeave={() => pausedRef.current = false}
         >
@@ -276,7 +276,7 @@ function ServicesSection() {
               {SERVICES[active].description}
             </p>
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 10, justifyContent: 'center' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 10, justifyContent: 'flex-start' }}>
             {SERVICES[active].tags.map((tag, i) => (
               <span key={tag} className="svc-tag" style={{ animationDelay: `${0.06 * i}s` }}>{tag}</span>
             ))}
@@ -852,9 +852,10 @@ export default function AmbroisePartnersModern() {
         /* ── APPROACH ── */
         .approach-panels{display:flex;flex-direction:column;gap:0;}
         .approach-panel{display:grid;grid-template-columns:1fr 1fr;background:var(--accent-bg);}
-        .approach-text{padding:1.6rem 2rem 1.6rem 0;display:flex;flex-direction:column;justify-content:center;border-right:1px solid #fff;}
+        .approach-panel+.approach-panel .approach-text{border-top:1px solid var(--line);}
+        .approach-text{padding:1.6rem 2rem 1.6rem 0;display:flex;flex-direction:column;justify-content:center;border-right:none;}
         .approach-num{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:#162d50;margin-bottom:.8rem;display:block;}
-        .approach-title{font-family:var(--serif);font-weight:400;font-size:1.7rem;letter-spacing:-.01em;margin-bottom:.7rem;line-height:1.15;}
+        .approach-title{font-family:var(--serif);font-weight:400;font-size:1.4rem;letter-spacing:-.01em;margin-bottom:.7rem;line-height:1.15;}
         .approach-desc{color:var(--muted);font-size:1.125rem;line-height:1.7;font-weight:300;}
         .approach-canvas-wrap{background:var(--accent-bg);overflow:hidden;position:relative;min-height:160px;}
 
@@ -863,14 +864,14 @@ export default function AmbroisePartnersModern() {
         .value-card{background:var(--accent-bg);padding:1.8rem 1.6rem;transition:background .25s;}
         .value-card:hover{background:#e8ecf2;}
         .value-tag{display:inline-block;font-size:.65rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);border:1px solid var(--blue);padding:.2rem .6rem;border-radius:100px;margin-bottom:.8rem;}
-        .value-title{font-family:var(--serif);font-weight:400;font-size:1.7rem;letter-spacing:-.01em;margin-bottom:.6rem;line-height:1.2;}
+        .value-title{font-family:var(--serif);font-weight:400;font-size:1.4rem;letter-spacing:-.01em;margin-bottom:.6rem;line-height:1.2;}
         .value-desc{color:var(--muted);font-size:1.125rem;line-height:1.7;font-weight:300;}
 
         /* ── METHOD ── */
         .method-list{border-top:1px solid var(--line);}
         .method-step{display:grid;grid-template-columns:80px 1fr;align-items:center;gap:1.2rem;padding:1rem 0;border-bottom:1px solid var(--line);}
         .step-num{font-family:var(--serif);font-style:normal;font-size:2.8rem;color:#162d50;font-weight:400;letter-spacing:-.02em;}
-        .step-body h4{font-family:var(--serif);font-weight:400;font-size:1.7rem;letter-spacing:-.01em;margin-bottom:.3rem;}
+        .step-body h4{font-family:var(--serif);font-weight:400;font-size:1.4rem;letter-spacing:-.01em;margin-bottom:.3rem;}
         .step-body p{color:var(--muted);font-size:1.125rem;line-height:1.7;font-weight:300;}
 
         /* ── ABOUT ── */
@@ -898,7 +899,7 @@ export default function AmbroisePartnersModern() {
         .submit-btn:hover{background:#030a24;border-color:#030a24;transform:translateY(-2px);box-shadow:0 10px 28px rgba(3,10,36,.2);}
 
         /* ── SERVICES TABS ── */
-        .svc-tabs{display:flex;border-bottom:1px solid var(--line);justify-content:space-between;overflow:hidden;}
+        .svc-tabs{display:flex;border-bottom:1px solid var(--line);justify-content:space-between;overflow:hidden;margin-top:4.5rem;}
         .svc-tab{cursor:pointer;position:relative;padding:0 0 20px 0;background:none;border:none;outline:none;-webkit-appearance:none;appearance:none;white-space:nowrap;font-family:var(--serif);font-size:1.4rem;font-weight:400;color:var(--muted);letter-spacing:-.01em;transition:color .35s ease;}
         .svc-tab::after{content:'';position:absolute;bottom:-1.5px;left:0;width:100%;height:2px;background:var(--ink);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(0.25,0.1,0.25,1);}
         .svc-tab:hover{color:var(--ink);}
@@ -911,7 +912,7 @@ export default function AmbroisePartnersModern() {
         @keyframes svcFadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 
         /* ── SECTOR TICKER ── */
-        .sector-ticker{background:var(--white);border-top:1px solid #fff;border-bottom:1px solid #fff;overflow:hidden;padding:1.2rem 0;margin-top:6rem;white-space:nowrap;}
+        .sector-ticker{background:var(--white);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:.5rem 0;margin-top:3rem;margin-bottom:5rem;white-space:nowrap;}
         .sector-ticker-track{display:flex;width:max-content;animation:tickerScroll 180s linear infinite;}
         .sector-ticker-set{display:flex;gap:0;flex-shrink:0;}
         .sector-ticker-item{font-size:.78rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#162d50;padding:0 2.8rem;opacity:1;display:flex;align-items:center;gap:.7rem;}
