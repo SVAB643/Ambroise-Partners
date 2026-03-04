@@ -901,12 +901,12 @@ export default function AmbroisePartnersModern() {
         .form-msg--ok{background:#f0faf0;color:#1a7a2e;border:1px solid #c3e6c3;}
         .form-msg--err{background:#fdf0f0;color:#a12;border:1px solid #e6c3c3;}
         .submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
-        .contact-wrap{max-width:700px;margin:0 auto;padding:7rem 2.5vw;text-align:center;display:flex;flex-direction:column;align-items:center;}
-        .contact-form{margin-top:3.5rem;text-align:left;display:flex;flex-direction:column;gap:1.2rem;width:100%;max-width:600px;}
+        .contact-wrap{max-width:700px;margin:0 auto;padding:3.5rem 2.5vw;text-align:center;display:flex;flex-direction:column;align-items:center;}
+        .contact-form{margin-top:2rem;text-align:left;display:flex;flex-direction:column;gap:.9rem;width:100%;max-width:600px;}
         .fl{display:block;font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.45rem;}
         .fi,.ft{width:100%;background:#fff;border:1px solid var(--line);border-radius:4px;padding:.9rem 1.15rem;font-family:var(--sans);font-size:.95rem;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;}
         .fi:focus,.ft:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(3,10,36,.1);}
-        .ft{min-height:130px;resize:vertical;}
+        .ft{min-height:90px;resize:vertical;}
         .fc{display:flex;gap:.7rem;align-items:flex-start;font-size:.75rem;color:var(--muted);cursor:pointer;line-height:1.55;font-weight:300;}
         .fc input{margin-top:3px;flex-shrink:0;accent-color:var(--blue);}
         .submit-btn{align-self:center;background:var(--ink);color:#fff;border:1.5px solid var(--ink);padding:1rem 3rem;border-radius:9999px;font-family:var(--sans);font-size:.85rem;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:background .22s,transform .2s,box-shadow .22s,color .22s,border-color .22s;}
