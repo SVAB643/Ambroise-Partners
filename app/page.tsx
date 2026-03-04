@@ -1049,9 +1049,9 @@ export default function AmbroisePartnersModern() {
           .eyebrow{font-size:.62rem;margin-bottom:.5rem;}
 
           /* Services */
-          .svc-tabs{gap:1.2rem;justify-content:flex-start;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;margin-top:1.5rem!important;}
-          .svc-tabs::-webkit-scrollbar{display:none;}
-          .svc-tab{font-size:.75rem;padding:0 0 10px 0;white-space:nowrap;flex-shrink:0;}
+          .svc-tabs{flex-direction:column;gap:0;border-bottom:none;margin-top:1.5rem!important;overflow:visible;}
+          .svc-tab{font-size:1rem;padding:10px 0;white-space:nowrap;text-align:left;border-bottom:1px solid var(--line);}
+          .svc-tab::after{bottom:0;}
           .svc-tag{font-size:.75rem;padding:6px 14px;}
           .svc-desc{font-size:15px!important;line-height:1.7!important;}
           .svc-panel-anim{padding:32px 0!important;gap:28px!important;}
@@ -1108,7 +1108,7 @@ export default function AmbroisePartnersModern() {
         }
         @media(max-width:480px){
           /* Services */
-          .svc-tab{font-size:.65rem;padding:0 0 8px 0;}
+          .svc-tab{font-size:.9rem;padding:8px 0;}
           .svc-tag{font-size:.65rem;padding:5px 10px;}
 
           /* Ticker */
@@ -1154,7 +1154,7 @@ export default function AmbroisePartnersModern() {
           .dalt-carousel{height:260px;}
 
           /* Services */
-          .svc-tab{font-size:.58rem;}
+          .svc-tab{font-size:.85rem;}
         }
       `}</style>
 
