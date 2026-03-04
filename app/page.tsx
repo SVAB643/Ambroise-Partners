@@ -728,6 +728,7 @@ export default function AmbroisePartnersModern() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <style jsx global>{`
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+        a,button{-webkit-tap-highlight-color:transparent;}
 
         :root {
           --white:  #ffffff;
@@ -778,7 +779,7 @@ export default function AmbroisePartnersModern() {
         .nav-scrolled .nav-links a{color:var(--muted);}
         .nav-scrolled .nav-links a:hover{color:var(--ink);}
         .nav-scrolled .nav-cta{background:var(--ink)!important;color:#fff!important;border-radius:9999px;border-color:var(--ink);}
-        .nav-scrolled .nav-cta:hover{background:var(--blue)!important;border-color:var(--blue);}
+        .nav-scrolled .nav-cta:hover,.nav-scrolled .nav-cta:active{background:var(--blue)!important;border-color:var(--blue);}
 
         /* ── HERO ── */
         .hero{
