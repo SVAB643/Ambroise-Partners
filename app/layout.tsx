@@ -5,7 +5,7 @@ import "./globals.css";
 const dmSans = DM_Sans({ subsets: ["latin"], weight: ["300", "400", "500", "600"], variable: "--font-sans", display: "swap" });
 const lora = Lora({ subsets: ["latin"], weight: ["400", "500", "600"], style: ["normal", "italic"], variable: "--font-serif", display: "swap" });
 
-const siteUrl = "https://ambroise-partners.vercel.app";
+const siteUrl = "https://www.ambroisepartners.com";
 
 export const metadata: Metadata = {
   title: "Ambroise Partners — Healthcare Advisory",

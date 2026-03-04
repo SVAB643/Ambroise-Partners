@@ -716,7 +716,7 @@ export default function AmbroisePartnersModern() {
     '@type': 'ProfessionalService',
     name: 'Ambroise Partners',
     description: 'Strategic and transactional advisory for healthcare companies.',
-    url: 'https://ambroise-partners.vercel.app',
+    url: 'https://www.ambroisepartners.com',
     email: 'contact@ambroisepartners.com',
     areaServed: 'Global',
     serviceType: ['M&A Advisory', 'Capital Raising', 'Partnerships & Licensing', 'Corporate Advisory', 'Public Capital Markets'],

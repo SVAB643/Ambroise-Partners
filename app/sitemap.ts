@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://ambroise-partners.vercel.app';
+  const baseUrl = 'https://www.ambroisepartners.com';
 
   return [
     { url: baseUrl, lastModified: new Date(), changeFrequency: 'monthly', priority: 1 },
