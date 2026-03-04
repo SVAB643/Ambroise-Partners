@@ -267,16 +267,16 @@ function ServicesSection() {
         <div
           key={SERVICES[active].id}
           className="svc-panel-anim"
-          style={{ padding: '64px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 80, flexWrap: 'wrap' as const }}
+          style={{ padding: '64px 0', display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: 48 }}
           onMouseEnter={() => pausedRef.current = true}
           onMouseLeave={() => pausedRef.current = false}
         >
-          <div style={{ flex: 1, maxWidth: 640, minWidth: 280 }}>
+          <div style={{ width: '100%' }}>
             <p style={{ fontSize: 18, lineHeight: 1.8, color: 'var(--muted)', margin: 0 }}>
               {SERVICES[active].description}
             </p>
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 10, justifyContent: 'flex-end', maxWidth: 320, paddingTop: 8 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: 10, justifyContent: 'center' }}>
             {SERVICES[active].tags.map((tag, i) => (
               <span key={tag} className="svc-tag" style={{ animationDelay: `${0.06 * i}s` }}>{tag}</span>
             ))}
@@ -714,7 +714,7 @@ export default function AmbroisePartnersModern() {
           --muted:  #6B6B6B;
           --line:   #E5E5E3;
           --dark:   #0D0D0D;
-          --accent-bg: #F6FBFF;
+          --accent-bg: #F7F9FF;
           --sans:   'DM Sans',-apple-system,sans-serif;
           --serif:  'Lora',Georgia,serif;
           --ease:   cubic-bezier(0.22,0.61,0.36,1);
@@ -911,11 +911,11 @@ export default function AmbroisePartnersModern() {
         @keyframes svcFadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 
         /* ── SECTOR TICKER ── */
-        .sector-ticker{background:var(--white);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:1.2rem 0;white-space:nowrap;}
+        .sector-ticker{background:var(--white);border-top:1px solid #fff;border-bottom:1px solid #fff;overflow:hidden;padding:1.2rem 0;margin-top:6rem;white-space:nowrap;}
         .sector-ticker-track{display:flex;width:max-content;animation:tickerScroll 180s linear infinite;}
         .sector-ticker-set{display:flex;gap:0;flex-shrink:0;}
-        .sector-ticker-item{font-size:.78rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 2.8rem;opacity:.45;display:flex;align-items:center;gap:.7rem;transition:opacity .3s;}
-        .sector-ticker-item::before{content:'';width:4px;height:4px;border-radius:50%;border:1px solid var(--blue);flex-shrink:0;}
+        .sector-ticker-item{font-size:.78rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgb(20,50,120);padding:0 2.8rem;opacity:1;display:flex;align-items:center;gap:.7rem;}
+        .sector-ticker-item::before{content:'';width:4px;height:4px;border-radius:50%;border:1px solid rgb(20,50,120);flex-shrink:0;}
         @keyframes tickerScroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
 
         /* ── FOOTER ── */
@@ -941,7 +941,7 @@ export default function AmbroisePartnersModern() {
         .footer-copy{font-size:.65rem;color:rgba(255,255,255,.22);letter-spacing:.04em;}
 
         /* ── DOMAINS GRID ── */
-        .domains-grid{display:flex;gap:6px;height:420px;}
+        .domains-grid{display:flex;gap:6px;height:520px;}
         .domain-card{position:relative;border-radius:4px;overflow:hidden;flex-grow:1;flex-shrink:1;flex-basis:0;min-width:0;cursor:pointer;transition:flex-grow .5s var(--ease),flex-shrink .5s var(--ease),box-shadow .4s ease;}
         .domain-card--shrunk{flex-grow:.7;flex-shrink:1;}
         .domain-card--active{flex-grow:2;flex-shrink:0;box-shadow:0 12px 30px rgba(0,0,0,.18);}
