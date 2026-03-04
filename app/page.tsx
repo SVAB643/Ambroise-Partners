@@ -1042,7 +1042,7 @@ export default function AmbroisePartnersModern() {
           /* Nav */
           nav{padding:0 4vw;height:56px;}
           .logo-ap{font-size:1.3rem;}
-          .logo-name{font-size:.75rem;letter-spacing:.08em;}
+          .logo-name{font-size:.9rem;letter-spacing:.1em;}
           .logo-sep{height:13px;}
           .nav-cta{padding:.48rem 1.1rem!important;font-size:.72rem!important;}
 
