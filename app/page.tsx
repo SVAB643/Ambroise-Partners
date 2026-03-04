@@ -695,16 +695,18 @@ export default function AmbroisePartnersModern() {
   }, []);
 
   const [sending, setSending] = useState(false);
+  const [formStatus, setFormStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSending(true);
+    setFormStatus('idle');
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form));
     try {
       const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-      if (res.ok) { alert('Thank you! We will get back to you shortly.'); form.reset(); }
-      else { alert('Something went wrong. Please try again.'); }
-    } catch { alert('Something went wrong. Please try again.'); }
+      if (res.ok) { setFormStatus('success'); form.reset(); }
+      else { setFormStatus('error'); }
+    } catch { setFormStatus('error'); }
     setSending(false);
   };
 
@@ -895,6 +897,10 @@ export default function AmbroisePartnersModern() {
         .about-dark::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(3,10,36,.22) 0%,transparent 70%);border-radius:50%;}
 
         /* ── CONTACT ── */
+        .form-msg{text-align:center;padding:1rem 1.5rem;border-radius:8px;font-family:var(--sans);font-size:.9rem;font-weight:400;animation:svcFadeUp .4s ease both;}
+        .form-msg--ok{background:#f0faf0;color:#1a7a2e;border:1px solid #c3e6c3;}
+        .form-msg--err{background:#fdf0f0;color:#a12;border:1px solid #e6c3c3;}
+        .submit-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
         .contact-wrap{max-width:700px;margin:0 auto;padding:7rem 2.5vw;text-align:center;display:flex;flex-direction:column;align-items:center;}
         .contact-form{margin-top:3.5rem;text-align:left;display:flex;flex-direction:column;gap:1.2rem;width:100%;max-width:600px;}
         .fl{display:block;font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.45rem;}
@@ -1283,7 +1289,9 @@ export default function AmbroisePartnersModern() {
             <div><label className="fl">Email</label><input name="email" className="fi" type="email" required placeholder="you@company.com"/></div>
             <div><label className="fl">Message</label><textarea name="message" className="ft" required placeholder="Describe your project…"/></div>
             <label className="fc"><input type="checkbox" required/><span>I agree that my information will be processed to answer my request.</span></label>
-            <button type="submit" className="submit-btn">Send message</button>
+            <button type="submit" className="submit-btn" disabled={sending}>{sending ? 'Sending...' : 'Send message'}</button>
+            {formStatus === 'success' && <div className="form-msg form-msg--ok">Thank you! We will get back to you shortly.</div>}
+            {formStatus === 'error' && <div className="form-msg form-msg--err">Something went wrong. Please try again.</div>}
           </form>
         </div>
       </div>
