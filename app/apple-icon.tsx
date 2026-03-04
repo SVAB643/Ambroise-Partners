@@ -15,16 +15,17 @@ export default function Icon() {
           alignItems: 'center',
           justifyContent: 'center',
           background: '#ffffff',
-          borderRadius: 36,
+          borderRadius: 40,
         }}
       >
         <span
           style={{
-            fontFamily: 'Georgia, serif',
+            fontFamily: 'serif',
             fontWeight: 500,
-            fontSize: 90,
+            fontSize: 110,
             color: '#1A1A1A',
-            letterSpacing: -1,
+            letterSpacing: '-0.02em',
+            marginTop: -4,
           }}
         >
           AP
