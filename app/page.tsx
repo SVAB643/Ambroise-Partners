@@ -779,7 +779,7 @@ export default function AmbroisePartnersModern() {
         .nav-scrolled .nav-links a{color:var(--muted);}
         .nav-scrolled .nav-links a:hover{color:var(--ink);}
         .nav-scrolled .nav-cta{background:var(--ink)!important;color:#fff!important;border-radius:9999px;border-color:var(--ink);}
-        .nav-scrolled .nav-cta:hover,.nav-scrolled .nav-cta:active{background:var(--blue)!important;border-color:var(--blue);}
+        .nav-scrolled .nav-cta:hover,.nav-scrolled .nav-cta:active{background:#030a24!important;border-color:#030a24;}
 
         /* ── HERO ── */
         .hero{
