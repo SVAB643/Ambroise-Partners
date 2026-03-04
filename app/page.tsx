@@ -1077,7 +1077,7 @@ export default function AmbroisePartnersModern() {
           .approach-text{padding:1.2rem 0;border-right:none;}
           .approach-title{font-size:1.15rem;}
           .approach-desc{font-size:.9rem;}
-          .approach-canvas-wrap{display:none;}
+          .approach-canvas-wrap{min-height:200px;}
           .value-card{padding:1.4rem 1.2rem;}
           .value-title{font-size:1.2rem;}
           .value-desc{font-size:.9rem;}
