@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
-    const { name, email, company, message } = await req.json();
+    const { name, email, subject, company, message } = await req.json();
 
-    if (!name || !email || !message) {
+    if (!name || !email || !subject || !message) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -18,8 +18,8 @@ export async function POST(req: Request) {
         from: 'Ambroise Partners <onboarding@resend.dev>',
         to: 'camille@ambroisepartners.com',
         reply_to: email,
-        subject: `New inquiry from ${name}${company ? ` (${company})` : ''}`,
-        text: `Name: ${name}\nEmail: ${email}\nCompany: ${company || 'N/A'}\n\nMessage:\n${message}`,
+        subject: `[Website] ${subject} — ${name}`,
+        text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}`,
       }),
     });
 

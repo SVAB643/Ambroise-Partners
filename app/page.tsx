@@ -1287,6 +1287,7 @@ export default function AmbroisePartnersModern() {
           <form className="contact-form reveal" onSubmit={handleSubmit}>
             <div><label className="fl">Name</label><input name="name" className="fi" type="text" required placeholder="Your full name"/></div>
             <div><label className="fl">Email</label><input name="email" className="fi" type="email" required placeholder="you@company.com"/></div>
+            <div><label className="fl">Subject</label><input name="subject" className="fi" type="text" required placeholder="How can we help?"/></div>
             <div><label className="fl">Message</label><textarea name="message" className="ft" required placeholder="Describe your project…"/></div>
             <label className="fc"><input type="checkbox" required/><span>I agree that my information will be processed to answer my request.</span></label>
             <button type="submit" className={`submit-btn${formStatus === 'success' ? ' submit-btn--ok' : ''}${formStatus === 'error' ? ' submit-btn--err' : ''}`} disabled={sending || formStatus === 'success'}>{sending ? 'Sending...' : formStatus === 'success' ? 'Message sent!' : formStatus === 'error' ? 'Error — try again' : 'Send message'}</button>
