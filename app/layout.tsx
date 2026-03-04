@@ -8,11 +8,11 @@ const lora = Lora({ subsets: ["latin"], weight: ["400", "500", "600"], style: ["
 const siteUrl = "https://www.ambroisepartners.com";
 
 export const metadata: Metadata = {
-  title: "Ambroise Partners — Healthcare Advisory",
+  title: "Ambroise Partners - Healthcare Financial Advisory",
   description: "Strategic and transactional advisory for healthcare companies. M&A, capital raising, partnerships & licensing.",
   metadataBase: new URL(siteUrl),
   openGraph: {
-    title: "Ambroise Partners — Healthcare Advisory",
+    title: "Ambroise Partners - Healthcare Financial Advisory",
     description: "Strategic and transactional advisory for healthcare companies. M&A, capital raising, partnerships & licensing.",
     url: siteUrl,
     siteName: "Ambroise Partners",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ambroise Partners — Healthcare Advisory",
+    title: "Ambroise Partners - Healthcare Financial Advisory",
     description: "Strategic and transactional advisory for healthcare companies.",
     images: ["/og-image.svg"],
   },
