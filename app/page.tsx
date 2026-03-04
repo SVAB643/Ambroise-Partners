@@ -1049,9 +1049,9 @@ export default function AmbroisePartnersModern() {
           .eyebrow{font-size:.62rem;margin-bottom:.5rem;}
 
           /* Services */
-          .svc-tabs{gap:0;justify-content:space-between;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;}
+          .svc-tabs{gap:1.2rem;justify-content:flex-start;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;margin-top:1.5rem!important;}
           .svc-tabs::-webkit-scrollbar{display:none;}
-          .svc-tab{font-size:.82rem;padding:0 0 10px 0;}
+          .svc-tab{font-size:.75rem;padding:0 0 10px 0;white-space:nowrap;flex-shrink:0;}
           .svc-tag{font-size:.75rem;padding:6px 14px;}
           .svc-desc{font-size:15px!important;line-height:1.7!important;}
           .svc-panel-anim{padding:32px 0!important;gap:28px!important;}
@@ -1075,12 +1075,12 @@ export default function AmbroisePartnersModern() {
           .domain-card{flex:1 1 45%!important;aspect-ratio:3/4;}
           .domain-card--shrunk{flex:1 1 45%!important;}
           .domain-card--active{flex:1 1 45%!important;}
-          .domain-label{padding:.8rem .7rem;}
-          .domain-name{font-size:.95rem;transition:none;white-space:normal;}
-          .domain-card--shrunk .domain-name{font-size:.95rem;}
-          .domain-card--active .domain-name{font-size:.95rem;}
-          .domain-desc{max-height:80px!important;opacity:1!important;margin-top:.25rem!important;font-size:.7rem!important;line-height:1.4!important;}
-          .domain-card--active .domain-desc{max-height:80px;opacity:1;margin-top:.25rem;font-size:.7rem;}
+          .domain-label{padding:.7rem .7rem;text-align:left;}
+          .domain-name{font-size:.85rem;transition:none;white-space:normal;text-align:left;}
+          .domain-card--shrunk .domain-name{font-size:.85rem;}
+          .domain-card--active .domain-name{font-size:.85rem;}
+          .domain-desc{max-height:80px!important;opacity:1!important;margin-top:.2rem!important;font-size:.65rem!important;line-height:1.4!important;text-align:left;}
+          .domain-card--active .domain-desc{max-height:80px;opacity:1;margin-top:.2rem;font-size:.65rem;}
 
           /* Domains carousel */
           .domains-alt-section{padding:3rem 4vw;}
@@ -1108,8 +1108,8 @@ export default function AmbroisePartnersModern() {
         }
         @media(max-width:480px){
           /* Services */
-          .svc-tab{font-size:.72rem;padding:0 0 8px 0;}
-          .svc-tag{font-size:.7rem;padding:5px 12px;}
+          .svc-tab{font-size:.65rem;padding:0 0 8px 0;}
+          .svc-tag{font-size:.65rem;padding:5px 10px;}
 
           /* Ticker */
           .sector-ticker{padding:.7rem 0;}
@@ -1154,7 +1154,7 @@ export default function AmbroisePartnersModern() {
           .dalt-carousel{height:260px;}
 
           /* Services */
-          .svc-tab{font-size:.65rem;}
+          .svc-tab{font-size:.58rem;}
         }
       `}</style>
 
