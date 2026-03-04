@@ -694,10 +694,18 @@ export default function AmbroisePartnersModern() {
     };
   }, []);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [sending, setSending] = useState(false);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert('Thank you! We will get back to you shortly.');
-    e.currentTarget.reset();
+    setSending(true);
+    const form = e.currentTarget;
+    const data = Object.fromEntries(new FormData(form));
+    try {
+      const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+      if (res.ok) { alert('Thank you! We will get back to you shortly.'); form.reset(); }
+      else { alert('Something went wrong. Please try again.'); }
+    } catch { alert('Something went wrong. Please try again.'); }
+    setSending(false);
   };
 
   return (
@@ -1271,9 +1279,9 @@ export default function AmbroisePartnersModern() {
             </p>
           </div>
           <form className="contact-form reveal" onSubmit={handleSubmit}>
-            <div><label className="fl">Name</label><input className="fi" type="text" required placeholder="Your full name"/></div>
-            <div><label className="fl">Email</label><input className="fi" type="email" required placeholder="you@company.com"/></div>
-            <div><label className="fl">Message</label><textarea className="ft" required placeholder="Describe your project…"/></div>
+            <div><label className="fl">Name</label><input name="name" className="fi" type="text" required placeholder="Your full name"/></div>
+            <div><label className="fl">Email</label><input name="email" className="fi" type="email" required placeholder="you@company.com"/></div>
+            <div><label className="fl">Message</label><textarea name="message" className="ft" required placeholder="Describe your project…"/></div>
             <label className="fc"><input type="checkbox" required/><span>I agree that my information will be processed to answer my request.</span></label>
             <button type="submit" className="submit-btn">Send message</button>
           </form>
