@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify({
         from: 'Ambroise Partners <onboarding@resend.dev>',
-        to: 'camille@ambroisepartners.com',
+        to: 'adrien@ambroisepartners.com',
         reply_to: email,
         subject: `[Website] ${subject} — ${name}`,
         text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}`,
@@ -24,7 +24,9 @@ export async function POST(req: Request) {
     });
 
     if (!res.ok) {
-      return NextResponse.json({ error: 'Failed to send message' }, { status: 500 });
+      const errorData = await res.json().catch(() => ({}));
+      console.error('Resend error:', res.status, errorData);
+      return NextResponse.json({ error: 'Failed to send message', detail: errorData }, { status: 500 });
     }
 
     return NextResponse.json({ success: true });
