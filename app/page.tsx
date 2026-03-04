@@ -47,14 +47,14 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
           ctx.beginPath();
           ctx.moveTo(nodes[i].x,nodes[i].y);
           ctx.lineTo(nodes[j].x,nodes[j].y);
-          ctx.strokeStyle=`rgba(3,10,36,${0.18*(1-d/110)})`;
+          ctx.strokeStyle=`rgba(10,26,58,${0.18*(1-d/110)})`;
           ctx.lineWidth=0.8;
           ctx.stroke();
         }
       }
       nodes.forEach(n => {
         ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
-        ctx.fillStyle='rgba(3,10,36,0.55)'; ctx.fill();
+        ctx.fillStyle='rgba(10,26,58,0.55)'; ctx.fill();
       });
       raf = requestAnimationFrame(drawBrain);
     };
@@ -73,22 +73,22 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
       nt += 0.018;
       const cx = hubs[0].x*W, cy = hubs[0].y*H;
       const grad = ctx.createRadialGradient(cx,cy,0,cx,cy,W*.28);
-      grad.addColorStop(0,'rgba(3,10,36,0.12)');
-      grad.addColorStop(1,'rgba(3,10,36,0)');
+      grad.addColorStop(0,'rgba(10,26,58,0.12)');
+      grad.addColorStop(1,'rgba(10,26,58,0)');
       ctx.fillStyle=grad; ctx.beginPath(); ctx.arc(cx,cy,W*.28,0,Math.PI*2); ctx.fill();
       hubs.slice(1).forEach((h,i) => {
         const hx=h.x*W, hy=h.y*H;
         ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(hx,hy);
-        ctx.strokeStyle=`rgba(3,10,36,${0.18+0.08*Math.sin(nt+i)})`; ctx.lineWidth=1; ctx.stroke();
+        ctx.strokeStyle=`rgba(10,26,58,${0.18+0.08*Math.sin(nt+i)})`; ctx.lineWidth=1; ctx.stroke();
         const p = (Math.sin(nt*0.8+i*1.1)+1)/2;
         const px2 = cx+(hx-cx)*p, py2 = cy+(hy-cy)*p;
         ctx.beginPath(); ctx.arc(px2,py2,2.2,0,Math.PI*2);
-        ctx.fillStyle='rgba(3,10,36,0.7)'; ctx.fill();
+        ctx.fillStyle='rgba(10,26,58,0.7)'; ctx.fill();
         ctx.beginPath(); ctx.arc(hx,hy,h.r,0,Math.PI*2);
-        ctx.fillStyle=`rgba(3,10,36,${0.45+0.15*Math.sin(nt+i)})`; ctx.fill();
+        ctx.fillStyle=`rgba(10,26,58,${0.45+0.15*Math.sin(nt+i)})`; ctx.fill();
       });
       ctx.beginPath(); ctx.arc(cx,cy,hubs[0].r*(1+.12*Math.sin(nt)),0,Math.PI*2);
-      ctx.fillStyle='rgba(3,10,36,0.8)'; ctx.fill();
+      ctx.fillStyle='rgba(10,26,58,0.8)'; ctx.fill();
       raf = requestAnimationFrame(drawNetwork);
     };
 
@@ -103,7 +103,7 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
       for (let i=0;i<=4;i++) {
         const y = pad.y + iH*(1-i/4);
         ctx.beginPath(); ctx.moveTo(pad.x,y); ctx.lineTo(pad.x+iW,y);
-        ctx.strokeStyle='rgba(3,10,36,0.07)'; ctx.lineWidth=1; ctx.stroke();
+        ctx.strokeStyle='rgba(10,26,58,0.07)'; ctx.lineWidth=1; ctx.stroke();
       }
       ctx.beginPath();
       ctx.moveTo(pad.x, pad.y+iH);
@@ -117,8 +117,8 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
       ctx.lineTo(pad.x+iW, pad.y+iH);
       ctx.closePath();
       const fill = ctx.createLinearGradient(0,pad.y,0,pad.y+iH);
-      fill.addColorStop(0,'rgba(3,10,36,0.14)');
-      fill.addColorStop(1,'rgba(3,10,36,0.01)');
+      fill.addColorStop(0,'rgba(10,26,58,0.14)');
+      fill.addColorStop(1,'rgba(10,26,58,0.01)');
       ctx.fillStyle=fill; ctx.fill();
       ctx.beginPath();
       for (let i=0;i<=pts;i++) {
@@ -128,12 +128,12 @@ function ApproachCanvas({ type }: { type: 'brain' | 'network' | 'curve' }) {
         const y = pad.y + iH*(1-Math.min(fy,1));
         i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
       }
-      ctx.strokeStyle='rgba(3,10,36,0.75)'; ctx.lineWidth=2.2;
+      ctx.strokeStyle='rgba(10,26,58,0.75)'; ctx.lineWidth=2.2;
       ctx.lineJoin='round'; ctx.stroke();
       const lastFy = Math.pow(1,1.6)+Math.sin(Math.PI*2+ct)*0.15*.5;
       const dotY = pad.y+iH*(1-Math.min(lastFy,1));
       ctx.beginPath(); ctx.arc(pad.x+iW, dotY, 4.5, 0, Math.PI*2);
-      ctx.fillStyle='rgba(3,10,36,0.9)'; ctx.fill();
+      ctx.fillStyle='rgba(10,26,58,0.9)'; ctx.fill();
       raf = requestAnimationFrame(drawCurve);
     };
 
@@ -787,15 +787,15 @@ export default function AmbroisePartnersModern() {
             #0a1880 42%,
             #071260 48%,
             #050e42 53%,
-            #030a24 58%,
-            rgba(3,10,36,0.85) 62%,
-            rgba(3,10,36,0.7) 65%,
-            rgba(3,10,36,0.55) 68%,
-            rgba(3,10,36,0.4) 71%,
-            rgba(3,10,36,0.28) 74%,
-            rgba(3,10,36,0.16) 77%,
-            rgba(3,10,36,0.08) 80%,
-            rgba(3,10,36,0.03) 84%,
+            #0a1a3a 58%,
+            rgba(10,26,58,0.85) 62%,
+            rgba(10,26,58,0.7) 65%,
+            rgba(10,26,58,0.55) 68%,
+            rgba(10,26,58,0.4) 71%,
+            rgba(10,26,58,0.28) 74%,
+            rgba(10,26,58,0.16) 77%,
+            rgba(10,26,58,0.08) 80%,
+            rgba(10,26,58,0.03) 84%,
             transparent 88%
           );
           opacity:0;
@@ -853,7 +853,7 @@ export default function AmbroisePartnersModern() {
         .approach-panels{display:flex;flex-direction:column;gap:0;}
         .approach-panel{display:grid;grid-template-columns:1fr 1fr;background:var(--accent-bg);}
         .approach-text{padding:1.6rem 2rem 1.6rem 0;display:flex;flex-direction:column;justify-content:center;border-right:1px solid #fff;}
-        .approach-num{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:#030a24;margin-bottom:.8rem;display:block;}
+        .approach-num{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:#0a1a3a;margin-bottom:.8rem;display:block;}
         .approach-title{font-family:var(--serif);font-weight:400;font-size:1.7rem;letter-spacing:-.01em;margin-bottom:.7rem;line-height:1.15;}
         .approach-desc{color:var(--muted);font-size:1.125rem;line-height:1.7;font-weight:300;}
         .approach-canvas-wrap{background:var(--accent-bg);overflow:hidden;position:relative;min-height:160px;}
@@ -869,7 +869,7 @@ export default function AmbroisePartnersModern() {
         /* ── METHOD ── */
         .method-list{border-top:1px solid var(--line);}
         .method-step{display:grid;grid-template-columns:80px 1fr;align-items:center;gap:1.2rem;padding:1rem 0;border-bottom:1px solid var(--line);}
-        .step-num{font-family:var(--serif);font-style:normal;font-size:2.8rem;color:#030a24;font-weight:400;letter-spacing:-.02em;}
+        .step-num{font-family:var(--serif);font-style:normal;font-size:2.8rem;color:#0a1a3a;font-weight:400;letter-spacing:-.02em;}
         .step-body h4{font-family:var(--serif);font-weight:400;font-size:1.7rem;letter-spacing:-.01em;margin-bottom:.3rem;}
         .step-body p{color:var(--muted);font-size:1.125rem;line-height:1.7;font-weight:300;}
 
@@ -878,24 +878,24 @@ export default function AmbroisePartnersModern() {
         .about-lede{color:var(--muted);font-size:1rem;line-height:1.7;margin-top:1.2rem;font-weight:300;letter-spacing:-.01em;}
         .about-links{display:flex;gap:1rem;margin-top:2.5rem;flex-wrap:wrap;}
         .btn-dark{background:var(--ink);color:#fff;padding:.9rem 2rem;border-radius:100px;font-size:.75rem;font-weight:500;letter-spacing:.04em;transition:background .22s,transform .2s,box-shadow .22s;}
-        .btn-dark:hover{background:var(--blue);transform:translateY(-2px);box-shadow:0 10px 26px rgba(3,10,36,.2);}
+        .btn-dark:hover{background:#0a1a3a;transform:translateY(-2px);box-shadow:0 10px 26px rgba(10,26,58,.2);}
         .btn-outline{border:1.5px solid var(--line);color:var(--ink);padding:.9rem 2rem;border-radius:100px;font-size:.75rem;font-weight:500;letter-spacing:.04em;transition:border-color .22s,color .22s;}
         .btn-outline:hover{border-color:var(--blue);color:var(--blue);}
         .about-dark{background:var(--dark);border-radius:4px;padding:3.5rem 3rem;color:#fff;position:relative;overflow:hidden;}
         .about-dark-label{font-family:var(--serif);font-weight:400;font-size:1.2rem;letter-spacing:-.01em;margin-bottom:1.5rem;position:relative;}
-        .about-dark::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(3,10,36,.22) 0%,transparent 70%);border-radius:50%;}
+        .about-dark::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(10,26,58,.22) 0%,transparent 70%);border-radius:50%;}
 
         /* ── CONTACT ── */
         .contact-wrap{max-width:700px;margin:0 auto;padding:7rem 2.5vw;text-align:center;display:flex;flex-direction:column;align-items:center;}
         .contact-form{margin-top:3.5rem;text-align:left;display:flex;flex-direction:column;gap:1.2rem;width:100%;max-width:600px;}
         .fl{display:block;font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.45rem;}
         .fi,.ft{width:100%;background:#fff;border:1px solid var(--line);border-radius:4px;padding:.9rem 1.15rem;font-family:var(--sans);font-size:.95rem;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;}
-        .fi:focus,.ft:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(3,10,36,.1);}
+        .fi:focus,.ft:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(10,26,58,.1);}
         .ft{min-height:130px;resize:vertical;}
         .fc{display:flex;gap:.7rem;align-items:flex-start;font-size:.75rem;color:var(--muted);cursor:pointer;line-height:1.55;font-weight:300;}
         .fc input{margin-top:3px;flex-shrink:0;accent-color:var(--blue);}
         .submit-btn{align-self:center;background:var(--ink);color:#fff;border:1.5px solid var(--ink);padding:1rem 3rem;border-radius:9999px;font-family:var(--sans);font-size:.85rem;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:background .22s,transform .2s,box-shadow .22s,color .22s,border-color .22s;}
-        .submit-btn:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-2px);box-shadow:0 10px 28px rgba(3,10,36,.2);}
+        .submit-btn:hover{background:#0a1a3a;border-color:#0a1a3a;transform:translateY(-2px);box-shadow:0 10px 28px rgba(10,26,58,.2);}
 
         /* ── SERVICES TABS ── */
         .svc-tabs{display:flex;border-bottom:1px solid var(--line);justify-content:space-between;overflow:hidden;}
@@ -914,12 +914,12 @@ export default function AmbroisePartnersModern() {
         .sector-ticker{background:var(--white);border-top:1px solid #fff;border-bottom:1px solid #fff;overflow:hidden;padding:1.2rem 0;margin-top:6rem;white-space:nowrap;}
         .sector-ticker-track{display:flex;width:max-content;animation:tickerScroll 180s linear infinite;}
         .sector-ticker-set{display:flex;gap:0;flex-shrink:0;}
-        .sector-ticker-item{font-size:.78rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#030a24;padding:0 2.8rem;opacity:1;display:flex;align-items:center;gap:.7rem;}
-        .sector-ticker-item::before{content:'';width:4px;height:4px;border-radius:50%;border:1px solid #030a24;flex-shrink:0;}
+        .sector-ticker-item{font-size:.78rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#0a1a3a;padding:0 2.8rem;opacity:1;display:flex;align-items:center;gap:.7rem;}
+        .sector-ticker-item::before{content:'';width:4px;height:4px;border-radius:50%;border:1px solid #0a1a3a;flex-shrink:0;}
         @keyframes tickerScroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
 
         /* ── FOOTER ── */
-        footer{background:#030a24;color:#fff;padding:3rem 2.5vw 2rem;}
+        footer{background:#0a1a3a;color:#fff;padding:3rem 2.5vw 2rem;}
         .footer-inner{max-width:1200px;margin:0 auto;}
 
         .footer-top{display:grid;grid-template-columns:1fr auto;gap:4rem;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.08);align-items:start;}
