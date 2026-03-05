@@ -1324,7 +1324,6 @@ export default function AmbroisePartnersModern() {
                 Healthcare focused advisory
               </p>
               <div className="footer-contact">
-                <a href="mailto:contact@ambroisepartners.com">contact@ambroisepartners.com</a>
                 <span>Paris · London</span>
               </div>
             </div>
