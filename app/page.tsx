@@ -453,6 +453,12 @@ export default function AmbroisePartnersModern() {
   const heroRef   = useRef<HTMLElement>(null);
   const navRef    = useRef<HTMLDivElement>(null);
 
+  /* ── Dismiss loading screen after hydration ── */
+  useEffect(() => {
+    const loader = document.getElementById('page-loader');
+    if (loader) { loader.classList.add('done'); setTimeout(() => loader.remove(), 500); }
+  }, []);
+
   /* ── Reveal ── */
   useEffect(() => {
     const nodes = Array.from(document.querySelectorAll('.reveal'));
