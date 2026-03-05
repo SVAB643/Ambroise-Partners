@@ -29,3 +29,17 @@ body {
 .reveal {
   opacity: 0;
 }
+
+/* Loading screen — covers page until JS removes it */
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: #0a1628;
+  transition: opacity 0.4s ease;
+  pointer-events: all;
+}
+.page-loader.done {
+  opacity: 0;
+  pointer-events: none;
+}

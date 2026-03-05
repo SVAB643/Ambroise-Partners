@@ -38,7 +38,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${dmSans.variable} ${lora.variable}`}>
       <body className="antialiased">
+        <div id="page-loader" className="page-loader" />
         {children}
+        <script dangerouslySetInnerHTML={{ __html: `
+          requestAnimationFrame(function(){
+            var l=document.getElementById('page-loader');
+            if(l){l.classList.add('done');setTimeout(function(){l.remove()},500);}
+          });
+        `}} />
       </body>
     </html>
   );
