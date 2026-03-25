@@ -73,7 +73,7 @@ export default function LegalNoticePage() {
         <p><strong>Ambroise Partners</strong> is a healthcare-focused advisory firm.</p>
         <p>
           Registered office: Paris, France<br />
-          Contact: <a href="mailto:contact@ambroisepartners.com" style={{ color: 'var(--blue)' }}>contact@ambroisepartners.com</a>
+          Contact: Ambroise Partners (Paris, France)
         </p>
 
         <h2>Publication Director</h2>

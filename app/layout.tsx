@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans, Lora } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const dmSans = DM_Sans({ subsets: ["latin"], weight: ["300", "400", "500", "600"], variable: "--font-sans", display: "swap" });
@@ -40,6 +41,7 @@ export default function RootLayout({
       <body className="antialiased">
         <div id="page-loader" className="page-loader" />
         {children}
+        <Analytics />
       </body>
     </html>
   );
